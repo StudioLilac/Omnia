@@ -1,0 +1,42 @@
+name: "[CI] Unity Build Check"
+
+on:
+    pull_request:
+
+jobs:
+    build:
+        name: Validate Unity Build
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Free up disk space
+              run: |
+                  sudo rm -rf /usr/share/dotnet
+                  sudo rm -rf /usr/local/lib/android
+                  sudo rm -rf /opt/ghc
+                  sudo rm -rf /usr/local/share/boost
+                  docker system prune -af
+
+            - name: Cache Unity Library
+              uses: actions/cache@v3
+              with:
+                  path: Library
+                  key: Library-${{ runner.os }}-${{ hashFiles('ProjectSettings/ProjectVersion.txt', 'Packages/manifest.json', 'Packages/packages-lock.json') }}
+                  restore-keys: |
+                      Library-${{ runner.os }}-
+
+            - name: Build project
+              uses: game-ci/unity-builder@v4
+              env:
+                  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+                  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+                  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+              with:
+                  unityVersion: 6000.6.3f1
+                  targetPlatform: WebGL
+                  buildName: PR-Check
+                  allowDirtyBuild: true
+                  customParameters: -job-worker-count 2 -desiredWorkerCount 1
