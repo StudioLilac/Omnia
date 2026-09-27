@@ -39,7 +39,7 @@ public class PurpleArrow : MonoBehaviour {
         currentDirection = new Vector2(Mathf.Cos(randomAngle * Mathf.Deg2Rad), Mathf.Sin(randomAngle * Mathf.Deg2Rad)).normalized;
 
         currentSpeed = initialSpeed;
-        rb.velocity = currentDirection * currentSpeed;
+        rb.linearVelocity = currentDirection * currentSpeed;
         StartCoroutine(SelfDestruct());
     }
 
@@ -63,7 +63,7 @@ public class PurpleArrow : MonoBehaviour {
             currentSpeed = Mathf.MoveTowards(currentSpeed, minSpeed, deceleration * Time.fixedDeltaTime);
         }
 
-        rb.velocity = currentDirection * currentSpeed;
+        rb.linearVelocity = currentDirection * currentSpeed;
 
         float visualAngle = Mathf.Atan2(currentDirection.y, currentDirection.x) * Mathf.Rad2Deg;
         rb.rotation = visualAngle;
