@@ -41,15 +41,19 @@ namespace Scenes {
                     break;
                 case 1:
                     SceneInitializer.LoadScene("W-1-2");
+                    AudioManager.Instance.PlayBGM(AudioTracks.CaveSpeak);
                     break;
                 case 2:
                     SceneInitializer.LoadScene("W-2-1");
+                    AudioManager.Instance.PlayBGM(AudioTracks.CaveSpeak);
                     break;
                 case 3:
                     SceneInitializer.LoadScene("W-3-1");
+                    AudioManager.Instance.PlayBGM(AudioTracks.CaveSpeak);
                     break;
                 case 4:
                     SceneInitializer.LoadScene("W-4-1");
+                    AudioManager.Instance.PlayBGM(AudioTracks.CaveSpeak);
                     break;
                 case 5:
                     SceneInitializer.LoadScene("W-B-B");

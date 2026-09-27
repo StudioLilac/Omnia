@@ -35,9 +35,10 @@ namespace Enemies {
 
         // Used to make enemies stronger in Warped Depths.
         public void Magnify(float factor) {
-            maximumHealth *= factor;
-            currentHealth *= factor;
-            attack = Mathf.Floor(attack * factor);
+            maximumHealth *= factor * 2;
+            currentHealth *= factor * 2;
+            // attack should grow like a LOT slower than hp
+            attack = Mathf.Max(1, Mathf.Floor((attack * factor)/4));
         }
 
 

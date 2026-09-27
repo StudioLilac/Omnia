@@ -5,7 +5,7 @@ namespace Players.Fragments {
     public class OrbitObject : MonoBehaviour {
         [SerializeField] private GameObject orbitalPrefab;
         [SerializeField] public int orbitalCount;
-        [SerializeField] private float orbitRadius;
+        [SerializeField] public float orbitRadius;
         [SerializeField] public float orbitSpeed;
         [SerializeField] private float damage;
 

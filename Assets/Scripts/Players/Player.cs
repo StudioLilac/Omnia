@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Enemies;
 using Omnia.State;
 using Omnia.Utils;
 using Players.Animation;
@@ -30,17 +32,20 @@ namespace Players {
 
         // health and flow are properties that broadcast an event whenever they are changed.
         private int _currentHealth;
+
         public int CurrentHealth {
             get => _currentHealth;
             set {
                 if (_currentHealth != value) {
-                    _currentHealth = Mathf.Clamp(value, 0, maximumHealth); ;
+                    _currentHealth = Mathf.Clamp(value, 0, maximumHealth);
+                    ;
                     OnHealthChanged?.Invoke(_currentHealth);
                 }
             }
         }
 
         private float _currentFlow;
+
         public float CurrentFlow {
             get => _currentFlow;
             set {
@@ -98,10 +103,55 @@ namespace Players {
         [SerializeField] public float critChance;
         [SerializeField] public float critMultiplier;
 
+        private List<float> additiveMultipliers = new List<float>();
+        private List<float> multiplicativeMultipliers = new List<float>();
+
+        public float BaseDamageMultiplier => 1f;
+
+        public float damageMultiplier {
+            get {
+                float sumAdd = 0f;
+                foreach (var val in additiveMultipliers)
+                    sumAdd += val;
+
+                float prodMul = 1f;
+                foreach (var val in multiplicativeMultipliers)
+                    prodMul *= val;
+
+                return (BaseDamageMultiplier + sumAdd) * prodMul;
+            }
+        }
+
+        public void AddAdditiveBuff(float value) {
+            Debug.Log("Adding a buff with factor "+ value);
+            additiveMultipliers.Add(value);
+        }
+
+        public void RemoveAdditiveBuff(float value) {
+            additiveMultipliers.Remove(value);
+        }
+
+        public void AddMultiplicativeBuff(float value) {
+            multiplicativeMultipliers.Add(value);
+        }
+
+        public void RemoveMultiplicativeBuff(float value) {
+            multiplicativeMultipliers.Remove(value);
+        }
+
+        public void ClearAllBuffs() {
+            additiveMultipliers.Clear();
+            multiplicativeMultipliers.Clear();
+        }
+
+
         // disable user input if this is true.
         public static bool controlsLocked = false;
 
+        public static bool knockbackImmune;
+
         private bool _healthBoosted;
+
         public bool HealthBoosted {
             get => _healthBoosted;
             set {
@@ -129,6 +179,10 @@ namespace Players {
         public static event Action<int> OnWeaponChanged;
         public static event Action<float> OnSkillCooldownUpdated;
 
+        public static event Action<float, Enemy> OnEnemyHit;
+
+        public static event Action OnSkill;
+
         public static event Action<bool> OnBearEffectReady;
         private bool wasBearReady = false; // Track previous state
 
@@ -148,7 +202,8 @@ namespace Players {
         private IBehaviour behaviour;
         private StateMachine animationStateMachine;
         internal bool lockGravity = false;
-        public Vector3 Center => transform.position + new Vector3(0, 1, 0);
+        public Vector3 Center => this ? transform.position + new Vector3(0, 1, 0) : Vector3.zero;
+
 
         public void Awake() {
             cam = Camera.main;
@@ -236,18 +291,21 @@ namespace Players {
             AudioManager.Instance.PlayHurtSound();
 
             combatTimer.Start();
-            CurrentHealth -= (int) damage;
+            CurrentHealth -= (int)damage;
             currentHurtInvulnerability = hurtInvulnerabilityTime;
-            UseExternalVelocity(velocity, lockout);
+            if (!knockbackImmune) {
+                UseExternalVelocity(velocity, lockout);
+            }
             StartCoroutine(DoHurtInvincibilityFlicker());
 
             if (CurrentHealth == 0) Die();
         }
 
-        public void OnHit(float flowAmount) {
+        public void OnHit(float damage, Enemy enemy) {
             combatTimer.Start();
             if (!hasShotgun) return;
-            CurrentFlow = Mathf.Min(CurrentFlow + flowAmount, maximumFlow);
+            CurrentFlow = Mathf.Min(CurrentFlow + (damage / damageMultiplier) * WeaponClass.damageToFlowRatio, maximumFlow);
+            OnEnemyHit?.Invoke(damage, enemy);
         }
 
         public void ConsumeAllFlow() {
@@ -282,6 +340,7 @@ namespace Players {
             var control = 1 - currentLockout / maximumLockout;
             return MathUtils.Lerpish(rb.velocity.x, x, control * acceleration);
         }
+
         public void SetGravityLock(bool lockGravity, float gravity) {
             rb.gravityScale = gravity;
             this.lockGravity = lockGravity;
@@ -312,9 +371,13 @@ namespace Players {
                 OnSkillCooldownUpdated?.Invoke(skillCooldownTimer.Progress);
                 return;
             }
+
             if (!skill) return;
             skill = false;
-            if (weapons[selectedWeapon].UseSkill()) skillCooldownTimer.Start();
+            if (weapons[selectedWeapon].UseSkill()) {
+                skillCooldownTimer.Start();
+                OnSkill?.Invoke();
+            }
         }
 
         private void DoIntroSkill() {

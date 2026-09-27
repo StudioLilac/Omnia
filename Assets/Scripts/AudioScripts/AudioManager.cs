@@ -104,7 +104,7 @@ public class AudioManager : PersistentSingleton<AudioManager>
             BGMPlayer.clip = track;
             BGMPlayer.loop = true;
             BGMPlayer.Play();
-            StartCoroutine(BGMFadeIn(1f)); // Fade in to full volume
+            StartCoroutine(BGMFadeIn(PauseMenu.musicVol)); // Fade in to full volume
         }
     }
 
@@ -278,5 +278,9 @@ public class AudioManager : PersistentSingleton<AudioManager>
         ToggleBGM();
         ToggleSFX();
         ToggleAmbient();
+    }
+
+    public bool IsMuted() {
+        return SFXPlayer.mute && AmbientPlayer.mute && BGMPlayer.mute;
     }
 }

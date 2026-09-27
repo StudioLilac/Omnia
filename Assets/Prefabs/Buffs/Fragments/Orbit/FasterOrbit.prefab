@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8099652ac32548beb756c6b78ada9529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextFragments: []
+  nextFragments:
+  - {fileID: -3127804115576932928, guid: 459a2d9fdde84bb458d969f82f470413, type: 3}
   fragmentName: Faster Orbit
   description: Orbitals spin around you faster.
   increase: -100

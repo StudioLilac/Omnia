@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de123db9a2741b0bab07d0f08997e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextFragments: []
+  nextFragments:
+  - {fileID: -8455215122211719591, guid: 57c224dd7ab99ed4e826be36040ee26a, type: 3}
   fragmentName: Pocket Harpoons
   description: Gain 2 ammo to use with the Harpoon Gun.
   extraAmmo: 2

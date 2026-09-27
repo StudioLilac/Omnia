@@ -276,22 +276,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneInitializer
       objectReference: {fileID: 0}
-    - target: {fileID: 3913066680617439840, guid: dec067d666e464088a06b526d65856c9, type: 3}
-      propertyPath: managers.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3913066680617439840, guid: dec067d666e464088a06b526d65856c9, type: 3}
-      propertyPath: managers.Array.data[5]
-      value: 
-      objectReference: {fileID: 4883409523034971244, guid: e73900af4eaf1443989339fff7eb7353, type: 3}
-    - target: {fileID: 3913066680617439840, guid: dec067d666e464088a06b526d65856c9, type: 3}
-      propertyPath: managers.Array.data[6]
-      value: 
-      objectReference: {fileID: 3157765424273095830, guid: 8e34de0f30303481da877a1d76801f5e, type: 3}
-    - target: {fileID: 3913066680617439840, guid: dec067d666e464088a06b526d65856c9, type: 3}
-      propertyPath: managers.Array.data[7]
-      value: 
-      objectReference: {fileID: 831985412458610923, guid: eb009b6c038cb4eafa846218e8275fd7, type: 3}
     - target: {fileID: 5473875346563200313, guid: dec067d666e464088a06b526d65856c9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

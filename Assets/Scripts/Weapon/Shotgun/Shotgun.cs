@@ -90,7 +90,7 @@ public class Shotgun : WeaponClass {
             Player playerCharachter = player.GetComponent<Player>();
             lockedPlayerGravity = false;
             playerCharachter.SetGravityLock(lockedPlayerGravity, 3);
-        } 
+        }
 
         if (skillLockTimer > 0) {
             skillLockTimer -= Time.deltaTime;
@@ -126,8 +126,10 @@ public class Shotgun : WeaponClass {
 
     private List<RaycastHit2D> PerformRayCasts() {
         Vector2 origin = transform.position;
-        float halfAngle = blastAngle / 2;
-        float angleStep = blastAngle / (subDivide - 1);
+        float clampedBlastAngle = Mathf.Max(blastAngle, 1);
+
+        float halfAngle = clampedBlastAngle / 2;
+        float angleStep = clampedBlastAngle / (subDivide - 1);
         List<RaycastHit2D> hits = new List<RaycastHit2D>();
 
         for (int i = 0; i < subDivide; i++) {
@@ -161,7 +163,7 @@ public class Shotgun : WeaponClass {
                         damageAmount *= DamageDropOff(distance);
                     }
 
-                    damageAmount = Mathf.Max(damageAmount, 0);
+                    damageAmount = Mathf.Max(damageAmount, 0) * player.GetComponent<Player>().damageMultiplier;
 
                     bool isCrit = Random.Range(0f, 1f) < player.GetComponent<Player>().critChance;
                     if (isCrit) {
@@ -169,7 +171,7 @@ public class Shotgun : WeaponClass {
                     }
 
                     enemy.Hurt(damageAmount, crit: isCrit);
-                    playerScript.OnHit(damageAmount * damageToFlowRatio);
+                    playerScript.OnHit(damageAmount, enemy);
                 }
             }
         }
@@ -186,7 +188,9 @@ public class Shotgun : WeaponClass {
     private void HandleTracers() {
         Vector2 origin = barrelPosition.transform.position;
         for (int i = 0; i < subDivide; i++) {
-            float randomAngle = MathUtils.RandomGaussian(-blastAngle / 2, blastAngle / 2);
+            float clampedBlastAngle = Mathf.Max(blastAngle, 1);
+
+            float randomAngle = MathUtils.RandomGaussian(-clampedBlastAngle / 2, clampedBlastAngle / 2);
             Vector2 direction = Quaternion.Euler(0, 0, randomAngle) * transform.right;
 
             Tracer instance = Instantiate(tracer, origin, Quaternion.identity).GetComponent<Tracer>();

@@ -30,7 +30,7 @@ public class InventoryManager : PersistentSingleton<InventoryManager> {
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         CloseInventory();
         InitializeTrinketSlots();
-        EquipDisplay.color = new Color(1, 1, 1, 0);
+        EquipDisplay.color = new Color(1, 1, 1, 1);
     }
 
     private void Start() {
