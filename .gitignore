@@ -79,8 +79,6 @@ steam_appid.txt
 
 # --- BELOW: FMOD SPECIFIC IGNORES ---
 
-fmod_editor.log
-
 # Never ignore DLLs in the FMOD subfolder.
 !/[Aa]ssets/Plugins/FMOD/**/lib/*
 
