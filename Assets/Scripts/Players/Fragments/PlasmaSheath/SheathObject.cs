@@ -47,9 +47,7 @@ namespace Players.Fragments {
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
-            Debug.Log("OnTriggerEnter2D");
             Enemy enemy = other.GetComponent<Enemy>();
-            Debug.Log(enemy);
             if (enemy != null) {
                 enemy.Hurt(damage);
             }

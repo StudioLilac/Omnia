@@ -340,7 +340,7 @@ public class Fragment_Selection : LevelData {
 public class Level_1 : LevelData {
     public override string PlainName => "Level 1";
     public override string SceneName => "Level 1";
-    public override LevelType Type => LevelType.Normal;
+    public override LevelType Type => LevelType.Other;
     public override LevelData NextLevel => Get<Fragment_Selection>();
     public override LevelData PrevLevel => Get<Fragment_Selection>();
 }

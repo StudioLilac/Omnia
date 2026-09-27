@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3755558a7a824c1fa1cb24a64363fbe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextFragments: []
+  nextFragments:
+  - {fileID: 4668020448773337953, guid: b95c13b2efed4453bb38685887f3d296, type: 3}
   fragmentName: Pocket Shells
   description: Gain 3 ammo to use with the Scrap Gun.
   extraAmmo: 3

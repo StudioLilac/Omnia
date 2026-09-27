@@ -44,7 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41427f4943f4040b644857cfa652c7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextFragments: []
+  nextFragments:
+  - {fileID: -7285132409356647768, guid: cda5f7766fd96f54ca2ac584ef046499, type: 3}
+  - {fileID: -6768569807849375688, guid: c68c155ec64b8c14a9f24199b7fe2bb8, type: 3}
   fragmentName: Vitality
   description: Gain an additional heart.
   healthBoost: 2

@@ -53,12 +53,17 @@ namespace UI {
         private void OnEnemyDamage(Enemy enemy, float damage, bool crit) {
             var marker = Instantiate(prefabs[(int) UiPrefabs.DamageMarker]).GetComponent<DamageMarker>();
             marker.Initialize(enemy.transform.position, damage, crit);
+
+            if (enemies.TryGetValue(enemy, out var ui)) {
+                ui.ShowParent(true);
+            }
         }
 
+
         private void OnEnemySpawn(Enemy enemy) {
-            //var ui = prefabs[(int) UiPrefabs.EnemyUI];
-            //var prefab = Instantiate(ui, canvas.transform).GetComponent<EnemyUI>()!.Of(enemy);
-            //enemies[enemy] = prefab;
+            var ui = prefabs[(int) UiPrefabs.EnemyUI];
+            var prefab = Instantiate(ui, canvas.transform).GetComponent<EnemyUI>()!.Of(enemy);
+            enemies[enemy] = prefab;
         }
     }
 }

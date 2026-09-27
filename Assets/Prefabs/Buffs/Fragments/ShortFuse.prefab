@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed240d882fb443cebcd16e9d92033512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextFragments: []
+  nextFragments:
+  - {fileID: 3944765131370253212, guid: 04f58ec333cb99a42b0f269afb5f2d21, type: 3}
   fragmentName: Short Fuse
   description: Explode whenever you take damage, blasting enemies away and dealing
     damage.

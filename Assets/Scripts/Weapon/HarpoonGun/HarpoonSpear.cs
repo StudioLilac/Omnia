@@ -1,9 +1,11 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using Enemies;
 using Omnia.Utils;
 using Players;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 /*
     The projectile for HarpoonGun
@@ -31,6 +33,10 @@ public class HarpoonSpear : MonoBehaviour {
     public Transform PullTo { get; private set; }
 
     public bool IsCollectable => collectable;
+
+    public static bool CanPullToGround;
+
+    public static event Action<Transform> OnHitEnemy;
 
     public void Awake() {
         dropped = false;
@@ -76,8 +82,8 @@ public class HarpoonSpear : MonoBehaviour {
         Vector2 difference = (player.Center - transform.position).normalized;
         TaggedEnemy.GetComponent<Rigidbody2D>().AddForce(difference * gun.pullPower);
         AudioManager.Instance.PlaySFX(AudioTracks.HarpoonRetract);
-        TaggedEnemy.GetComponent<Enemy>().Hurt(gun.damage);
-        player?.OnHit(gun.damage * gun.damageToFlowRatio);
+
+        DoDamage();
     }
 
     public void ReleaseHarpoonFromEnemy() {
@@ -164,12 +170,17 @@ public class HarpoonSpear : MonoBehaviour {
         TaggedEnemy = enemy;
         AttachToRigidBody(TaggedEnemy.GetComponent<Rigidbody2D>());
 
-        bool isCrit = Random.Range(0f, 1f) < player.critChance;
-        TaggedEnemy.GetComponent<Enemy>().Hurt(
-            gun.damage * (isCrit ? player.critMultiplier : 1),
-            crit: isCrit);
+        DoDamage();
+        OnHitEnemy?.Invoke(transform);
+    }
 
-        player?.OnHit(gun.damage * gun.damageToFlowRatio);
+    private void DoDamage() {
+        bool isCrit = Random.Range(0f, 1f) < player.critChance;
+
+        float damageAmount = gun.damage * player.damageMultiplier * (isCrit ? player.critMultiplier : 1);
+        TaggedEnemy.GetComponent<Enemy>().Hurt(damageAmount, crit: isCrit);
+
+        player?.OnHit(damageAmount, TaggedEnemy);
     }
 
     private void HandleSemisolidCollision(GameObject semi) {
@@ -183,6 +194,9 @@ public class HarpoonSpear : MonoBehaviour {
     private void HandleGroundCollision(GameObject ground) {
         Freeze();
         AttachToRigidBody(ground.GetComponent<Rigidbody2D>());
+        if (CanPullToGround) {
+            PullTo = gameObject.transform;
+        }
         StartCooldown();
         StartHarpoonTimer();
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Players.Fragments;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
@@ -9,11 +10,21 @@ namespace Players.Buff {
     public class BuffManager : PersistentSingleton<BuffManager> {
         private Player player;
         private List<Buff> activeBuffs = new List<Buff>();
-        [SerializeField] private List<Fragment> fragmentPool = new List<Fragment>();
+        [SerializeField] private List<Fragment> fragmentPoolSerialized = new List<Fragment>();
+
+        private HashSet<Fragment> fragmentPool = new HashSet<Fragment>();
+        private HashSet<Fragment> originalFragmentPool = new HashSet<Fragment>();
+
+
+
+
 
         protected override void OnAwake() {
             player = GameObject.FindGameObjectWithTag("Player")?.GetComponent<Player>();
+            fragmentPool = new HashSet<Fragment>(fragmentPoolSerialized);
+            originalFragmentPool = new HashSet<Fragment>(fragmentPool);
         }
+
 
         private void OnEnable() {
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -28,6 +39,7 @@ namespace Players.Buff {
             if (player == null) {
                 Debug.LogWarning("Player not found in the new scene.");
             }
+
             ReapplyBuffs();
         }
 
@@ -79,16 +91,35 @@ namespace Players.Buff {
         // Required because the player was destroyed and reinstantiated on scene load, losing buff properties.
         public void ReapplyBuffs() {
             foreach (Buff buff in activeBuffs) {
-                buff.Initialize(player);
-                buff.ApplyBuff();
+                buff.RevokeBuff(); // Unsubscribe events, remove stat effects, etc.
             }
+
+            foreach (Buff buff in activeBuffs) {
+                buff.Initialize(player); // Re-assign player reference
+                buff.ApplyBuff();        // Resubscribe and reapply cleanly
+            }
+        }
+
+
+        public void ResetFragmentPoolToOriginal() {
+            fragmentPool = new HashSet<Fragment>(originalFragmentPool);
+            Debug.Log("Resetting fragment pool to original buffs.");
         }
 
         public void AddFragmentsToPool(List<Fragment> fragments) {
             if (fragments.Count > 0) {
-                fragmentPool.AddRange(fragments);
+                fragmentPool.UnionWith(fragments);
             }
         }
+
+        public void RemoveFragmentFromPool(Fragment fragment) {
+            Debug.Log("Trying to remove fragment " + fragment);
+            if (fragmentPool.Contains(fragment)) {
+                fragmentPool.Remove(fragment);
+                Debug.Log($"Removed fragment {fragment.fragmentName} from the pool.");
+            }
+        }
+
 
         public List<Fragment> GetRandomizedFragments(int fragmentCount) {
             if (fragmentPool.Count == 0) {

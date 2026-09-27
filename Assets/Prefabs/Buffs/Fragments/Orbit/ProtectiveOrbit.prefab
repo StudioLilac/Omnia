@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a01667d6018404cb51936ed3b77ebae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextFragments: []
+  nextFragments:
+  - {fileID: -1730357137838878591, guid: eb0b13cb4170d7247b681c581ac9d8a1, type: 3}
   fragmentName: Protective Orbit
   description: Gain an extra 2 orbitals.
   increase: 2

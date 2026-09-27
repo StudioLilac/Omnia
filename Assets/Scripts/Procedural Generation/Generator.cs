@@ -194,9 +194,9 @@ public class LevelGenerator : MonoBehaviour {
 
     // returns a float >=1 that represents the factor by which to multiply all enemy stats.
     // Example: factor = 2 -> enemies have double health and damage.
-    // Enemy stats will grow exponentially, by doubling every three levels.
+    // Enemy stats will grow exponentially, by doubling every five levels.
     private static float CalculateEnemyMagnification(int progress) {
-        return Mathf.Pow(2f, progress / 3f);
+        return Mathf.Pow(2f, progress / 5f);
     }
 
 

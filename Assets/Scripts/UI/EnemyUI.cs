@@ -1,17 +1,21 @@
 using Enemies;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using UnityEngine.Serialization;
 
 namespace UI {
     public class EnemyUI : MonoBehaviour {
         [SerializeField] internal RectTransform rect;
         [SerializeField] internal Canvas canvas;
-        [SerializeField] internal Slider slider;
-        [SerializeField] internal Slider shield;
+        [SerializeField] internal Slider slider;  // Health bar
+        [SerializeField] internal Slider shield;  // Shield bar
         [SerializeField] internal Enemy subject;
+        [SerializeField] internal Canvas parentCanvas;
 
         public void Start() {
-            shield.gameObject.SetActive(subject is ShieldedEnemy && ((ShieldedEnemy) subject).maxShieldHealth > 0);
+            shield.gameObject.SetActive(subject is ShieldedEnemy && ((ShieldedEnemy)subject).maxShieldHealth > 0);
+            ShowParent(false);
         }
 
         public void Update() {
@@ -49,6 +53,10 @@ namespace UI {
             if (subject is not ShieldedEnemy) return;
             ShieldedEnemy shieldedEnemy = (ShieldedEnemy) subject;
             shield.value = shieldedEnemy.shieldHealth == 0 ? 0 : shieldedEnemy.shieldHealth / shieldedEnemy.maxShieldHealth;
+        }
+
+        public void ShowParent(bool show) {
+            parentCanvas.enabled = show;
         }
     }
 }

@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: befa0314fb6e4f36ad85570688fbc6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextFragments: []
+  nextFragments:
+  - {fileID: 4259237562068932044, guid: 70bc9cd7e93ed0949868e12769d0d018, type: 3}
   fragmentName: Plasma Sheath
   description: Become invulnerable as long as you are falling quick enough.
   sheathPrefab: {fileID: 5581647842075571253, guid: 39b6fc1a4149648dfb1d3a577f397fec, type: 3}

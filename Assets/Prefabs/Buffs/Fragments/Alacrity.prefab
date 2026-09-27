@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d4325cca214cf49d52e8a0261bedba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextFragments: []
+  nextFragments:
+  - {fileID: 5293423221939211821, guid: 9c225dcf85c8d4dc69156432aaf531a0, type: 3}
   fragmentName: Alacrity
   description: You run faster.
   speedBoost: 3

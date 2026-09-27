@@ -26,7 +26,7 @@ namespace Enemies.Crab {
 
         [SerializeField] internal GameObject deathExplosion;
 
-        bool HiddenEnemy.hidden => behaviour is Idle or Hide;
+        bool HiddenEnemy.hidden => behaviour is Idle;
 
         public void Awake() {
             targetInstance ??= FindObjectsOfType<Player>().FirstOrDefault();
@@ -45,7 +45,7 @@ namespace Enemies.Crab {
 
         public override void Hurt(float damage, bool stagger = true, bool crit = false) {
             if (((HiddenEnemy)this).hidden) return;
-            base.Hurt(damage, stagger, crit);
+            base.Hurt(damage, false, crit);
         }
 
         public void Attack(Player it) {

@@ -14,7 +14,7 @@ public abstract class WeaponClass : MonoBehaviour
     [Header("Weapon Base Stats")]
     public float damage;
     public float attackCooldown; // seconds
-    public float damageToFlowRatio = 1; // determines the rate at which damage is translated into flow.
+    public static float damageToFlowRatio = 1; // determines the rate at which damage is translated into flow.
 
     [SerializeField] public int maxAmmoCount;
 
