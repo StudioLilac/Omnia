@@ -200,7 +200,7 @@ namespace Players {
         }
 
         public void FixedUpdate() {
-            if (!lockGravity) rb.gravityScale = held && rb.velocity.y > 0 ? 1 : MathUtils.Lerpish(rb.gravityScale, 3, Time.fixedDeltaTime * fallAccel);
+            if (!lockGravity) rb.gravityScale = held && rb.linearVelocity.y > 0 ? 1 : MathUtils.Lerpish(rb.gravityScale, 3, Time.fixedDeltaTime * fallAccel);
             DoAttack();
             DoSkill();
             DoIntroSkill();
@@ -214,7 +214,7 @@ namespace Players {
 
         public void UseRecoil(float speed) {
             var recoil = -1 * speed * facing.normalized;
-            UseExternalVelocity(new Vector2(rb.velocity.x + recoil.x, recoil.y), weaponRecoilLockoutTime);
+            UseExternalVelocity(new Vector2(rb.linearVelocity.x + recoil.x, recoil.y), weaponRecoilLockoutTime);
         }
 
         // ***** Methods for handling player stats (HP, Flow) ***** //
@@ -273,14 +273,14 @@ namespace Players {
         }
 
         public void UseExternalVelocity(Vector2 velocity, float lockout) {
-            rb.velocity = velocity;
+            rb.linearVelocity = velocity;
             currentLockout = maximumLockout = lockout;
         }
 
         public float HorizontalVelocityOf(float x, float acceleration) {
-            if (maximumLockout == 0) return MathUtils.Lerpish(rb.velocity.x, x, acceleration);
+            if (maximumLockout == 0) return MathUtils.Lerpish(rb.linearVelocity.x, x, acceleration);
             var control = 1 - currentLockout / maximumLockout;
-            return MathUtils.Lerpish(rb.velocity.x, x, control * acceleration);
+            return MathUtils.Lerpish(rb.linearVelocity.x, x, control * acceleration);
         }
         public void SetGravityLock(bool lockGravity, float gravity) {
             rb.gravityScale = gravity;
@@ -288,7 +288,7 @@ namespace Players {
         }
 
         internal bool IsPhoon() {
-            return Math.Abs(rb.velocity.x) > moveSpeed && Math.Sign(rb.velocity.x) == Math.Sign(moving.x);
+            return Math.Abs(rb.linearVelocity.x) > moveSpeed && Math.Sign(rb.linearVelocity.x) == Math.Sign(moving.x);
         }
 
         internal bool IsAttackEnabled() {

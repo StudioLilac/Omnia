@@ -16,7 +16,7 @@ namespace Enemies.Armadillo.Behaviour {
         }
 
         public void OnTick() {
-            self.rb.velocity = new Vector2(self.facing.x * self.rollSpeed, self.rb.velocity.y);
+            self.rb.linearVelocity = new Vector2(self.facing.x * self.rollSpeed, self.rb.linearVelocity.y);
 
             if (IsHitTarget(out var target)) {
                 self.UseBehaviour(new Recoil(self));

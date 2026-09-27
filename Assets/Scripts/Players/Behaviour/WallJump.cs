@@ -21,7 +21,7 @@ namespace Players.Behaviour {
 
         public void OnTick() {
             var x = self.HorizontalVelocityOf(self.moving.x * self.moveSpeed, Time.fixedDeltaTime * self.fallAccel);
-            self.rb.velocity = new Vector2(x, self.rb.velocity.y);
+            self.rb.linearVelocity = new Vector2(x, self.rb.linearVelocity.y);
         }
 
         public void OnUpdate() {

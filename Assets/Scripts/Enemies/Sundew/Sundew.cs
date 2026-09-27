@@ -43,11 +43,11 @@ namespace Enemies.Sundew {
         private void FireProjectile(Vector2 direction) {
             var p = Instantiate(projectile, rb.worldCenterOfMass, Quaternion.identity).GetComponent<SundewProjectile>();
             p.NotifyOnHit = Attack;
-            p.rb.velocity = projectileSpeed * Vector2.Lerp(transform.rotation * direction.normalized, Random.insideUnitSphere, spread);
+            p.rb.linearVelocity = projectileSpeed * Vector2.Lerp(transform.rotation * direction.normalized, Random.insideUnitSphere, spread);
         }
 
         private void Attack(Player it, SundewProjectile by) {
-            it.Hurt(attack, knockbackForce * new Vector2(Mathf.Sign(by.rb.velocity.x) * Mathf.Cos(knockbackAngle * Mathf.Deg2Rad), Mathf.Sin(knockbackAngle * Mathf.Deg2Rad)), 1);
+            it.Hurt(attack, knockbackForce * new Vector2(Mathf.Sign(by.rb.linearVelocity.x) * Mathf.Cos(knockbackAngle * Mathf.Deg2Rad), Mathf.Sin(knockbackAngle * Mathf.Deg2Rad)), 1);
         }
 
         protected override void UseAnimation(StateMachine stateMachine) {

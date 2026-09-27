@@ -16,7 +16,7 @@ namespace Players.Behaviour {
 
         public void OnTick() {
             var x = self.HorizontalVelocityOf(self.moving.x * self.moveSpeed, Time.fixedDeltaTime * self.moveAccel);
-            self.rb.velocity = new Vector2(x, Mathf.Max(self.jumpSpeed / 2 * -1, self.rb.velocity.y));
+            self.rb.linearVelocity = new Vector2(x, Mathf.Max(self.jumpSpeed / 2 * -1, self.rb.linearVelocity.y));
         }
 
         public void OnUpdate() {

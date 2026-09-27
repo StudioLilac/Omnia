@@ -16,11 +16,11 @@ namespace Enemies.Sundew {
         public void Start() => Destroy(gameObject, time);
 
         public void Update() {
-            sprite.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg);
+            sprite.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(rb.linearVelocity.y, rb.linearVelocity.x) * Mathf.Rad2Deg);
         }
 
         public void FixedUpdate() {
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(terminalVelocity, rb.velocity.y));
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Max(terminalVelocity, rb.linearVelocity.y));
         }
 
         public void OnTriggerEnter2D(Collider2D other) {

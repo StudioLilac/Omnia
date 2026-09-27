@@ -17,7 +17,7 @@ namespace Enemies.Spawnball.Behaviour {
         }
 
         public void OnTick() {
-            self.rb.velocity = Vector2.zero;
+            self.rb.linearVelocity = Vector2.zero;
             if (t == 0) self.OnSpawnEnemy();
         }
 

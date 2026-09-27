@@ -35,7 +35,7 @@ namespace Enemies.Spawnball {
 
         public override void Update() {
             base.Update();
-            sprite.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg);
+            sprite.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(rb.linearVelocity.y, rb.linearVelocity.x) * Mathf.Rad2Deg);
         }
 
         public void OnSpawnEnemy() {

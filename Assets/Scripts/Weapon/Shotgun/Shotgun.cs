@@ -51,7 +51,7 @@ public class Shotgun : WeaponClass {
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
         Player playerCharachter = player.GetComponent<Player>();
         if (rb != null) {
-            rb.velocity = new Vector2(rb.velocity.x, skillForce);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, skillForce);
             lockedPlayerGravity = true;
             playerCharachter.SetGravityLock(lockedPlayerGravity, 1);
         }
@@ -86,7 +86,7 @@ public class Shotgun : WeaponClass {
     private void Update() {
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
 
-        if (rb.velocity.y < 0 && lockedPlayerGravity) {
+        if (rb.linearVelocity.y < 0 && lockedPlayerGravity) {
             Player playerCharachter = player.GetComponent<Player>();
             lockedPlayerGravity = false;
             playerCharachter.SetGravityLock(lockedPlayerGravity, 3);

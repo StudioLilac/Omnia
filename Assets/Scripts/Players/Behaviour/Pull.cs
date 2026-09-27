@@ -20,11 +20,11 @@ namespace Players.Behaviour {
         }
 
         public void OnExit() {
-            self.rb.velocity = new Vector2(self.rb.velocity.x, Mathf.Min(self.jumpSpeed, self.rb.velocity.y));
+            self.rb.linearVelocity = new Vector2(self.rb.linearVelocity.x, Mathf.Min(self.jumpSpeed, self.rb.linearVelocity.y));
         }
 
         public void OnTick() {
-            self.rb.velocity = direction.normalized * self.pullSpeed;
+            self.rb.linearVelocity = direction.normalized * self.pullSpeed;
         }
 
         public void OnUpdate() {

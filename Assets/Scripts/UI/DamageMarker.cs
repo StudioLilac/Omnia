@@ -28,7 +28,7 @@ public class DamageMarker : MonoBehaviour {
             Random.Range(minInitialVelocity, maxInitialVelocity)
         );
         rb.rotation = -Mathf.Acos(initVelocity.y / initVelocity.magnitude) * Mathf.Rad2Deg * Mathf.Sign(initVelocity.x);
-        rb.velocity = initVelocity;
+        rb.linearVelocity = initVelocity;
     }
 
     public void Update() {

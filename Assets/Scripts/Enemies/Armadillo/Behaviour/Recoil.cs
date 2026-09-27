@@ -11,7 +11,7 @@ namespace Enemies.Armadillo.Behaviour {
 
         public void OnEnter() {
             t = self.recoilTime;
-            self.rb.velocity = CalculateRecoil(self.recoilAngle * Mathf.Deg2Rad);
+            self.rb.linearVelocity = CalculateRecoil(self.recoilAngle * Mathf.Deg2Rad);
         }
 
         public void OnExit() {

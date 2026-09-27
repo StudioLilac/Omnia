@@ -20,7 +20,7 @@ namespace Players.Fragments {
         }
 
         private void Update() {
-            bool shouldBeActive = player.rb.velocity.y < -velocityThreshold;
+            bool shouldBeActive = player.rb.linearVelocity.y < -velocityThreshold;
 
             if (shouldBeActive && !wasActive) {
                 ActivateEffect();

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Cinemachine;
+
 using Enemies;
 using UnityEngine;
 
@@ -32,17 +32,17 @@ namespace UI {
             Enemy.Spawn += OnEnemySpawn;
             Enemy.Damage += OnEnemyDamage;
             Enemy.Death += OnEnemyDeath;
-            CinemachineCore.CameraUpdatedEvent.AddListener(OnCameraUpdate);
+            Unity.Cinemachine.CinemachineCore.CameraUpdatedEvent.AddListener(OnCameraUpdate);
         }
 
         public void OnDisable() {
             Enemy.Spawn -= OnEnemySpawn;
             Enemy.Damage -= OnEnemyDamage;
             Enemy.Death -= OnEnemyDeath;
-            CinemachineCore.CameraUpdatedEvent.RemoveListener(OnCameraUpdate);
+            Unity.Cinemachine.CinemachineCore.CameraUpdatedEvent.RemoveListener(OnCameraUpdate);
         }
 
-        private void OnCameraUpdate(CinemachineBrain it) {
+        private void OnCameraUpdate(Unity.Cinemachine.CinemachineBrain it) {
             foreach (var ui in enemies.Values) ui.OnCameraUpdate();
         }
 

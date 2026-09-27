@@ -9,7 +9,7 @@ using Utils;
 #nullable enable
 public class LevelManager : PersistentSingleton<LevelManager> {
     // If this throws a key-not-found error, that means no LevelData was found for the corresponding scene name. Will have to define one to use these level methods.
-    [SerializeField] private LevelData LevelData { get => LevelData.SceneToLevelMap[SceneManager.GetActiveScene().name]; }
+    private LevelData LevelData { get => LevelData.SceneToLevelMap[SceneManager.GetActiveScene().name]; }
 
     public static event Action<LevelData>? OnLevelLoaded;
 

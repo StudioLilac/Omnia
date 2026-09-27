@@ -38,7 +38,7 @@ namespace Enemies.Bird {
 
         public override void Update() {
             base.Update();
-            sprite.flipX = rb.velocity.x == 0 ? sprite.flipX : rb.velocity.x > 0;
+            sprite.flipX = rb.linearVelocity.x == 0 ? sprite.flipX : rb.linearVelocity.x > 0;
         }
 
         public void OnExplode() {

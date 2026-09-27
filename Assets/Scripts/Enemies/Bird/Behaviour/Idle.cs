@@ -17,7 +17,7 @@ namespace Enemies.Bird.Behaviour {
         }
 
         public void OnTick() {
-            self.rb.velocity = MathUtils.Lerpish(self.rb.velocity, Vector2.zero, Time.fixedDeltaTime * self.airAcceleration);
+            self.rb.linearVelocity = MathUtils.Lerpish(self.rb.linearVelocity, Vector2.zero, Time.fixedDeltaTime * self.airAcceleration);
 
             if (t != 0) return;
             t = 0.1f;

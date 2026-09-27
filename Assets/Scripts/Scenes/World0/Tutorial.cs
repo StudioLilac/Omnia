@@ -103,7 +103,7 @@ namespace Scenes {
             rb.gravityScale = 1f;
             // always towards the right
             float horizontalForce = UnityEngine.Random.Range(1.5f, 3f);
-            rb.velocity = new Vector2(horizontalForce, 0);
+            rb.linearVelocity = new Vector2(horizontalForce, 0);
 
             float spinForce = UnityEngine.Random.Range(250f, 400f) * (UnityEngine.Random.value > 0.5f ? 1 : -1);
             rb.angularVelocity = spinForce;

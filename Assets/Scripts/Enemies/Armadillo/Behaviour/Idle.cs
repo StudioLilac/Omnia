@@ -18,7 +18,7 @@ namespace Enemies.Armadillo.Behaviour {
         }
 
         public void OnTick() {
-            self.rb.velocity = new Vector2(0, self.rb.velocity.y);
+            self.rb.linearVelocity = new Vector2(0, self.rb.linearVelocity.y);
 
             if (self.IsTargetDetected()) self.UseBehaviour(new Alert(self));
             else if (t != 0) return;

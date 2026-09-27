@@ -65,7 +65,7 @@ public class HarpoonSpear : MonoBehaviour {
         transform.position = gun.transform.position;
         transform.rotation = gun.transform.rotation;
 
-        Rigidbody2D.velocity = gun.transform.right * gun.harpoonVelocity;
+        Rigidbody2D.linearVelocity = gun.transform.right * gun.harpoonVelocity;
     }
 
     public void PullEnemy() {
@@ -91,8 +91,8 @@ public class HarpoonSpear : MonoBehaviour {
 
     public void Update() {
         // Rotate based on velocity
-        if (!dropped && Rigidbody2D.velocity != Vector2.zero) {
-            float angle = Mathf.Atan2(Rigidbody2D.velocity.y, Rigidbody2D.velocity.x) * Mathf.Rad2Deg;
+        if (!dropped && Rigidbody2D.linearVelocity != Vector2.zero) {
+            float angle = Mathf.Atan2(Rigidbody2D.linearVelocity.y, Rigidbody2D.linearVelocity.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         }
 
@@ -223,7 +223,7 @@ public class HarpoonSpear : MonoBehaviour {
         }
 
         Rigidbody2D.gravityScale = 0;
-        Rigidbody2D.velocity = Vector2.zero;
+        Rigidbody2D.linearVelocity = Vector2.zero;
         Rigidbody2D.freezeRotation = true;
         dropped = true;
     }

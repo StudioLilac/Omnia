@@ -35,7 +35,7 @@ namespace Enemies.BirdSpawner {
             var b = Instantiate(spawnable, transform.position, Quaternion.identity).GetComponent<Bird.Bird>();
             b.NotifyOnDestroy = _ => spawns++;
             spawns--;
-            b.rb.velocity = Random.insideUnitSphere * b.speed;
+            b.rb.linearVelocity = Random.insideUnitSphere * b.speed;
         }
 
         protected override void UseAnimation(StateMachine stateMachine) {

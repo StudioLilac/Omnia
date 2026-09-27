@@ -32,7 +32,7 @@ namespace Enemies.Bird.Behaviour {
                 Vector2 next = path.LastOrDefault(it => IsNear(it));
                 if (next == default) return;
                 var direction = next - self.rb.worldCenterOfMass;
-                self.rb.velocity = MathUtils.Lerpish(self.rb.velocity, direction.normalized * self.speed, Time.fixedDeltaTime * self.airAcceleration);
+                self.rb.linearVelocity = MathUtils.Lerpish(self.rb.linearVelocity, direction.normalized * self.speed, Time.fixedDeltaTime * self.airAcceleration);
             }
         }
 

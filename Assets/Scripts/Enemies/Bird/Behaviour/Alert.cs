@@ -12,7 +12,7 @@ namespace Enemies.Bird.Behaviour {
 
         public void OnEnter() {
             t = self.delay;
-            self.rb.velocity = Vector2.zero;
+            self.rb.linearVelocity = Vector2.zero;
         }
 
         public void OnExit() {

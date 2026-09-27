@@ -13,7 +13,7 @@ namespace Players.Behaviour {
             t = self.jumpLockoutTime;
 
             self.jump = false;
-            self.UseExternalVelocity(new Vector2(self.rb.velocity.x, self.jumpSpeed), 0);
+            self.UseExternalVelocity(new Vector2(self.rb.linearVelocity.x, self.jumpSpeed), 0);
         }
 
         public void OnExit() {
@@ -23,7 +23,7 @@ namespace Players.Behaviour {
             if (self.IsPhoon()) return;
 
             var x = self.HorizontalVelocityOf(self.moving.x * self.moveSpeed, Time.fixedDeltaTime * self.fallAccel);
-            self.rb.velocity = new Vector2(x, self.rb.velocity.y);
+            self.rb.linearVelocity = new Vector2(x, self.rb.linearVelocity.y);
         }
 
         public void OnUpdate() {

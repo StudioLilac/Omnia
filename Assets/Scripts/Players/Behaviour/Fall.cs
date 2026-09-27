@@ -18,7 +18,7 @@ namespace Players.Behaviour {
             if (self.IsPhoon()) return;
 
             var x = self.HorizontalVelocityOf(self.moving.x * self.moveSpeed, Time.fixedDeltaTime * self.fallAccel);
-            self.rb.velocity = new Vector2(x, Mathf.Max(self.jumpSpeed * 2 * -1, self.rb.velocity.y));
+            self.rb.linearVelocity = new Vector2(x, Mathf.Max(self.jumpSpeed * 2 * -1, self.rb.linearVelocity.y));
         }
 
         public void OnUpdate() {
@@ -26,7 +26,7 @@ namespace Players.Behaviour {
         }
 
         public static IBehaviour If(Player it) {
-            return !it.grounded && it.slide.x == 0 && it.rb.velocity.y <= 0 ? new Fall(it) : null;
+            return !it.grounded && it.slide.x == 0 && it.rb.linearVelocity.y <= 0 ? new Fall(it) : null;
         }
     }
 }
