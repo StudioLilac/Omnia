@@ -101,3 +101,6 @@ steam_appid.txt
 /FMOD/Project/.cache/*
 /FMOD/Project/Build/*
 /FMOD/Project/*.user
+
+# Yarn
+ProjectSettings/Packages/dev.yarnspinner/*-generated.ysls.json
