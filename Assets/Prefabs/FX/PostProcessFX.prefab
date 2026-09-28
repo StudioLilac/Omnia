@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7285355237660147787}
-  - component: {fileID: 8855555113227699089}
   - component: {fileID: 2043504567393240233}
+  - component: {fileID: 645277781312055666}
   m_Layer: 31
   m_Name: PostProcessFX
   m_TagString: Untagged
@@ -33,23 +33,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8855555113227699089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 541092851418386870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: f302c2974ce2d4891941f15b880e889c, type: 2}
-  isGlobal: 1
-  blendDistance: 0
-  weight: 1
-  priority: 0
 --- !u!114 &2043504567393240233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,8 +45,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d3a5416ebd44999b15579a8c8ca937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volume: {fileID: 8855555113227699089}
+  volume: {fileID: 645277781312055666}
   hpThreshold: 2
   fadeSpeed: 2
   hurtColor: {r: 0.7490196, g: 0.12941177, b: 0.2627451, a: 0}
   hurtIntensity: 0.5
+--- !u!114 &645277781312055666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541092851418386870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 1
+  priority: 1
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 788b24cc8c494ea40a45249a8e2f9707, type: 2}
