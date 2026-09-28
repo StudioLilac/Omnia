@@ -16,29 +16,9 @@ namespace UI
         private List<GameObject> highlightedObjects = new List<GameObject>();
         private List<Transform> reticles = new List<Transform>();
 
-        protected override void OnAwake()
-        {
-            cutoutPosID = Shader.PropertyToID("_CutoutPosition");
-            cutoutSizeID = Shader.PropertyToID("_CutoutSize");
-
-            HideHighlight();
-        }
-
         private void Update()
         {
             RotateReticles();
-        }
-
-        public void HighlightUI(Vector2 screenPosition, float size = 0.2f)
-        {
-            Vector2 uv = new Vector2(screenPosition.x / Screen.width, screenPosition.y / Screen.height);
-            highlightMaterial.SetVector(cutoutPosID, uv);
-            highlightMaterial.SetFloat(cutoutSizeID, size);
-        }
-
-        public void HideHighlight()
-        {
-            highlightMaterial.SetFloat(cutoutSizeID, 0f);
         }
 
         public void HighlightGameObject(GameObject target)
@@ -100,8 +80,6 @@ namespace UI
 
             highlightedObjects.Clear();
             reticles.Clear();
-
-            HideHighlight();
         }
     }
 
