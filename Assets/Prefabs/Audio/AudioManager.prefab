@@ -43,6 +43,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -171,6 +172,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -303,6 +305,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f7ed1133a534740b8688c9bf56f03f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  root: 1
+  persistent: 1
   BGMPlayer: {fileID: 2010144141250469274}
   SFXPlayer: {fileID: 7673258787553588525}
   AmbientPlayer: {fileID: 884855892563430496}
@@ -349,6 +353,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

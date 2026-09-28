@@ -47,8 +47,7 @@ MonoBehaviour:
   nextFragments:
   - {fileID: 3944765131370253212, guid: 04f58ec333cb99a42b0f269afb5f2d21, type: 3}
   fragmentName: Short Fuse
-  description: Explode whenever you take damage, blasting enemies away and dealing
-    damage.
+  description: Explode whenever you take damage, blasting enemies away and dealing damage.
   explosion: {fileID: 6478827744998899019, guid: 8064472a4698446a9b2918c8b3247bc5, type: 3}
   explosionRadius: 5
   damage: 20
