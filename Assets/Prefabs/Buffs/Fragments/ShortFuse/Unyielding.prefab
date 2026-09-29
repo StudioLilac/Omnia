@@ -47,5 +47,4 @@ MonoBehaviour:
   nextFragments:
   - {fileID: -8776176349284046397, guid: 9ffc3dd46c196a949965585c9a678e95, type: 3}
   fragmentName: Unyielding
-  description: When you take lethal damage, survive at 1HP, unless you are already
-    at 1HP.
+  description: When you take lethal damage, survive at 1HP, unless you are already at 1HP.

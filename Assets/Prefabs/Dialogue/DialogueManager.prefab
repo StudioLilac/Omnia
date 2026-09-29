@@ -58,6 +58,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -102,6 +103,7 @@ MonoBehaviour:
   persistent: 1
   picturelessDialogueBoxComponent: {fileID: 5104453689515325453}
   pictureDialogueBox: {fileID: 6410928754391461768}
+  inDialogue: 0
 --- !u!1001 &5566071346152445929
 PrefabInstance:
   m_ObjectHideFlags: 0

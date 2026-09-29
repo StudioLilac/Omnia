@@ -58,4 +58,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e649e93f2ff6a964792b995460c55d31, type: 2}
   - {fileID: 11400000, guid: ece06702ad114bd47b9d6fe9921da9d7, type: 2}
   - {fileID: 11400000, guid: 975a2173f63607f4d9baa546423fe1b5, type: 2}
+  warpedDepthsProgress: 0
   playerSelectedWeapon: 0

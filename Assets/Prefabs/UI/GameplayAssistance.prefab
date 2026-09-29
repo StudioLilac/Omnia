@@ -52,4 +52,5 @@ MonoBehaviour:
   take: 3
   step: 0.75
   interval: 5
+  repeat: 1
   debugTransform: {fileID: 0}

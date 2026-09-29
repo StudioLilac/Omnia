@@ -103,6 +103,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 4014376132953842367}
+  canvasGroup: {fileID: 0}
+  fadeDuration: 1
+  pause: 0.5
+  fillDuration: 2
 --- !u!1 &5680813339647505008
 GameObject:
   m_ObjectHideFlags: 0
