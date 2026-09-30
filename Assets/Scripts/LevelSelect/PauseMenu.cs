@@ -40,9 +40,7 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
             musicSlider.value = PauseMenu.musicVol;
             MusicVolume();
         }
-        pauseAction.action.Enable();
     }
-    void OnDisable() => pauseAction.action.Disable();
 
     public static float musicVol = 0.7f;
 

@@ -26,26 +26,6 @@ namespace Players.Mixin {
             InventoryManager.OnInventoryOpened += StopMoving;
         }
 
-        private void OnEnable() {
-            moveAction.action.Enable();
-            lookAction.action.Enable();
-            fireAction.action.Enable();
-            skillAction.action.Enable();
-            jumpAction.action.Enable();
-            rollAction.action.Enable();
-            introAction.action.Enable();
-        }
-
-        private void OnDisable() {
-            moveAction.action.Disable();
-            lookAction.action.Disable();
-            fireAction.action.Disable();
-            skillAction.action.Disable();
-            jumpAction.action.Disable();
-            rollAction.action.Disable();
-            introAction.action.Disable();
-        }
-
         public void Update() {
             if (Player.controlsLocked) {
                 self.moving = Vector2.zero;

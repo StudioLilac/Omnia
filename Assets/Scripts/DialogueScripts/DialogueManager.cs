@@ -18,17 +18,6 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
 
     List<DialogueText> dialogueHistory = new();
 
-    void OnEnable() {
-        advanceAction.action.Enable();
-        fastForwardAction.action.Enable();
-    }
-
-    void OnDisable() {
-        advanceAction.action.Disable();
-        fastForwardAction.action.Disable();
-    }
-
-
     protected override void OnAwake() {
         activeDialogueBox = pictureDialogueBox;
     }
