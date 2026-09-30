@@ -1,32 +1,19 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Players.Mixin {
     public class UseInput : MonoBehaviour {
-        private enum KeysEnum {
-            Horizontal,
-            Vertical,
-            Fire1,
-            Fire2,
-            Fire3,
-            Jump,
-            Roll,
-        }
-
-        private static readonly Dictionary<KeysEnum, string> KeyMap = new Dictionary<KeysEnum, string> {
-            { KeysEnum.Horizontal, "Horizontal" },
-            { KeysEnum.Vertical, "Vertical" },
-            { KeysEnum.Fire1, "Fire1" },
-            { KeysEnum.Fire2, "Fire2" },
-            { KeysEnum.Fire3, "Fire3" },
-            { KeysEnum.Jump, "Jump" },
-            { KeysEnum.Roll, "Roll" },
-        };
-
-
         [SerializeField] internal Player self;
         [SerializeField] internal float delay;
+
+        [Header("Input Actions (Player map)")]
+        [SerializeField] private InputActionReference moveAction;   // Value, Vector2
+        [SerializeField] private InputActionReference lookAction;   // Value, Vector2 (pointer position)
+        [SerializeField] private InputActionReference fireAction;   // Button
+        [SerializeField] private InputActionReference skillAction;  // Button
+        [SerializeField] private InputActionReference jumpAction;   // Button
+        [SerializeField] private InputActionReference rollAction;   // Button
+        [SerializeField] private InputActionReference introAction;  // Button (held)
 
         private float jt;
         private float ft;
@@ -39,6 +26,26 @@ namespace Players.Mixin {
             InventoryManager.OnInventoryOpened += StopMoving;
         }
 
+        private void OnEnable() {
+            moveAction.action.Enable();
+            lookAction.action.Enable();
+            fireAction.action.Enable();
+            skillAction.action.Enable();
+            jumpAction.action.Enable();
+            rollAction.action.Enable();
+            introAction.action.Enable();
+        }
+
+        private void OnDisable() {
+            moveAction.action.Disable();
+            lookAction.action.Disable();
+            fireAction.action.Disable();
+            skillAction.action.Disable();
+            jumpAction.action.Disable();
+            rollAction.action.Disable();
+            introAction.action.Disable();
+        }
+
         public void Update() {
             if (Player.controlsLocked) {
                 self.moving = Vector2.zero;
@@ -47,12 +54,12 @@ namespace Players.Mixin {
             if (DialogueManager.Instance?.IsInDialogue() == true || InventoryManager.Instance?.IsInventoryOpen == true) return;
             if (PauseMenu.IsPaused) return;
 
-            var fire = Input.GetButtonDown(KeyMap[KeysEnum.Fire1]);
-            var jump = Input.GetButtonDown(KeyMap[KeysEnum.Jump]);
-            var held = Input.GetButton(KeyMap[KeysEnum.Jump]);
-            var skill = Input.GetButtonDown(KeyMap[KeysEnum.Fire2]);
-            var roll = Input.GetButtonDown(KeyMap[KeysEnum.Roll]) && self.shoeEquipped;
-            var intro = Input.GetButton(KeyMap[KeysEnum.Fire3]);
+            var fire = fireAction.action.WasPressedThisFrame();
+            var jump = jumpAction.action.WasPressedThisFrame();
+            var held = jumpAction.action.IsPressed();
+            var skill = skillAction.action.WasPressedThisFrame();
+            var roll = rollAction.action.WasPressedThisFrame() && self.shoeEquipped;
+            var intro = introAction.action.IsPressed();
 
             ft = fire ? delay : Mathf.Max(0, ft - Time.deltaTime);
             jt = jump ? delay : Mathf.Max(0, jt - Time.deltaTime);
@@ -75,12 +82,13 @@ namespace Players.Mixin {
             InventoryManager.OnInventoryOpened -= StopMoving;
         }
 
-        private static Vector2 GetMovingInput() {
-            return new Vector2(Input.GetAxisRaw(KeyMap[KeysEnum.Horizontal]), Input.GetAxisRaw(KeyMap[KeysEnum.Vertical]));
+        private Vector2 GetMovingInput() {
+            return moveAction.action.ReadValue<Vector2>();
         }
 
-        private static Vector2 GetFacingInput(Player it) {
-            return it.cam.ScreenToWorldPoint(Input.mousePosition) - it.sprite.transform.position;
+        private Vector2 GetFacingInput(Player it) {
+            Vector2 pointer = lookAction.action.ReadValue<Vector2>();
+            return it.cam.ScreenToWorldPoint(pointer) - it.sprite.transform.position;
         }
 
         private void StopMoving() {
