@@ -9,7 +9,7 @@ namespace Players.Fragments {
 
         public void SpawnArrows() {
             // Find all enemies in the scene
-            Enemy[] enemies = FindObjectsOfType<Enemy>();
+            Enemy[] enemies = FindObjectsByType<Enemy>();
 
             if (enemies.Length == 0) return;
 

@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assemblies;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 /*
- * Code referenced from adammyhre from github. 
+ * Code referenced from adammyhre from github.
  */
 [Serializable]
 public class SerializableType : ISerializationCallbackReceiver {
@@ -49,7 +50,7 @@ public class SerializableTypeDrawer : PropertyDrawer {
 
         typeFilter = (TypeFilterAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(TypeFilterAttribute));
 
-        var filteredTypes = AppDomain.CurrentDomain.GetAssemblies()
+        var filteredTypes = CurrentAssemblies.GetLoadedAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
             .Where(t => typeFilter == null ? DefaultFilter(t) : typeFilter.Filter(t))
             .ToArray();

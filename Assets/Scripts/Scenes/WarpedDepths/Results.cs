@@ -13,7 +13,7 @@ namespace Scenes {
     public class Results : WarpedDepths
     {
         [SerializeField] TextMeshProUGUI resultText;
-        protected void Start() {
+        protected new void Start() {
             base.Start();
             resultText.text = $"{PlayerDataManager.Instance.warpedDepthsProgress}";
 

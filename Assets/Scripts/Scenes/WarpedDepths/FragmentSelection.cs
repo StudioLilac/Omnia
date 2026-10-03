@@ -35,7 +35,7 @@ namespace Scenes {
         }
 
         private void RandomFragments() {
-            FragmentChoice[] choices = FindObjectsOfType<FragmentChoice>();
+            FragmentChoice[] choices = FindObjectsByType<FragmentChoice>();
             List<Fragment> fragmentOptions = BuffManager.Instance.GetRandomizedFragments(choices.Length);
 
             int count = Mathf.Min(choices.Length, fragmentOptions.Count);

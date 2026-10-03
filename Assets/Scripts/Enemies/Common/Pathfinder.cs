@@ -24,7 +24,7 @@ namespace Enemies.Common {
         }
 
         protected override void OnAwake() {
-            tiles = FindObjectsOfType<Tilemap>().Where(it => CollisionUtils.IsLayerInMask(it.gameObject.layer, solid)).ToArray();
+            tiles = FindObjectsByType<Tilemap>().Where(it => CollisionUtils.IsLayerInMask(it.gameObject.layer, solid)).ToArray();
             obstacles.Clear();
             foreach (var p in CompressedBoundsAllPositions(tiles)) {
                 var p2 = (Cell2D)p;

@@ -25,7 +25,7 @@ namespace Enemies {
         protected IBehaviour behaviour;
         public IBehaviour prevBehaviour { get; protected set; }
 
-        public StateMachine animationStateMachine;
+        public StateMachine animationStateMachine { get; protected set; }
 
         public virtual void Start() {
             currentHealth = maximumHealth;

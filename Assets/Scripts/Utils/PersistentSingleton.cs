@@ -37,6 +37,6 @@ namespace Utils {
         protected virtual void OnAwake() {
         }
 
-        private static T GetOrCreateSelf() => FindFirstObjectByType<T>() ?? new GameObject(typeof(T).Name).AddComponent<T>();
+        private static T GetOrCreateSelf() => FindAnyObjectByType<T>() ?? new GameObject(typeof(T).Name).AddComponent<T>();
     }
 }

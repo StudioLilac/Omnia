@@ -29,7 +29,7 @@ namespace Enemies.Crab {
         bool HiddenEnemy.hidden => behaviour is Idle;
 
         public void Awake() {
-            targetInstance ??= FindObjectsOfType<Player>().FirstOrDefault();
+            targetInstance ??= FindObjectsByType<Player>().FirstOrDefault();
             UseBehaviour(new Idle(this));
         }
 
