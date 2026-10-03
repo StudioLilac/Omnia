@@ -643,6 +643,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   self: {fileID: 6725967550211918722}
   delay: 0.1
+  moveAction: {fileID: -1583466506410592879, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
+  lookAction: {fileID: 3650941797450068281, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
+  fireAction: {fileID: -1165250016479597841, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
+  skillAction: {fileID: 5365688327723964128, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
+  jumpAction: {fileID: 1507826311605278140, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
+  rollAction: {fileID: 6052303626126623351, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
+  introAction: {fileID: -324683607221141776, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
 --- !u!114 &1129889265447086856
 MonoBehaviour:
   m_ObjectHideFlags: 0

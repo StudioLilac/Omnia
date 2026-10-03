@@ -137,4 +137,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WarpedDepths/Results.unity
     guid: 5f87d707c17165840b8a5be977229a7a
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}

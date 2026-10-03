@@ -4,6 +4,7 @@ using Initializers;
 using Players.Buff;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Utils;
@@ -23,7 +24,26 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
 
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Toggle musicToggle;
+
+
+    [SerializeField] private InputActionReference pauseAction;
+
+    // Workaround To Import Mute Icon's Toggle Image from Title since it is not possible to toggle the image without
+    // the associated onValueChanged function being called
+    private void OnEnable() {
+        if (AudioManager.Instance.IsMuted() && !musicToggle.isOn) {
+            AudioManager.Instance.SetBGMVolume(0f);
+            AudioManager.Instance.SetSFXVolume(0f);
+            AudioManager.Instance.SetAmbientVolume(0f);
+            ToggleMusic();
+            musicToggle.isOn = true;
+            musicSlider.value = PauseMenu.musicVol;
+            MusicVolume();
+        }
+    }
+
     public static float musicVol = 0.7f;
+
 
 
     public delegate void PauseMenuEventHandler();
@@ -102,29 +122,14 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
         ControlsState = state;
     }
 
-    // Workaround To Import Mute Icon's Toggle Image from Title since it is not possible to toggle the image without
-    // the associated onValueChanged function being called
-    private void OnEnable() {
-        if (AudioManager.Instance.IsMuted() && !musicToggle.isOn) {
-            AudioManager.Instance.SetBGMVolume(0f);
-            AudioManager.Instance.SetSFXVolume(0f);
-            AudioManager.Instance.SetAmbientVolume(0f);
-            ToggleMusic();
-            musicToggle.isOn = true;
-            musicSlider.value = PauseMenu.musicVol;
-            MusicVolume();
-        }
-    }
-
     private void Start() {
         musicSlider.value = PauseMenu.musicVol;
         MusicVolume();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (pauseAction.action.WasPressedThisFrame())
         {
             TogglePause();
         }

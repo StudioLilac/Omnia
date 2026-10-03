@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Utils;
 
@@ -9,6 +10,8 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
     private DialogueBox activeDialogueBox;
     [SerializeField] private DialogueBox picturelessDialogueBoxComponent;
     [SerializeField] private DialogueBox pictureDialogueBox;
+    [SerializeField] private InputActionReference advanceAction;
+    [SerializeField] private InputActionReference fastForwardAction;
     private List<DialogueText> sentences = new();
 
     public bool inDialogue;
@@ -138,7 +141,10 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
     void Update() {
         if (!inDialogue) return;
 
-        if ((Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space) || Input.GetKey(KeyCode.RightArrow)) && !PauseMenu.IsPaused) {
+        bool advance = advanceAction.action.WasPressedThisFrame()
+                       || fastForwardAction.action.IsPressed();
+
+        if (advance && !PauseMenu.IsPaused) {
             if (activeDialogueBox.FinishedLine()) {
                 DisplayNextSentence();
             } else {

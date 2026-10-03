@@ -103,6 +103,8 @@ MonoBehaviour:
   persistent: 1
   picturelessDialogueBoxComponent: {fileID: 5104453689515325453}
   pictureDialogueBox: {fileID: 6410928754391461768}
+  advanceAction: {fileID: -5551014783282890740, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
+  fastForwardAction: {fileID: 2812966848922923538, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
   inDialogue: 0
 --- !u!1001 &5566071346152445929
 PrefabInstance:
@@ -244,6 +246,14 @@ PrefabInstance:
     - target: {fileID: 3009351223007997610, guid: 026e787f6af83dc4ca1645e16e8acf98, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -13.492699
+      objectReference: {fileID: 0}
+    - target: {fileID: 3353208400390227134, guid: 026e787f6af83dc4ca1645e16e8acf98, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 4457218667971122588, guid: 026e787f6af83dc4ca1645e16e8acf98, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 4728857978263358706, guid: 026e787f6af83dc4ca1645e16e8acf98, type: 3}
       propertyPath: m_Name
