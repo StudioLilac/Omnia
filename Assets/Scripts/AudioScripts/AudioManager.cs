@@ -9,48 +9,48 @@ using STOP_MODE = FMOD.Studio.STOP_MODE; // FMODUnity also defines STOP_MODE, so
 // Rename them to match whatever you actually call the events.
 public static class AudioTracks {
     // BGM
-    public const string LullabyForAScrapyard = "event:/Music/LullabyForAScrapyard";
-    public const string CityOfMold = "event:/Music/CityOfMold";
-    public const string SunkBeneath = "event:/Music/SunkBeneath";
-    public const string JamiesTheme = "event:/Music/Jamie_sTheme";
-    public const string TrialBySteel = "event:/Music/TrialBySteel";
-    public const string UnclesTheme = "event:/Music/Uncle_sTheme";
-    public const string CaveSpeak = "event:/Music/CaveSpeak";
-    public const string FloraExMachina = "event:/Music/FloraExMachina";
-    public const string IntoTheWind = "event:/Music/IntoTheWind";
+    public const string LullabyForAScrapyard = "event:/Music/Lullaby For a Scrapyard";
+    public const string CityOfMold = "event:/Music/City of Mold";
+    public const string SunkBeneath = "event:/Music/Sunk Beneath";
+    public const string JamiesTheme = "event:/Music/Jamie's Theme";
+    public const string TrialBySteel = "event:/Music/Trial By Steel";
+    public const string UnclesTheme = "event:/Music/Uncle Beau's Theme";
+    public const string CaveSpeak = "event:/Music/Cave Speak";
+    public const string FloraExMachina = "event:/Music/Flora Ex Machina";
+    public const string IntoTheWind = "event:/Music/Into The Wind";
     public const string Undersound = "event:/Music/Undersound";
 
     // SFX
     public const string Scrapgun = "event:/SFX/Scrapgun";
-    public const string ScrapgunSpecial = "event:/SFX/ScrapgunSpecial";
+    public const string ScrapgunSpecial = "event:/SFX/Scrapgun_Special";
     public const string Reload = "event:/SFX/Reload";
-    public const string HarpoonHit = "event:/SFX/HarpoonHit";
-    public const string HarpoonLaunch = "event:/SFX/HarpoonLaunch";
-    public const string HarpoonRetract = "event:/SFX/HarpoonRetract";
-    public const string JamieLand = "event:/SFX/JamieLand";
-    public const string JamieSlide = "event:/SFX/JamieSlide";      // merge Slide + Slide_2 into one random-playlist event
-    public const string JamieHurt = "event:/SFX/JamieHurt";        // one event, multi-instrument random playlist of the 4 hurt clips
-    public const string MachineBreakdown = "event:/SFX/MachineBreakdown";
-    public const string MachineHitGround = "event:/SFX/MachineHitGround";
-    public const string MachineMalfunction = "event:/SFX/MachineMalfunction";
-    public const string PlantShoot = "event:/SFX/PlantShoot";
+    public const string HarpoonHit = "event:/SFX/Harpoon_Hit";
+    public const string HarpoonLaunch = "event:/SFX/Harpoon_Launch";
+    public const string HarpoonRetract = "event:/SFX/Harpoon_Retract";
+    public const string JamieLand = "event:/SFX/Jamie_Land";
+    public const string JamieSlide = "event:/SFX/JamieSlide";      // Multi-instrument 2
+    public const string JamieHurt = "event:/SFX/JamieHurt";        // Multi-instrument 4
+    public const string MachineBreakdown = "event:/SFX/Machine_Breakdown";
+    public const string MachineHitGround = "event:/SFX/Machine_Hit_Ground";
+    public const string MachineMalfunction = "event:/SFX/Machine_Malfunction";
+    public const string PlantShoot = "event:/SFX/Plant_Shoot";
     public const string Rumble = "event:/SFX/Rumble";
-    public const string TaDa = "event:/SFX/TaDa";
-    public const string WasteMove = "event:/SFX/WasteMove";        // merge Waste_Move_1 + _2
-    public const string ArmadilloAttack = "event:/SFX/ArmadilloAttack";
-    public const string ArmadilloClose = "event:/SFX/ArmadilloClose";
-    public const string ArmadilloOpen = "event:/SFX/ArmadilloOpen";
-    public const string ButtonPress = "event:/SFX/ButtonPress";
-    public const string ClockStrikes = "event:/SFX/ClockStrikes";
-    public const string CrabHurt = "event:/SFX/CrabHurt";
-    public const string CrabSpawn = "event:/SFX/CrabSpawn";
-    public const string Dinky = "event:/SFX/Dinky";                // merge Dinky_1..3
-    public const string DinkyMutate = "event:/SFX/DinkyMutate";
-    public const string DinkyScream = "event:/SFX/DinkyScream";
-    public const string DummyFall = "event:/SFX/DummyFall";
-    public const string FlyBoom = "event:/SFX/FlyBoom";
-    public const string GateOpen = "event:/SFX/GateOpen";
-    public const string GlassBreak = "event:/SFX/GlassBreak";
+    public const string TaDa = "event:/SFX/Ta_Da!";
+    public const string WasteMove = "event:/SFX/Waste_Move";        // Multi-instrument 2
+    public const string ArmadilloAttack = "event:/SFX/Armadillo_Attack";
+    public const string ArmadilloClose = "event:/SFX/Armadillo_Close";
+    public const string ArmadilloOpen = "event:/SFX/Armadillo_Open";
+    public const string ButtonPress = "event:/SFX/Button_Press";
+    public const string ClockStrikes = "event:/SFX/Clock_Strikes";
+    public const string CrabHurt = "event:/SFX/Crab_Hurt";
+    public const string CrabSpawn = "event:/SFX/Crab_Spawn";
+    public const string Dinky = "event:/SFX/Dinky";                // Multi-instrument 3
+    public const string DinkyMutate = "event:/SFX/Dinky_Mutate";
+    public const string DinkyScream = "event:/SFX/Dinky_Scream";
+    public const string DummyFall = "event:/SFX/Dummy_Fall";
+    public const string FlyBoom = "event:/SFX/Fly_Boom";
+    public const string GateOpen = "event:/SFX/Gate_Open";
+    public const string GlassBreak = "event:/SFX/Glass_Break";
 
     // AMBIENT
 }
