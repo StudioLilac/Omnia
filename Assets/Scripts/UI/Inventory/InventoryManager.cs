@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,6 +13,8 @@ public class InventoryManager : PersistentSingleton<InventoryManager> {
     [SerializeField] private TrinketSlot equippedTrinket;
     [SerializeField] private TextMeshProUGUI descriptionText; // Description UI text box
     [SerializeField] private Image EquipDisplay;
+    [SerializeField] private InputActionReference inventoryAction;
+    [SerializeField] private InputActionReference pauseAction;
 
     public delegate void InventoryEventHandler();
     public static event InventoryEventHandler OnInventoryOpened;   // for more complex functions that cannot use isPaused
@@ -43,9 +46,9 @@ public class InventoryManager : PersistentSingleton<InventoryManager> {
     private void Update() {
         if (PauseMenu.IsPaused || DialogueManager.Instance.IsInDialogue()) return;
 
-        if (Input.GetKeyDown(KeyCode.I)) {
+        if (inventoryAction.action.WasPressedThisFrame()) {
             ToggleInventory();
-        } else if (Input.GetKeyDown(KeyCode.Tab)) {
+        } else if (pauseAction.action.WasPressedThisFrame()) {
             CloseInventory();
         }
     }

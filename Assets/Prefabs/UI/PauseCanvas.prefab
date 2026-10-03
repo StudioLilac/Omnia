@@ -5689,7 +5689,7 @@ MonoBehaviour:
   historyText: {fileID: 1043213968084869821}
   musicSlider: {fileID: 1429423396662669399}
   musicToggle: {fileID: 8263104267081776706}
-  pauseAction: {fileID: 2053825010490566390, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
+  pauseAction: {fileID: -2623426019970766947, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
 --- !u!1 &8665351978529188025
 GameObject:
   m_ObjectHideFlags: 0

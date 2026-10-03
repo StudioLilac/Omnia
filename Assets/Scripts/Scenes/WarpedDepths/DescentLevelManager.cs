@@ -4,9 +4,11 @@ using Players;
 using Players.Buff;
 using Players.Fragments;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Scenes.Descent {
     public class DescentLevelManager : MonoBehaviour {
+        [SerializeField] private InputActionReference cancelAction;
         public void OnEnable() {
             Player.Death += EndRun;
         }
@@ -28,7 +30,7 @@ namespace Scenes.Descent {
         // for playtesting; allows "fishing" for certain fragments
         #if UNITY_EDITOR
         private void Update() {
-            if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (cancelAction.action.WasPressedThisFrame()) {
                 PlayerDataManager.Instance.warpedDepthsProgress++;
                 LevelManager.Instance.NextLevel();
             }

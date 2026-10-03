@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using Utils;
 
 
@@ -16,6 +17,7 @@ namespace Scenes {
     public class FragmentSelection : MonoBehaviour
     {
         [SerializeField] private GameObject dustParent;
+        [SerializeField] private InputActionReference cancelAction;
 
         private Image[] dustImages;
 
@@ -51,7 +53,7 @@ namespace Scenes {
 
         #if UNITY_EDITOR
         private void Update() {
-            if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (cancelAction.action.WasPressedThisFrame()) {
                 RandomFragments();
             }
         }

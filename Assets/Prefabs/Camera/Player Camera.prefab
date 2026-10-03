@@ -132,6 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: -5
   lerpSpeed: 4
+  moveAction: {fileID: -1583466506410592879, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
 --- !u!1 &4616330556291420026
 GameObject:
   m_ObjectHideFlags: 0
