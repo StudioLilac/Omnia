@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{c6759eb6-b970-4a8a-a502-e8b2792f8c15}">
+		<property name="assetPath">
+			<value>Into The Wind.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>120.19199999999999</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{2d709b89-9e8e-4829-b542-89423483c535}</destination>
+		</relationship>
+	</object>
+</objects>

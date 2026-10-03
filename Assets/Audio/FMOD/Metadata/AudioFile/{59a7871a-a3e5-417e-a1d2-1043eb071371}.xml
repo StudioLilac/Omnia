@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{59a7871a-a3e5-417e-a1d2-1043eb071371}">
+		<property name="assetPath">
+			<value>Waste_Move_2.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>4.1280000000000001</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{2d709b89-9e8e-4829-b542-89423483c535}</destination>
+		</relationship>
+	</object>
+</objects>

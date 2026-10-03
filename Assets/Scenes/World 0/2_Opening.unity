@@ -3242,6 +3242,7 @@ MonoBehaviour:
   Ekey: {fileID: 1014210362}
   EkeyFadeTime: 0.5
   EkeyDelayTime: 1
+  advanceAction: {fileID: -5551014783282890740, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
 --- !u!4 &1443498646
 Transform:
   m_ObjectHideFlags: 0

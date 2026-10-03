@@ -5,10 +5,8 @@ using UnityEngine.UI;
 
 namespace Background {
     public class FloatingImage : MonoBehaviour {
-        [SerializeField] private float averageFloatSpeed = 0.2f;
         [SerializeField] private float deltaFloatSpeed = 0.1f;
         [SerializeField] private float floatStrength = 2f;
-        [SerializeField] private float fadeDuration = 2f;
 
         private float floatSpeed;
 

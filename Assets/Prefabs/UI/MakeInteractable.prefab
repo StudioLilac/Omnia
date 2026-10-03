@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonIcon: {fileID: 5868704970826834299}
+  interactAction: {fileID: 5167875597974225737, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
 --- !u!212 &5868704970826834299
 SpriteRenderer:
   serializedVersion: 3

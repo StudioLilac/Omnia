@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 public class UseVerticalLookahead : MonoBehaviour {
     [FormerlySerializedAs("offsetYWhileFalling")] public float offset = -3f;
     public float lerpSpeed = 3f;              // Smoothing speed
+    [SerializeField] private InputActionReference moveAction;
 
     private Unity.Cinemachine.CinemachineCamera virtualCam;
     private Unity.Cinemachine.CinemachinePositionComposer positionComposer;
@@ -24,7 +26,7 @@ public class UseVerticalLookahead : MonoBehaviour {
     {
         if (positionComposer == null) return;
 
-        bool lookingDown = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+        bool lookingDown = moveAction.action.ReadValue<Vector2>().y < 0f;
         float targetYOffset = lookingDown ? offset : defaultYOffset;
 
         Vector3 targetOffset = positionComposer.TargetOffset;

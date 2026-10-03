@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{a80d1eab-608a-43fe-b543-50edac086ae8}">
+		<property name="assetPath">
+			<value>Rumble.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>15.071999999999999</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{2d709b89-9e8e-4829-b542-89423483c535}</destination>
+		</relationship>
+	</object>
+</objects>

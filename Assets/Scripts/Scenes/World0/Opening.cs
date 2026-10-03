@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using Utils;
 
 namespace Scenes {
@@ -45,6 +46,7 @@ namespace Scenes {
 
         [SerializeField] private float EkeyFadeTime = 1f;
         [SerializeField] private float EkeyDelayTime = 3f;
+        [SerializeField] private InputActionReference advanceAction;
 
         private bool canPressE = false;
 
@@ -87,7 +89,7 @@ namespace Scenes {
         }
 
         private void Update() {
-            if (canPressE && (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space))) {
+            if (canPressE && advanceAction.action.WasPressedThisFrame()) {
                 canPressE = false;
                 switch (progress) {
                     case 0:

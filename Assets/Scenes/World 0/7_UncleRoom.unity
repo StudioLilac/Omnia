@@ -334,7 +334,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4774809283147415622, guid: 60c329ee0656c824e8e9c92cb57b8930, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.175478
+      value: 1.1738148
       objectReference: {fileID: 0}
     - target: {fileID: 4774809283147415622, guid: 60c329ee0656c824e8e9c92cb57b8930, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1045,6 +1045,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonIcon: {fileID: 1197169696}
+  interactAction: {fileID: 5167875597974225737, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
 --- !u!1 &931315504
 GameObject:
   m_ObjectHideFlags: 0
@@ -1420,6 +1421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonIcon: {fileID: 682334519}
+  interactAction: {fileID: 5167875597974225737, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
 --- !u!1 &1197169695
 GameObject:
   m_ObjectHideFlags: 0

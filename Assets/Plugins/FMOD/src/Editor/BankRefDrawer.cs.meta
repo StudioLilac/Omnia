@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 49ebe6fea5e4bfc4bb492bba062b2afe
+AssetOrigin:
+  serializedVersion: 1
+  productId: 311497
+  packageName: FMOD for Unity (2.03)
+  packageVersion: 2.03.15
+  assetPath: Assets/Plugins/FMOD/src/Editor/BankRefDrawer.cs
+  uploadId: 1007396
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

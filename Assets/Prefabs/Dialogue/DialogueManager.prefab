@@ -103,8 +103,8 @@ MonoBehaviour:
   persistent: 1
   picturelessDialogueBoxComponent: {fileID: 5104453689515325453}
   pictureDialogueBox: {fileID: 6410928754391461768}
-  advanceAction: {fileID: -5551014783282890740, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
-  fastForwardAction: {fileID: 2812966848922923538, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
+  advanceAction: {fileID: 458678326611253272, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
+  fastForwardAction: {fileID: 3818010804340039222, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
   inDialogue: 0
 --- !u!1001 &5566071346152445929
 PrefabInstance:

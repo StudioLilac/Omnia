@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 86c6556701af9e04380698b89f691b6e
+AssetOrigin:
+  serializedVersion: 1
+  productId: 311497
+  packageName: FMOD for Unity (2.03)
+  packageVersion: 2.03.15
+  assetPath: Assets/Plugins/FMOD/src/StudioListener.cs
+  uploadId: 1007396
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 80
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
