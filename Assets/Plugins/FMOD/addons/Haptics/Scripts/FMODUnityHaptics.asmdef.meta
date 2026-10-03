@@ -1,10 +1,5 @@
 fileFormatVersion: 2
 guid: 9cdf6dc5d95f5b94cba414c3008c5c76
-AssemblyDefinitionImporter:
-  externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
   productId: 311497
@@ -12,3 +7,8 @@ AssetOrigin:
   packageVersion: 2.03.15
   assetPath: Assets/Plugins/FMOD/addons/Haptics/Scripts/FMODUnityHaptics.asmdef
   uploadId: 1007396
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,12 +1,22 @@
 fileFormatVersion: 2
 guid: 982978af662f9ea43b7979c7f61bbad3
-timeCreated: 1507179416
-licenseType: Store
-PluginImporter:
+AssetOrigin:
   serializedVersion: 1
+  productId: 311497
+  packageName: FMOD for Unity (2.03)
+  packageVersion: 2.03.15
+  assetPath: Assets/Plugins/FMOD/platforms/tvos/lib/libfmodstudiounitypluginL.a
+  uploadId: 1007396
+PluginImporter:
+  externalObjects: {}
+  serializedVersion: 3
   iconMap: {}
   executionOrder: {}
+  defineConstraints: []
   isPreloaded: 0
+  isOverridable: 0
+  isExplicitlyReferenced: 0
+  validateReferences: 1
   platformData:
     Any:
       enabled: 0
@@ -18,10 +28,3 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 311497
-  packageName: FMOD for Unity (2.03)
-  packageVersion: 2.03.15
-  assetPath: Assets/Plugins/FMOD/platforms/tvos/lib/libfmodstudiounitypluginL.a
-  uploadId: 1007396

@@ -1,10 +1,5 @@
 fileFormatVersion: 2
 guid: df892acb3265e0043b3bb1b8981b5aeb
-LocalizationImporter:
-  externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
   productId: 311497
@@ -12,3 +7,8 @@ AssetOrigin:
   packageVersion: 2.03.15
   assetPath: Assets/Plugins/FMOD/addons/ResonanceAudio/Editor/zh_hans.po
   uploadId: 1007396
+LocalizationImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

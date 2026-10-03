@@ -1,16 +1,28 @@
 fileFormatVersion: 2
 guid: fb0aabfc61c4c1548ac6990286c84327
-PluginImporter:
+AssetOrigin:
   serializedVersion: 1
+  productId: 311497
+  packageName: FMOD for Unity (2.03)
+  packageVersion: 2.03.15
+  assetPath: Assets/Plugins/FMOD/platforms/android/lib/armeabi-v7a/libresonanceaudio.so
+  uploadId: 1007396
+PluginImporter:
+  externalObjects: {}
+  serializedVersion: 3
   iconMap: {}
   executionOrder: {}
+  defineConstraints: []
   isPreloaded: 0
   isOverridable: 0
+  isExplicitlyReferenced: 0
+  validateReferences: 1
   platformData:
     Android:
       enabled: 1
       settings:
         CPU: ARMv7
+        Is16KbAligned: false
     Any:
       enabled: 0
       settings: {}
@@ -21,10 +33,3 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 311497
-  packageName: FMOD for Unity (2.03)
-  packageVersion: 2.03.15
-  assetPath: Assets/Plugins/FMOD/platforms/android/lib/armeabi-v7a/libresonanceaudio.so
-  uploadId: 1007396

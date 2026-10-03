@@ -1,16 +1,28 @@
 fileFormatVersion: 2
 guid: 77fe4a7edb1590848943702df0444855
-PluginImporter:
+AssetOrigin:
   serializedVersion: 1
+  productId: 311497
+  packageName: FMOD for Unity (2.03)
+  packageVersion: 2.03.15
+  assetPath: Assets/Plugins/FMOD/platforms/linux/lib/x86_64/libfmod_haptics.so
+  uploadId: 1007396
+PluginImporter:
+  externalObjects: {}
+  serializedVersion: 3
   iconMap: {}
   executionOrder: {}
+  defineConstraints: []
   isPreloaded: 0
   isOverridable: 0
+  isExplicitlyReferenced: 0
+  validateReferences: 1
   platformData:
     Android:
       enabled: 0
       settings:
         CPU: ARMv7
+        Is16KbAligned: true
     Any:
       enabled: 0
       settings:
@@ -21,34 +33,14 @@ PluginImporter:
         CPU: x86_64
         DefaultValueInitialized: true
         OS: Linux
-    Linux:
-      enabled: 0
-      settings:
-        CPU: None
     Linux64:
       enabled: 0
       settings:
         CPU: x86_64
-    LinuxUniversal:
-      enabled: 0
-      settings:
-        CPU: x86_64
-    OSXIntel:
-      enabled: 0
-      settings:
-        CPU: None
-    OSXIntel64:
-      enabled: 0
-      settings:
-        CPU: None
     OSXUniversal:
       enabled: 0
       settings:
         CPU: None
-    SamsungTV:
-      enabled: 0
-      settings:
-        STV_MODEL: STANDARD_15
     Win:
       enabled: 0
       settings:
@@ -65,10 +57,3 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 311497
-  packageName: FMOD for Unity (2.03)
-  packageVersion: 2.03.15
-  assetPath: Assets/Plugins/FMOD/platforms/linux/lib/x86_64/libfmod_haptics.so
-  uploadId: 1007396

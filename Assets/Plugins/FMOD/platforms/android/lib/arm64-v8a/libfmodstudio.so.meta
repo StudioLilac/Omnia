@@ -1,11 +1,22 @@
-fileFormatVersion: 1
+fileFormatVersion: 2
 guid: e4d6c68823f34e440bfe4e4ecba4c113
-PluginImporter:
+AssetOrigin:
   serializedVersion: 1
+  productId: 311497
+  packageName: FMOD for Unity (2.03)
+  packageVersion: 2.03.15
+  assetPath: Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libfmodstudio.so
+  uploadId: 1007396
+PluginImporter:
+  externalObjects: {}
+  serializedVersion: 3
   iconMap: {}
   executionOrder: {}
+  defineConstraints: []
   isPreloaded: 0
   isOverridable: 0
+  isExplicitlyReferenced: 0
+  validateReferences: 1
   platformData:
     Android:
       enabled: 1
@@ -22,10 +33,3 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 311497
-  packageName: FMOD for Unity (2.03)
-  packageVersion: 2.03.15
-  assetPath: Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libfmodstudio.so
-  uploadId: 1007396

@@ -1,13 +1,5 @@
 fileFormatVersion: 2
 guid: 6e0992509b0077e479d2da05c8f52eb0
-MonoImporter:
-  serializedVersion: 2
-  defaultReferences: []
-  executionOrder: 0
-  icon: {instanceID: 0}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
   productId: 311497
@@ -15,3 +7,12 @@ AssetOrigin:
   packageVersion: 2.03.15
   assetPath: Assets/Plugins/FMOD/src/fmod_errors.cs
   uploadId: 1007396
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

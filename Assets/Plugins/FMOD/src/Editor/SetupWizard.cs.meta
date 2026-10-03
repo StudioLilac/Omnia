@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: aa9a0c70fef01fb43b8eff668bfa0e9c
+AssetOrigin:
+  serializedVersion: 1
+  productId: 311497
+  packageName: FMOD for Unity (2.03)
+  packageVersion: 2.03.15
+  assetPath: Assets/Plugins/FMOD/src/Editor/SetupWizard.cs
+  uploadId: 1007396
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,10 +16,3 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 311497
-  packageName: FMOD for Unity (2.03)
-  packageVersion: 2.03.15
-  assetPath: Assets/Plugins/FMOD/src/Editor/SetupWizard.cs
-  uploadId: 1007396

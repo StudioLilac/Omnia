@@ -1,10 +1,5 @@
 fileFormatVersion: 2
 guid: aab3caaf43456d6449a3e035348ff798
-AssemblyDefinitionImporter:
-  externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
   productId: 311497
@@ -12,3 +7,8 @@ AssetOrigin:
   packageVersion: 2.03.15
   assetPath: Assets/Plugins/FMOD/src/Editor/FMODUnityEditor.asmdef
   uploadId: 1007396
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

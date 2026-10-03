@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 40a1ca322d08d704eacd449863718b31
+AssetOrigin:
+  serializedVersion: 1
+  productId: 311497
+  packageName: FMOD for Unity (2.03)
+  packageVersion: 2.03.15
+  assetPath: Assets/Plugins/FMOD/src/Editor/BankRefreshWindow.cs
+  uploadId: 1007396
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,10 +16,3 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 311497
-  packageName: FMOD for Unity (2.03)
-  packageVersion: 2.03.15
-  assetPath: Assets/Plugins/FMOD/src/Editor/BankRefreshWindow.cs
-  uploadId: 1007396
