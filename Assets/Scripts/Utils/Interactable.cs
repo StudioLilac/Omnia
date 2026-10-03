@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 public class Interactable : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class Interactable : MonoBehaviour
     [SerializeField] private SpriteRenderer buttonIcon;
 
     private Coroutine fadeCoroutine;
+
+    [SerializeField] private InputActionReference interactAction;
 
     void Start() {
         buttonIcon.color = new Color(1f, 1f, 1f, 0f); // Set fully transparent
@@ -37,7 +40,7 @@ public class Interactable : MonoBehaviour
 
     void Update() {
         if (mainScript == null || !interactable) return;
-        if (inRange && Input.GetKeyDown(KeyCode.E)) {
+        if (inRange && interactAction.action.WasPressedThisFrame()) {
             inRange = false;
             StartFade(false);
             mainScript.Interact();

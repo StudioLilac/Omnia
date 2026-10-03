@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonIcon: {fileID: 6765254433230650694}
+  interactAction: {fileID: 5167875597974225737, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
 --- !u!61 &6019806576371800203
 BoxCollider2D:
   m_ObjectHideFlags: 0
