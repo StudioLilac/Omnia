@@ -97,9 +97,8 @@ steam_appid.txt
 # Log files can be ignored.
 fmod_editor.log
 
-/FMOD/Project/.cache/*
-/FMOD/Project/Build/*
-/FMOD/Project/*.user
+Assets/Audio/FMOD/.cache/
+Assets/Audio/FMOD/.user/
 
 # Yarn
 ProjectSettings/Packages/dev.yarnspinner/*-generated.ysls.json
