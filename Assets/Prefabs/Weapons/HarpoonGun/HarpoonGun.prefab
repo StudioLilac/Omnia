@@ -90,7 +90,7 @@ MonoBehaviour:
   damage: 35
   attackCooldown: 0
   damageToFlowRatio: 1
-  maxAmmoCount: 3
+  maxAmmoCount: 1
   harpoonVelocity: 30
   harpoonSpearGravityScale: 1
   harpoonSpearPickupCooldown: 0.3
