@@ -35,9 +35,6 @@ namespace Scenes {
         private string taglineText;
         private string quoteText;
 
-        [SerializeField] private Slider musicSlider;
-        [SerializeField] private Toggle toggle;
-
 
 
 
@@ -54,17 +51,6 @@ namespace Scenes {
         }
 
         private void Start() {
-            if (AudioManager.Instance.IsMuted()) {
-                AudioManager.Instance.SetBGMVolume(0f);
-                AudioManager.Instance.SetSFXVolume(0f);
-                AudioManager.Instance.SetAmbientVolume(0f);
-                ToggleAudio();
-                toggle.isOn = true;
-                musicSlider.value = PauseMenu.musicVol;
-                MusicVolume();
-            }
-            musicSlider.value = PauseMenu.musicVol;
-            MusicVolume();
             PlayerDataManager.Instance.warpedDepthsProgress = 0;
             dustImages = dustParent.GetComponentsInChildren<Image>();
 
@@ -155,17 +141,6 @@ namespace Scenes {
             }
 
             sprite.color = targetColor;
-        }
-
-        public void ToggleAudio() {
-            AudioManager.Instance.ToggleAudio();
-        }
-
-        public void MusicVolume() {
-            PauseMenu.musicVol = musicSlider.value;
-            AudioManager.Instance.SetBGMVolume(musicSlider.value);
-            AudioManager.Instance.SetSFXVolume(musicSlider.value);
-            AudioManager.Instance.SetAmbientVolume(musicSlider.value);
         }
 
 
