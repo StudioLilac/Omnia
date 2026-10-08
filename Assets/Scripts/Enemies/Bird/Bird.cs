@@ -34,7 +34,7 @@ namespace Enemies.Bird {
         public void OnDestroy() => NotifyOnDestroy?.Invoke(this);
 
         public void Awake() {
-            targetInstance ??= FindObjectsOfType<Player>().FirstOrDefault();
+            targetInstance ??= FindObjectsByType<Player>().FirstOrDefault();
             UseBehaviour(new Idle(this));
         }
 
