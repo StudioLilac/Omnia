@@ -163,12 +163,10 @@ public class HarpoonSpear : MonoBehaviour {
     }
 
     private void HandleEnemyCollision(Enemy enemy) {
-        Freeze();
         StartCooldown();
         StartHarpoonTimer();
 
         TaggedEnemy = enemy;
-        AttachToRigidBody(TaggedEnemy.GetComponent<Rigidbody2D>());
 
         DoDamage();
         OnHitEnemy?.Invoke(transform);
@@ -212,7 +210,6 @@ public class HarpoonSpear : MonoBehaviour {
     private void HandleEnemyDeath(Enemy enemy) {
         if (enemy == TaggedEnemy) {
             TaggedEnemy = null;
-            Unfreeze();
         }
     }
 

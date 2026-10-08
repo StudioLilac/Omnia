@@ -89,6 +89,7 @@ MonoBehaviour:
     m_Bits: 128
   damage: 35
   attackCooldown: 0
+  damageToFlowRatio: 1
   maxAmmoCount: 3
   harpoonVelocity: 30
   harpoonSpearGravityScale: 1
