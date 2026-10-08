@@ -5,6 +5,7 @@ using Enemies;
 using Omnia.Utils;
 using Players;
 using System.Collections;
+using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
 /*
@@ -27,12 +28,14 @@ public class HarpoonSpear : MonoBehaviour {
     private Player player;
     private bool playerAbsorb;
     private IEnumerator absorbCooldown;
+    private readonly List<Enemy> skeweredEnemies = new();
 
     // Tracking enemy
     public Enemy TaggedEnemy { get; private set; }
     public Transform PullTo { get; private set; }
 
     public bool IsCollectable => collectable;
+    public bool IsLanded => dropped;
 
     public static bool CanPullToGround;
 
@@ -64,6 +67,7 @@ public class HarpoonSpear : MonoBehaviour {
     public void Fire(HarpoonGun gun) {
         AudioManager.Instance.PlaySFX(AudioTracks.HarpoonLaunch);
         this.gun = gun;
+        skeweredEnemies.Clear();
 
         gameObject.SetActive(true);
 
@@ -152,6 +156,7 @@ public class HarpoonSpear : MonoBehaviour {
     }
 
     private void HandlePlayerCollision() {
+        KillSkeweredEnemies();
         Unfreeze();
         playerAbsorb = false;
         collectable = false;
@@ -163,12 +168,15 @@ public class HarpoonSpear : MonoBehaviour {
     }
 
     private void HandleEnemyCollision(Enemy enemy) {
-        Freeze();
         StartCooldown();
         StartHarpoonTimer();
 
+        if (enemy.WeightType == EnemyWeightType.Light) {
+            SkewerLightEnemy(enemy);
+            return;
+        }
+
         TaggedEnemy = enemy;
-        AttachToRigidBody(TaggedEnemy.GetComponent<Rigidbody2D>());
 
         DoDamage();
         OnHitEnemy?.Invoke(transform);
@@ -186,6 +194,7 @@ public class HarpoonSpear : MonoBehaviour {
     private void HandleSemisolidCollision(GameObject semi) {
         Freeze();
         AttachToRigidBody(semi.GetComponent<Rigidbody2D>());
+        KillSkeweredEnemies();
         PullTo = gameObject.transform;
         StartCooldown();
         StartHarpoonTimer();
@@ -194,11 +203,41 @@ public class HarpoonSpear : MonoBehaviour {
     private void HandleGroundCollision(GameObject ground) {
         Freeze();
         AttachToRigidBody(ground.GetComponent<Rigidbody2D>());
+        KillSkeweredEnemies();
         if (CanPullToGround) {
             PullTo = gameObject.transform;
         }
         StartCooldown();
         StartHarpoonTimer();
+    }
+
+    private void SkewerLightEnemy(Enemy enemy) {
+        skeweredEnemies.Add(enemy);
+        enemy.transform.SetParent(transform, true);
+        enemy.enabled = false;
+
+        Rigidbody2D enemyRigidbody = enemy.GetComponent<Rigidbody2D>();
+        if (enemyRigidbody != null) {
+            enemyRigidbody.linearVelocity = Vector2.zero;
+            enemyRigidbody.angularVelocity = 0;
+            enemyRigidbody.simulated = false;
+        }
+
+        foreach (UnityEngine.Collider2D collider in enemy.GetComponentsInChildren<UnityEngine.Collider2D>()) {
+            collider.enabled = false;
+        }
+    }
+
+    private void KillSkeweredEnemies() {
+        Enemy[] enemies = new Enemy[skeweredEnemies.Count];
+        skeweredEnemies.CopyTo(enemies);
+        skeweredEnemies.Clear();
+
+        foreach (Enemy enemy in enemies) {
+            if (enemy == null) continue;
+            enemy.transform.SetParent(null, true);
+            enemy.Die();
+        }
     }
 
     // To make the spear move, the hit object should have a rigidbody
@@ -210,9 +249,10 @@ public class HarpoonSpear : MonoBehaviour {
     }
 
     private void HandleEnemyDeath(Enemy enemy) {
+        skeweredEnemies.Remove(enemy);
+
         if (enemy == TaggedEnemy) {
             TaggedEnemy = null;
-            Unfreeze();
         }
     }
 
@@ -242,7 +282,8 @@ public class HarpoonSpear : MonoBehaviour {
         dropped = true;
     }
 
-    // Begin pickup cooldown at the first spear contact, after that free to collect anytime
+    // Begin pickup cooldown at the first spear contact, after that free to collect anytime.
+    // Enemy hits no longer latch the spear, so TaggedEnemy must not block pickup.
     private void StartCooldown() {
         if (collectable) return;
 
@@ -260,7 +301,7 @@ public class HarpoonSpear : MonoBehaviour {
 
     private IEnumerator DropCooldown() {
         yield return new WaitForSeconds(gun.harpoonSpearPickupCooldown);
-        collectable = (TaggedEnemy == null);
+        collectable = true;
     }
 
     private void StartHarpoonTimer() {

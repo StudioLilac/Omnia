@@ -5,6 +5,12 @@ using Omnia.State;
 using Enemies.Common.Behaviour;
 
 namespace Enemies {
+    public enum EnemyWeightType {
+        None,
+        Light,
+        Heavy
+    }
+
     public abstract class Enemy : MonoBehaviour {
         public static event Action<Enemy> Spawn;
         public static event Action<Enemy> Death;
@@ -26,6 +32,8 @@ namespace Enemies {
         public IBehaviour prevBehaviour { get; protected set; }
 
         public StateMachine animationStateMachine { get; protected set; }
+
+        public virtual EnemyWeightType WeightType => EnemyWeightType.Heavy;
 
         public virtual void Start() {
             currentHealth = maximumHealth;
