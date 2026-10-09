@@ -1,14 +1,16 @@
 using System.Collections;
 
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 
 public class ScreenShakeManager : PersistentSingleton<ScreenShakeManager> {
-    private Unity.Cinemachine.CinemachineBasicMultiChannelPerlin perlinNoise;
+    private CinemachineBasicMultiChannelPerlin perlinNoise;
+    private Coroutine shakeCoroutine;
 
     protected override void OnAwake() {
-        perlinNoise = FindAnyObjectByType<Unity.Cinemachine.CinemachineCamera>()?.GetComponentInChildren<Unity.Cinemachine.CinemachineBasicMultiChannelPerlin>();
+        FindPerlinNoise();
     }
 
     private void OnEnable() {
@@ -20,12 +22,24 @@ public class ScreenShakeManager : PersistentSingleton<ScreenShakeManager> {
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        perlinNoise = FindAnyObjectByType<Unity.Cinemachine.CinemachineCamera>()?.GetComponentInChildren<Unity.Cinemachine.CinemachineBasicMultiChannelPerlin>();
+        if (shakeCoroutine != null) StopCoroutine(shakeCoroutine);
+        shakeCoroutine = null;
+        FindPerlinNoise();
     }
 
     public void Shake(float intensity = 1.0f, float duration = 0.5f) {
-        if (!perlinNoise || !PauseMenu.ScreenShake) return;
-        StartCoroutine(ShakeCoroutine(intensity, duration));
+        if (!PauseMenu.ScreenShake) return;
+
+        if (!perlinNoise || !perlinNoise.IsValid) FindPerlinNoise();
+        if (!perlinNoise) return;
+
+        if (shakeCoroutine != null) StopCoroutine(shakeCoroutine);
+        shakeCoroutine = StartCoroutine(ShakeCoroutine(intensity, duration));
+    }
+
+    private void FindPerlinNoise() {
+        perlinNoise = FindAnyObjectByType<CinemachineBasicMultiChannelPerlin>();
+        if (perlinNoise && !perlinNoise.IsValid) perlinNoise = null;
     }
 
     private IEnumerator ShakeCoroutine(float intensity, float duration) {
@@ -44,8 +58,9 @@ public class ScreenShakeManager : PersistentSingleton<ScreenShakeManager> {
             yield return null;
         }
 
-        // Reset to 0 instead of original values as multiple screen shakes at a time causes issues
         perlinNoise.AmplitudeGain = 0;
         perlinNoise.FrequencyGain = 0;
+
+        shakeCoroutine = null;
     }
 }
