@@ -88,11 +88,6 @@ public class HarpoonGun : WeaponClass
         CurrentAmmo++;
     }
 
-    public void SpearCollectAll() {
-        if (harpoonSpear.gameObject.activeSelf) SpearCollected(harpoonSpear);
-        CurrentAmmo = maxAmmoCount;
-    }
-
     private void HandleWeaponRotation() {
         Vector2 facing = playerComponent.facing;
 
