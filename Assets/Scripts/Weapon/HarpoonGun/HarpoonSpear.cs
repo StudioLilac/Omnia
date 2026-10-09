@@ -28,10 +28,9 @@ public class HarpoonSpear : MonoBehaviour {
     private Player player;
     private bool playerAbsorb;
     private IEnumerator absorbCooldown;
-    private readonly List<Enemy> skeweredEnemies = new();
 
     // Tracking enemy
-    public Enemy TaggedEnemy { get; private set; }
+    public List<Enemy> TaggedEnemies { get; private set; }
     public Transform PullTo { get; private set; }
 
     public bool IsCollectable => collectable;
@@ -43,7 +42,7 @@ public class HarpoonSpear : MonoBehaviour {
 
     public void Awake() {
         dropped = false;
-        TaggedEnemy = null;
+        TaggedEnemies = new List<Enemy>();
         PullTo = null;
         playerAbsorb = false;
 
@@ -67,7 +66,7 @@ public class HarpoonSpear : MonoBehaviour {
     public void Fire(HarpoonGun gun) {
         AudioManager.Instance.PlaySFX(AudioTracks.HarpoonLaunch);
         this.gun = gun;
-        skeweredEnemies.Clear();
+        TaggedEnemies.Clear();
 
         gameObject.SetActive(true);
 
@@ -79,19 +78,16 @@ public class HarpoonSpear : MonoBehaviour {
     }
 
     public void PullEnemy() {
-        if (TaggedEnemy == null) {
+        if (TaggedEnemies.Count == 0) {
             return;
         }
 
         Vector2 difference = (player.Center - transform.position).normalized;
-        TaggedEnemy.GetComponent<Rigidbody2D>().AddForce(difference * gun.pullPower);
+        foreach (var enemy in TaggedEnemies) {
+            enemy.GetComponent<Rigidbody2D>().AddForce(difference * gun.pullPower);
+            DoDamage(enemy);
+        }
         AudioManager.Instance.PlaySFX(AudioTracks.HarpoonRetract);
-
-        DoDamage();
-    }
-
-    public void ReleaseHarpoonFromEnemy() {
-        collectable = true;
     }
 
     public void ReturnToPlayer() {
@@ -161,7 +157,7 @@ public class HarpoonSpear : MonoBehaviour {
         playerAbsorb = false;
         collectable = false;
         PullTo = null;
-        TaggedEnemy = null;
+        TaggedEnemies.Clear();
 
         // Tell gun to mark this spear as available
         gun.SpearCollected(this);
@@ -171,24 +167,24 @@ public class HarpoonSpear : MonoBehaviour {
         StartCooldown();
         StartHarpoonTimer();
 
+        TaggedEnemies.Add(enemy);
+
         if (enemy.WeightType == EnemyWeightType.Light) {
             SkewerLightEnemy(enemy);
             return;
         }
 
-        TaggedEnemy = enemy;
-
-        DoDamage();
+        DoDamage(enemy);
         OnHitEnemy?.Invoke(transform);
     }
 
-    private void DoDamage() {
+    private void DoDamage(Enemy enemy) {
         bool isCrit = Random.Range(0f, 1f) < player.critChance;
 
         float damageAmount = gun.damage * player.damageMultiplier * (isCrit ? player.critMultiplier : 1);
-        TaggedEnemy.GetComponent<Enemy>().Hurt(damageAmount, crit: isCrit);
+        enemy.Hurt(damageAmount, crit: isCrit);
 
-        player?.OnHit(damageAmount, TaggedEnemy);
+        player?.OnHit(damageAmount, enemy);
     }
 
     private void HandleSemisolidCollision(GameObject semi) {
@@ -212,7 +208,6 @@ public class HarpoonSpear : MonoBehaviour {
     }
 
     private void SkewerLightEnemy(Enemy enemy) {
-        skeweredEnemies.Add(enemy);
         enemy.transform.SetParent(transform, true);
         enemy.enabled = false;
 
@@ -229,12 +224,10 @@ public class HarpoonSpear : MonoBehaviour {
     }
 
     private void KillSkeweredEnemies() {
-        Enemy[] enemies = new Enemy[skeweredEnemies.Count];
-        skeweredEnemies.CopyTo(enemies);
-        skeweredEnemies.Clear();
+        List<Enemy> skeweredEnemies = TaggedEnemies.FindAll(enemy => enemy != null && enemy.WeightType == EnemyWeightType.Light);
 
-        foreach (Enemy enemy in enemies) {
-            if (enemy == null) continue;
+        foreach (Enemy enemy in skeweredEnemies) {
+            TaggedEnemies.Remove(enemy);
             enemy.transform.SetParent(null, true);
             enemy.Die();
         }
@@ -249,11 +242,7 @@ public class HarpoonSpear : MonoBehaviour {
     }
 
     private void HandleEnemyDeath(Enemy enemy) {
-        skeweredEnemies.Remove(enemy);
-
-        if (enemy == TaggedEnemy) {
-            TaggedEnemy = null;
-        }
+        TaggedEnemies.Remove(enemy);
     }
 
     // Unfreezes the spear
@@ -283,7 +272,7 @@ public class HarpoonSpear : MonoBehaviour {
     }
 
     // Begin pickup cooldown at the first spear contact, after that free to collect anytime.
-    // Enemy hits no longer latch the spear, so TaggedEnemy must not block pickup.
+    // Enemy hits no longer latch the spear, so TaggedEnemies must not block pickup.
     private void StartCooldown() {
         if (collectable) return;
 

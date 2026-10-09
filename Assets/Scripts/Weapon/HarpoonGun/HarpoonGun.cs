@@ -34,15 +34,8 @@ public class HarpoonGun : WeaponClass
 
     protected override void HandleAttack()
     {
-        if (harpoonSpear.gameObject.activeSelf) {
-            // Once fired, left click pulls Jamie to the landed spear.
-            // UseSkill() keeps this inactive while the spear is still airborne.
-            UseSkill();
-            return;
-        }
-
         if (CurrentAmmo <= 0) {
-            // Do nothing
+            PullHarpoon();
             return;
         }
         harpoonSpear.Fire(this);
@@ -50,20 +43,22 @@ public class HarpoonGun : WeaponClass
         Instantiate(muzzleFlash, barrelPosition.transform.position, transform.rotation);
     }
 
-    public override bool UseSkill()
+    public void PullHarpoon()
     {
-        if (!harpoonSpear.gameObject.activeSelf) return false;
+        if (!harpoonSpear.gameObject.activeSelf) return;
         Transform target = harpoonSpear.PullTo ??
             (harpoonSpear.IsLanded ? harpoonSpear.transform : null);
 
-        if (target == null) return false;
-
-
-        harpoonSpear.ReleaseHarpoonFromEnemy();
+        if (target == null) return;
         playerComponent.UsePull(target);
 
         AudioManager.Instance.PlaySFX(AudioTracks.HarpoonRetract);
-        return true;
+    }
+
+    public override bool UseSkill()
+    {
+        //TODO
+        return false;
     }
 
     public override void IntroSkill()
