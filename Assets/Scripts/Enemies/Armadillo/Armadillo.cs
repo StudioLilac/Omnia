@@ -30,6 +30,7 @@ namespace Enemies.Armadillo {
         [SerializeField] internal float recoilSpeed = 5.0f;
 
         [SerializeField] internal GameObject deathExplosion;
+        [SerializeField] internal ParticleSystem dustParticles;
 
 #nullable enable
         internal Player? aggrodPlayer;

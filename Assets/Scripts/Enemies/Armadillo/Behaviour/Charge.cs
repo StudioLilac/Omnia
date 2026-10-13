@@ -11,6 +11,14 @@ namespace Enemies.Armadillo.Behaviour {
 
         public void OnEnter() {
             t = self.chargeTime;
+            var vel = self.dustParticles.velocityOverLifetime;
+            vel.x = -self.facing.x * Mathf.Abs(vel.x.constant);
+
+            Vector3 dustPos = self.dustParticles.transform.localPosition;
+            dustPos.x = -self.facing.x * Mathf.Abs(dustPos.x);
+            self.dustParticles.transform.localPosition = dustPos;
+
+            self.dustParticles.Play();
         }
 
         public void OnExit() {
