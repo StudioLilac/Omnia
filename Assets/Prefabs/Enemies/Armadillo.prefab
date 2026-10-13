@@ -428,6 +428,7 @@ MonoBehaviour:
   rollSpeed: 6
   idleDuration: 0.5
   alertTime: 1
+  chargeTime: 1
   recoilTime: 1
   uncurlTime: 0.5
   detectionRange: 7

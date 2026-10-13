@@ -22,6 +22,7 @@ namespace Enemies.Armadillo {
         [SerializeField] internal float rollSpeed = 4.0f;
         [SerializeField] internal float idleDuration = 0.5f;
         [SerializeField] internal float alertTime = 1.0f;
+        [SerializeField] internal float chargeTime = 1.0f;
         [SerializeField] internal float recoilTime = 1.0f;
         [SerializeField] internal float uncurlTime = 1.0f;
         [SerializeField] internal float detectionRange = 5.0f;
@@ -86,7 +87,7 @@ namespace Enemies.Armadillo {
             stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle));
             stateMachine.AddAnyTransition(new MoveAnimation(animator), new FuncPredicate(() => behaviour is Move));
             stateMachine.AddAnyTransition(new AlertAnimation(animator), new FuncPredicate(() => behaviour is Alert));
-            stateMachine.AddAnyTransition(new RollAnimation(animator), new FuncPredicate(() => behaviour is Roll));
+            stateMachine.AddAnyTransition(new RollAnimation(animator), new FuncPredicate(() => behaviour is Charge or Roll));
             stateMachine.AddAnyTransition(new RecoilAnimation(animator), new FuncPredicate(() => behaviour is Recoil));
             stateMachine.AddAnyTransition(new UncurlAnimation(animator), new FuncPredicate(() => behaviour is Uncurl));
 
