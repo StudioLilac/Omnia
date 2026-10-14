@@ -16,7 +16,7 @@ namespace UI {
         [SerializeField] private float fadeInDuration = 0.4f;
 
         private SpriteRenderer playerSprite;
-        private Transform player;
+        private Transform mapCenter;
         private readonly Dictionary<Enemy, RectTransform> dots = new();
         private readonly List<Enemy> destroyed = new();
 
@@ -32,7 +32,7 @@ namespace UI {
             LevelManager.OnLevelLoaded -= OnLevelLoaded;
         }
 
-        private void OnLevelLoaded(LevelData _) => player = null;
+        private void OnLevelLoaded(LevelData _) => mapCenter = null;
 
         private void OnEnemySpawn(Enemy enemy) {
             // Destructable walls inherit from Enemy but are terrain, so they don't get a dot
@@ -45,20 +45,22 @@ namespace UI {
         }
 
         private void LateUpdate() {
-            if (!player) {
+            if (!mapCenter) {
                 var obj = GameObject.FindGameObjectWithTag("Player");
                 if (obj) {
-                    player = obj.transform;
                     playerSprite = obj.GetComponent<Player>().sprite;
                     // The minimap camera is a child of the player prefab. Its view radius must match the mask radius
-                    obj.GetComponentInChildren<Camera>().orthographicSize = enemyDotParent.rect.width / 2f / pixelsPerUnit;
+                    var minimapCamera = obj.GetComponentInChildren<Camera>();
+                    minimapCamera.orthographicSize = enemyDotParent.rect.width / 2f / pixelsPerUnit;
+                    // camera's transform is at the center of the player while obj.transform is at the feet
+                    mapCenter = minimapCamera.transform;
                 }
                 else return;
             }
 
             foreach (var (enemy, dot) in dots) {
                 if (!enemy) { destroyed.Add(enemy); continue; }
-                dot.anchoredPosition = (enemy.transform.position - player.position) * pixelsPerUnit;
+                dot.anchoredPosition = (enemy.transform.position - mapCenter.position) * pixelsPerUnit;
                 dot.gameObject.SetActive(enemy is not HiddenEnemy h || !h.hidden);
             }
 
