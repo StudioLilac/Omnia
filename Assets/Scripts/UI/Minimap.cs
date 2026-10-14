@@ -9,6 +9,8 @@ namespace UI {
         [SerializeField] private RectTransform enemyDotPrefab;
         // UI pixels per world unit. Also sets the minimap camera's size so the terrain and dots share a scale
         [SerializeField] private float pixelsPerUnit = 2.5f;
+        private float minDotSize = 5f;
+        private float maxDotSize = 20f;
 
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private float obscuredAlpha = 0.3f;
@@ -37,20 +39,26 @@ namespace UI {
         private void OnEnemySpawn(Enemy enemy) {
             // Destructable walls inherit from Enemy but are terrain, so they don't get a dot
             if (enemy is DestructableWall || dots.ContainsKey(enemy)) return;
-            dots[enemy] = (Instantiate(enemyDotPrefab, enemyDotParent), enemy.GetComponent<Collider2D>());
+            RectTransform dot = Instantiate(enemyDotPrefab, enemyDotParent);
+            Collider2D body = enemy.GetComponent<Collider2D>();
+            if (body) {
+                Vector3 size = body.bounds.size;
+                dot.sizeDelta = Vector2.one * Mathf.Clamp(Mathf.Max(size.x, size.y) * pixelsPerUnit, minDotSize, maxDotSize);
+            }
+            dots[enemy] = (dot, body);
         }
 
         private void OnEnemyDeath(Enemy enemy) {
-            if (dots.Remove(enemy, out var entry)) Destroy(entry.dot.gameObject);
+            if (dots.Remove(enemy, out (RectTransform dot, Collider2D body) entry)) Destroy(entry.dot.gameObject);
         }
 
         private void LateUpdate() {
             if (!mapCenter) {
-                var obj = GameObject.FindGameObjectWithTag("Player");
+                GameObject obj = GameObject.FindGameObjectWithTag("Player");
                 if (obj) {
                     playerSprite = obj.GetComponent<Player>().sprite;
                     // The minimap camera is a child of the player prefab. Its view radius must match the mask radius
-                    var minimapCamera = obj.GetComponentInChildren<Camera>();
+                    Camera minimapCamera = obj.GetComponentInChildren<Camera>();
                     minimapCamera.orthographicSize = enemyDotParent.rect.width / 2f / pixelsPerUnit;
                     // camera's transform is at the center of the player while obj.transform is at the feet
                     mapCenter = minimapCamera.transform;
@@ -61,22 +69,22 @@ namespace UI {
             foreach (var (enemy, (dot, body)) in dots) {
                 if (!enemy) { destroyed.Add(enemy); continue; }
                 // Not every enemy has a collider
-                var position = body ? body.bounds.center : enemy.transform.position;
+                Vector3 position = body ? body.bounds.center : enemy.transform.position;
                 dot.anchoredPosition = (position - mapCenter.position) * pixelsPerUnit;
                 dot.gameObject.SetActive(enemy is not HiddenEnemy h || !h.hidden);
             }
 
             // Enemies unloaded with a scene never invoke Death, so they are removed here instead.
             // This can't happen inside the loop above, since the dictionary can't change while iterating
-            foreach (var enemy in destroyed) OnEnemyDeath(enemy);
+            foreach (Enemy enemy in destroyed) OnEnemyDeath(enemy);
             destroyed.Clear();
 
             UpdateFade();
         }
 
         private void UpdateFade() {
-            var target = IsPlayerBehindMinimap() ? obscuredAlpha : 1f;
-            var duration = target < canvasGroup.alpha ? fadeOutDuration : fadeInDuration;
+            float target = IsPlayerBehindMinimap() ? obscuredAlpha : 1f;
+            float duration = target < canvasGroup.alpha ? fadeOutDuration : fadeInDuration;
             // Speed is scaled so a full fade between 1 and obscuredAlpha takes exactly duration seconds
             canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, target, (1f - obscuredAlpha) / duration * Time.deltaTime);
         }
@@ -86,16 +94,16 @@ namespace UI {
          * The HUD is a Screen Space Overlay canvas, so UI world positions are already in screen pixels
          */
         private bool IsPlayerBehindMinimap() {
-            var rt = (RectTransform)transform;
+            RectTransform rt = (RectTransform)transform;
             Vector2 center = rt.TransformPoint(rt.rect.center);
-            var radius = rt.rect.width / 2f * rt.lossyScale.x;
+            float radius = rt.rect.width / 2f * rt.lossyScale.x;
 
-            var cam = Camera.main;
-            var bounds = playerSprite.bounds;
+            Camera cam = Camera.main;
+            Bounds bounds = playerSprite.bounds;
             Vector2 min = cam.WorldToScreenPoint(bounds.min);
             Vector2 max = cam.WorldToScreenPoint(bounds.max);
 
-            var closest = new Vector2(Mathf.Clamp(center.x, min.x, max.x), Mathf.Clamp(center.y, min.y, max.y));
+            Vector2 closest = new Vector2(Mathf.Clamp(center.x, min.x, max.x), Mathf.Clamp(center.y, min.y, max.y));
             return (closest - center).sqrMagnitude < radius * radius;
         }
     }
