@@ -17,7 +17,7 @@ namespace UI {
 
         private SpriteRenderer playerSprite;
         private Transform mapCenter;
-        private readonly Dictionary<Enemy, RectTransform> dots = new();
+        private readonly Dictionary<Enemy, (RectTransform dot, Collider2D body)> dots = new();
         private readonly List<Enemy> destroyed = new();
 
         private void OnEnable() {
@@ -37,11 +37,11 @@ namespace UI {
         private void OnEnemySpawn(Enemy enemy) {
             // Destructable walls inherit from Enemy but are terrain, so they don't get a dot
             if (enemy is DestructableWall || dots.ContainsKey(enemy)) return;
-            dots[enemy] = Instantiate(enemyDotPrefab, enemyDotParent);
+            dots[enemy] = (Instantiate(enemyDotPrefab, enemyDotParent), enemy.GetComponent<Collider2D>());
         }
 
         private void OnEnemyDeath(Enemy enemy) {
-            if (dots.Remove(enemy, out var dot)) Destroy(dot.gameObject);
+            if (dots.Remove(enemy, out var entry)) Destroy(entry.dot.gameObject);
         }
 
         private void LateUpdate() {
@@ -58,9 +58,11 @@ namespace UI {
                 else return;
             }
 
-            foreach (var (enemy, dot) in dots) {
+            foreach (var (enemy, (dot, body)) in dots) {
                 if (!enemy) { destroyed.Add(enemy); continue; }
-                dot.anchoredPosition = (enemy.transform.position - mapCenter.position) * pixelsPerUnit;
+                // Not every enemy has a collider
+                var position = body ? body.bounds.center : enemy.transform.position;
+                dot.anchoredPosition = (position - mapCenter.position) * pixelsPerUnit;
                 dot.gameObject.SetActive(enemy is not HiddenEnemy h || !h.hidden);
             }
 
