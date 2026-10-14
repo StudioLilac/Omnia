@@ -324,6 +324,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4911301043990639108}
   - component: {fileID: 3704957500424083931}
+  - component: {fileID: 7064790941920445290}
   m_Layer: 0
   m_Name: Minimap
   m_TagString: Untagged
@@ -367,6 +368,22 @@ MonoBehaviour:
   enemyDotParent: {fileID: 9036298613404515715}
   enemyDotPrefab: {fileID: 6035558281500425231, guid: bef5be0bb54c6b34e9e9a2f00db92f72, type: 3}
   pixelsPerUnit: 10
+  canvasGroup: {fileID: 7064790941920445290}
+  obscuredAlpha: 0.3
+  fadeOutDuration: 0.15
+  fadeInDuration: 0.4
+--- !u!225 &7064790941920445290
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3435520568536392062}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &5817422066745934975
 GameObject:
   m_ObjectHideFlags: 0
