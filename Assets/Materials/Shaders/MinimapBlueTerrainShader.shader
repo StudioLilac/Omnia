@@ -1,3 +1,5 @@
+// Draws the minimap render texture as a flat silhouette in the RawImage's color.
+// Relies on the alpha channel to find terrain, so the minimap camera's background alpha must stay 0
 Shader "UI/MinimapBlueTerrainShader"
 {
     Properties
@@ -6,6 +8,7 @@ Shader "UI/MinimapBlueTerrainShader"
         _Color ("Tint", Color) = (1,1,1,1)
         _Threshold ("Alpha Threshold", Range(0, 1)) = 0.01
 
+        // Set by the UI Mask component to clip this image to the circle. Must be kept for masking to work
         _StencilComp ("Stencil Comparison", Float) = 8
         _Stencil ("Stencil ID", Float) = 0
         _StencilOp ("Stencil Operation", Float) = 0
@@ -57,6 +60,7 @@ Shader "UI/MinimapBlueTerrainShader"
             }
 
             fixed4 frag (v2f i) : SV_Target {
+                // Tile colors are ignored. Any pixel with alpha above the threshold is terrain
                 fixed a = tex2D(_MainTex, i.uv).a;
                 return fixed4(i.color.rgb, a > _Threshold ? i.color.a : 0);
             }
