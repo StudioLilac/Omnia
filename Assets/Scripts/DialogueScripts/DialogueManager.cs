@@ -13,6 +13,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
     [SerializeField] private InputActionReference advanceAction;
     [SerializeField] private InputActionReference fastForwardAction;
     private List<DialogueText> sentences = new();
+    private bool ownsFreeze;
 
     public bool inDialogue;
 
@@ -31,6 +32,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
     }
 
     void OnDestroy() {
+        ReleaseFreeze();
         SceneManager.activeSceneChanged -= ClearDialogueHistory;
         PauseMenu.OnPauseMenuActivate -= OnPause;
         PauseMenu.OnPauseMenuDeactivate -= OnUnpause;
@@ -41,7 +43,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
     }
 
     public IEnumerator StartDialogue(List<DialogueText> newSentences) {
-        if (activeDialogueBox.gameObject.activeInHierarchy)
+        if (inDialogue || activeDialogueBox.gameObject.activeInHierarchy)
         {
             yield break;
         }
@@ -55,8 +57,8 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         sentences = newSentences;
 
         inDialogue = true;
-
-        Time.timeScale = 0f;
+        TimeManager.Freeze();
+        ownsFreeze = true;
 
         DisplayNextSentence();
         yield return new WaitUntil(() => !inDialogue);
@@ -73,7 +75,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
 
 
     void ClearPanel() {
-        activeDialogueBox.gameObject.SetActive(false);
+        if (activeDialogueBox != null) activeDialogueBox.gameObject.SetActive(false);
         sentences.Clear();
         inDialogue = false;
     }
@@ -135,7 +137,14 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
 
     void EndDialogue() {
         ClearPanel();
-        Time.timeScale = 1f;
+        ReleaseFreeze();
+    }
+
+    private void ReleaseFreeze() {
+        if (!ownsFreeze) return;
+
+        ownsFreeze = false;
+        TimeManager.Resume();
     }
 
     void Update() {
@@ -155,16 +164,16 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
 
     private void ClearDialogueHistory(Scene current, Scene next) {
         dialogueHistory.Clear();
+        if (inDialogue) EndDialogue();
     }
 
     private void OnPause() {
-        if (!inDialogue) return;
+        if (!inDialogue || activeDialogueBox == null) return;
         activeDialogueBox.gameObject.SetActive(false);
     }
 
     private void OnUnpause() {
-        if (!inDialogue) return;
-        Time.timeScale = 0f;
+        if (!inDialogue || activeDialogueBox == null) return;
         activeDialogueBox.gameObject.SetActive(true);
         activeDialogueBox.StopScrollingText();
     }
