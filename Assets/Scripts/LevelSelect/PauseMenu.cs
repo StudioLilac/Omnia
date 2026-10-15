@@ -28,8 +28,6 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
 
     [SerializeField] private InputActionReference pauseAction;
 
-    private bool ownsFreeze;
-
     // Workaround To Import Mute Icon's Toggle Image from Title since it is not possible to toggle the image without
     // the associated onValueChanged function being called
     private void OnEnable() {
@@ -148,7 +146,7 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
     public void ResumeScene()
     {
         if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
-        ReleaseFreeze();
+        TimeManager.Resume();
         IsPaused = false;
         OnPauseMenuDeactivate?.Invoke();
     }
@@ -159,7 +157,6 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
         pauseMenuPanel.SetActive(true);
         IsPaused = true;
         TimeManager.Freeze();
-        ownsFreeze = true;
 
         if (isDialogueHistoryShowing) {
             RenderHistory();
@@ -171,20 +168,13 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
         if (Instance != this) return;
 
         SceneManager.activeSceneChanged -= OnActiveSceneChanged;
-        ReleaseFreeze();
+        TimeManager.Resume();
         if (IsPaused) OnPauseMenuDeactivate?.Invoke();
         IsPaused = false;
     }
 
     private void OnActiveSceneChanged(Scene current, Scene next) {
         if (IsPaused) ResumeScene();
-    }
-
-    private void ReleaseFreeze() {
-        if (!ownsFreeze) return;
-
-        ownsFreeze = false;
-        TimeManager.Resume();
     }
 
     public void LevelSelectScene() {

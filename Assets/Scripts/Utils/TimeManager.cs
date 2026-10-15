@@ -52,14 +52,12 @@ public sealed class TimeManager : MonoBehaviour {
         instance = null;
     }
 
-    /// <summary>Freezes game time until a matching Resume call.</summary>
     public static void Freeze() {
         TimeManager manager = Instance;
         manager.freezeCount++;
         manager.Apply();
     }
 
-    /// <summary>Releases one freeze and restores the active pushed scale or the default.</summary>
     public static void Resume() {
         if (instance == null || instance.freezeCount == 0) return;
 
@@ -67,11 +65,6 @@ public sealed class TimeManager : MonoBehaviour {
         instance.Apply();
     }
 
-    /// <summary>
-    /// Pushes a temporary scale over the current one. The curve maps normalized
-    /// time from 0 to 1 and blends from scale (curve value 0) back to the
-    /// underlying scale (curve value 1). A null curve holds scale until expiry.
-    /// </summary>
     public static void Push(float scale, float duration, AnimationCurve ease) {
         if (float.IsNaN(scale) || float.IsInfinity(scale) || scale < 0f) {
             throw new ArgumentOutOfRangeException(nameof(scale));
@@ -81,6 +74,15 @@ public sealed class TimeManager : MonoBehaviour {
         }
 
         TimeManager manager = Instance;
+        if (scale == 0f && ease == null && manager.scales.Count > 0) {
+            TimedScale top = manager.scales.Peek();
+            if (top.Scale == 0f && top.Ease == null) {
+                // Overlapping hits should extend one freeze instead of stacking freezes.
+                top.Duration = Mathf.Max(top.Duration, top.Elapsed + duration);
+                return;
+            }
+        }
+
         float underlyingScale = manager.activeScale;
         float initialBlend = ease == null ? 0f : Mathf.Clamp01(ease.Evaluate(0f));
         float initialScale = Mathf.Lerp(scale, underlyingScale, initialBlend);
