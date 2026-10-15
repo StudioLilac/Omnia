@@ -6,6 +6,7 @@ using Yarn.Unity;
 
 public class DialogueManager : PersistentSingleton<DialogueManager> {
     [SerializeField] private DialogueRunner yarnDialogueRunnerPrefab;
+    private bool ownsFreeze;
 
     private DialogueRunner yarnDialogueRunner;
     private Canvas[] dialogueCanvases;
@@ -33,6 +34,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
     }
 
     void OnDestroy() {
+        ReleaseFreeze();
         PauseMenu.OnPauseMenuActivate -= OnPause;
         PauseMenu.OnPauseMenuDeactivate -= OnUnpause;
     }
@@ -44,7 +46,8 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         if (InventoryManager.Instance?.IsInventoryOpen ?? false) InventoryManager.Instance.CloseInventory();
 
         inDialogue = true;
-        Time.timeScale = 0f;
+        TimeManager.Freeze();
+        ownsFreeze = true;
         yarnDialogueRunner.SetProject(dialogueReference.project);
         SetDialogueUiVisible(true);
         yield return YarnTask.ToCoroutine(async () => {
@@ -53,7 +56,14 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         });
         SetDialogueUiVisible(false);
         inDialogue = false;
-        Time.timeScale = 1f;
+        ReleaseFreeze();
+    }
+
+    private void ReleaseFreeze() {
+        if (!ownsFreeze) return;
+
+        ownsFreeze = false;
+        TimeManager.Resume();
     }
 
     private void OnPause() {
@@ -62,7 +72,6 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
 
     private void OnUnpause() {
         if (inDialogue) {
-            Time.timeScale = 0f;
             SetDialogueUiVisible(true);
         }
     }
