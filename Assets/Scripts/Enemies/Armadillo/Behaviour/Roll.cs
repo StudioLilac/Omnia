@@ -13,6 +13,7 @@ namespace Enemies.Armadillo.Behaviour {
         }
 
         public void OnExit() {
+            self.dirtParticles.Stop();
         }
 
         public void OnTick() {
