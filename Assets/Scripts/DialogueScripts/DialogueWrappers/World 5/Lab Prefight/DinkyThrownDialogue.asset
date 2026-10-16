@@ -25,8 +25,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "We\u2019re here to help you, little guy. Won\u2019t be more than a
-      moment. You ready, Jamie?"
+  - bodyText: "We\u2019re here to help you, little guy. Won\u2019t be more than a moment. You ready, Jamie?"
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
     highlightedWords: []
@@ -44,3 +43,6 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_e7bbe75dcda4a3e44b309e540d439e4f

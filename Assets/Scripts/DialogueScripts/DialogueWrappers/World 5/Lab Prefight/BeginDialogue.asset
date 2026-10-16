@@ -19,8 +19,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "It\u2019s like you said. The Waste is only getting worse down there.
-      I needed a way to help, and here she is."
+  - bodyText: "It\u2019s like you said. The Waste is only getting worse down there. I needed a way to help, and here she is."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
     highlightedWords: []
@@ -38,8 +37,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Wait \u2018til you see her in action. Here, go grab me one of those
-      Waste objects on the table there. I\u2019ll show you how she works."
+  - bodyText: "Wait \u2018til you see her in action. Here, go grab me one of those Waste objects on the table there. I\u2019ll show you how she works."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
     highlightedWords: []
@@ -99,22 +97,19 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "No reason why it shouldn\u2019t. I\u2019ve wanted to help out the
-      infected animals ever since I started building the machine."
+  - bodyText: "No reason why it shouldn\u2019t. I\u2019ve wanted to help out the infected animals ever since I started building the machine."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Though it took a long time to get it runnin\u2019 how I wanted it
-      to. That\u2019s what all these critters have been waiting for."
+  - bodyText: "Though it took a long time to get it runnin\u2019 how I wanted it to. That\u2019s what all these critters have been waiting for."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "You came at a good time there, Jamie. I was just about to do my first
-      live trial when I found you. Dinky\u2019s a lucky little fella, first dibs!\r\n"
+  - bodyText: "You came at a good time there, Jamie. I was just about to do my first live trial when I found you. Dinky\u2019s a lucky little fella, first dibs!\r\n"
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
     highlightedWords: []
@@ -126,8 +121,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Don\u2019t worry, Jamie. If anything goes wrong, there\u2019s a kill
-      switch that should let him out right away. It\u2019ll be okay, promise."
+  - bodyText: "Don\u2019t worry, Jamie. If anything goes wrong, there\u2019s a kill switch that should let him out right away. It\u2019ll be okay, promise."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
     highlightedWords: []
@@ -151,8 +145,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "I know you\u2019re scared. But this is going to help you! It\u2019ll
-      all be worth it, you\u2019ll see. Right?"
+  - bodyText: "I know you\u2019re scared. But this is going to help you! It\u2019ll all be worth it, you\u2019ll see. Right?"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 092a1591720d645c5993e5e2c781803f, type: 3}
     highlightedWords: []
@@ -170,3 +163,6 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_d4ca1683618a402489a333eb53c06286

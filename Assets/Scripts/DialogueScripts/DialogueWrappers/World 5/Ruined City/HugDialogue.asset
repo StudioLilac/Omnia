@@ -16,56 +16,65 @@ MonoBehaviour:
   - bodyText: "*chuckles* \u2018Course I am. Who do you take me for? "
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
   - bodyText: '*giggles, tears sliding down her cheeks* I missed you so much, Uncle.'
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
   - bodyText: I missed you more, sprout. You got my letters then?
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
   - bodyText: Sure did. They helped us find the way.
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
   - bodyText: Nyeh!
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: e538d6a61810ade40935b67e54c43c78, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: 'What made you decide to come? Your parents were none too fond of the
-      idea when I left.
+  - bodyText: 'What made you decide to come? Your parents were none too fond of the idea when I left.
 
 '
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Right. Dinky got infected by the Waste. It\u2019s been seeping farther
-      and farther down, Uncle. It\u2019s real bad."
+  - bodyText: "Right. Dinky got infected by the Waste. It\u2019s been seeping farther and farther down, Uncle. It\u2019s real bad."
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 496d468b972644a7e80c2304362112a0, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "No one would help us\u2026 I didn't see another way. Can you help
-      Dinky?"
+  - bodyText: "No one would help us\u2026 I didn't see another way. Can you help Dinky?"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 496d468b972644a7e80c2304362112a0, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
   - bodyText: "\u2026"
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: 3c4dfebc856a4d6408d712a2c1dd627a, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "He\u2019s been got good\u2026 but I\u2019ve been studying the Waste.
-      I think I\u2019ve got just the thing. Come with me."
+  - bodyText: "He\u2019s been got good\u2026 but I\u2019ve been studying the Waste. I think I\u2019ve got just the thing. Come with me."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_d4dff5c3815945a4295291a12e41342f

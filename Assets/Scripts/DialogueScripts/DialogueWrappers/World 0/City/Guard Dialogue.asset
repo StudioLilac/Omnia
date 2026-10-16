@@ -13,28 +13,36 @@ MonoBehaviour:
   m_Name: Guard Dialogue
   m_EditorClassIdentifier: 
   dialogue:
-  - bodyText: "Careful, kid. We\u2019ve been seeing a rise of aggressive Waste creatures
-      around New Lutum lately. I wonder why\u2026 "
+  - bodyText: "Careful, kid. We\u2019ve been seeing a rise of aggressive Waste creatures around New Lutum lately. I wonder why\u2026 "
     speakerName: Guard
     displayingImage: {fileID: 0}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Oh no! My pet Dinky ran out of the town a few minutes ago! Please,
-      would you be able to help me open the gate? It\u2019ll just be for a moment,
-      I promise I\u2019ll find him and come back quick!"
+  - bodyText: "Oh no! My pet Dinky ran out of the town a few minutes ago! Please, would you be able to help me open the gate? It\u2019ll just be for a moment, I promise I\u2019ll find him and come back quick!"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 496d468b972644a7e80c2304362112a0, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Hm, I did just say it\u2019s getting more dangerous in the Underground,
-      but I lost a pet once. The grief never leaves you."
+  - bodyText: "Hm, I did just say it\u2019s getting more dangerous in the Underground, but I lost a pet once. The grief never leaves you."
     speakerName: Guard
     displayingImage: {fileID: 0}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "C\u2019mon, I\u2019ll help you open the gate, just don\u2019t tell
-      anyone, okay?"
+  - bodyText: "C\u2019mon, I\u2019ll help you open the gate, just don\u2019t tell anyone, okay?"
     speakerName: Guard
     displayingImage: {fileID: 0}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: Oh, thank you! Thank you so much!
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_fc6367a187981904783d375ba59233cd

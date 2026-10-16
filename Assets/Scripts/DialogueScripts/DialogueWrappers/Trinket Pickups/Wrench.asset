@@ -16,4 +16,9 @@ MonoBehaviour:
   - bodyText: Whoa... wonder who left this wrench laying around...
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e97d70049b5514d0dbe229dc7380a76b, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_739b18e9a7e4fe448bd9a6c0fd90c72a

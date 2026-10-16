@@ -16,8 +16,15 @@ MonoBehaviour:
   - bodyText: '!!!!'
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: 5b656bcb8156da74e8d678a4391b0026, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: (Dinky digs into the ground, scared.)
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: 5b656bcb8156da74e8d678a4391b0026, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_ae792a7db37824d38a2d4256a25ba17f

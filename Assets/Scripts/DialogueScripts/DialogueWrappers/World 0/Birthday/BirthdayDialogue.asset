@@ -13,23 +13,19 @@ MonoBehaviour:
   m_Name: BirthdayDialogue
   m_EditorClassIdentifier: 
   dialogue:
-  - bodyText: The clock strikes twelve and a young girl rushes downstairs with her
-      pet in tow. Her parents follow after her, carrying a birthday cake.
+  - bodyText: The clock strikes twelve and a young girl rushes downstairs with her pet in tow. Her parents follow after her, carrying a birthday cake.
     speakerName: 
     displayingImage: {fileID: 0}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "She doesn\u2019t pause, quickly blowing on the candles and distractedly
-      cutting the cake before running into the living room, where a pile of presents
-      awaits her on the coffee table."
+  - bodyText: "She doesn\u2019t pause, quickly blowing on the candles and distractedly cutting the cake before running into the living room, where a pile of presents awaits her on the coffee table."
     speakerName: 
     displayingImage: {fileID: 0}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Jamie! Good lord! At least take Dinky with you, or I\u2019m going
-      to trip over him!"
+  - bodyText: "Jamie! Good lord! At least take Dinky with you, or I\u2019m going to trip over him!"
     speakerName: Dominic Quila
     displayingImage: {fileID: 0}
     highlightedWords: []
@@ -47,15 +43,13 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: 'Digging through the pile, Jamie hunts for a specific gift, Dinky at
-      her heels. She pulls out a present wrapped in red and white striped paper. '
+  - bodyText: 'Digging through the pile, Jamie hunts for a specific gift, Dinky at her heels. She pulls out a present wrapped in red and white striped paper. '
     speakerName: 
     displayingImage: {fileID: 0}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: The tag reads "Happy birthday, Jamie. I'm always thinking of you. Love,
-      Uncle." Jamie rips the package open to find a purple gas canister.
+  - bodyText: The tag reads "Happy birthday, Jamie. I'm always thinking of you. Love, Uncle." Jamie rips the package open to find a purple gas canister.
     speakerName: 
     displayingImage: {fileID: 0}
     highlightedWords: []
@@ -67,8 +61,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: She runs over to the sofa and reaches far underneath it, pulling a
-      harpoon gun out.
+  - bodyText: She runs over to the sofa and reaches far underneath it, pulling a harpoon gun out.
     speakerName: 
     displayingImage: {fileID: 0}
     highlightedWords: []
@@ -98,9 +91,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Don\u2019t point that in the house! What do you think you're doing
-      Jamie? God, it's your fifteenth birthday, and you're still building toys? And
-      that too, behind our backs?"
+  - bodyText: "Don\u2019t point that in the house! What do you think you're doing Jamie? God, it's your fifteenth birthday, and you're still building toys? And that too, behind our backs?"
     speakerName: Dominic Quila
     displayingImage: {fileID: 21300000, guid: 1f8fa9ddbb3600f48be2e2be74bdf11d, type: 3}
     highlightedWords: []
@@ -130,37 +121,31 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: Well, maybe if you'd been more supportive of my dream I might have
-      told you earlier!
+  - bodyText: Well, maybe if you'd been more supportive of my dream I might have told you earlier!
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 34062a4c6040e4c068a5a0a77f26c834, type: 3}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: Hold on, supposedly no one knows, yet Uncle knew exactly which part
-      to give you, precisely when you needed it?! God, Jamie.
+  - bodyText: Hold on, supposedly no one knows, yet Uncle knew exactly which part to give you, precisely when you needed it?! God, Jamie.
     speakerName: Dominic Quila
     displayingImage: {fileID: 21300000, guid: 09ece29b6a40ee34aa3155a4b7179efb, type: 3}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: It's not like I could have told him, Mama. He somehow still knows me
-      better than anyone here.
+  - bodyText: It's not like I could have told him, Mama. He somehow still knows me better than anyone here.
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e97d70049b5514d0dbe229dc7380a76b, type: 3}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: Knew you. Your uncle is long gone, sweetheart, and you should come
-      to terms with it.
+  - bodyText: Knew you. Your uncle is long gone, sweetheart, and you should come to terms with it.
     speakerName: Alex Quila
     displayingImage: {fileID: 21300000, guid: 166639403330e764b9bac272772c9291, type: 3}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: Besides, no one has ever gone beyond the Underground, and neither should
-      you. It's too dangerous, and you know that. You need to start focusing your
-      time elsewhere now, honey.
+  - bodyText: Besides, no one has ever gone beyond the Underground, and neither should you. It's too dangerous, and you know that. You need to start focusing your time elsewhere now, honey.
     speakerName: Alex Quila
     displayingImage: {fileID: 21300000, guid: beb21a7e83a00184987133b0ff88f96d, type: 3}
     highlightedWords: []
@@ -178,17 +163,13 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: I am brave like him, Papa. I've never wanted to do anything else, and
-      you know that! I want to explore the world, not rot away in some corner of
-      darkness.
+  - bodyText: I am brave like him, Papa. I've never wanted to do anything else, and you know that! I want to explore the world, not rot away in some corner of darkness.
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e97d70049b5514d0dbe229dc7380a76b, type: 3}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: 'This is not "some darkness", Jamie, this is our home! And you''re
-      going to have to adjust your expectations, because you are never, ever going
-      up to the surface! '
+  - bodyText: 'This is not "some darkness", Jamie, this is our home! And you''re going to have to adjust your expectations, because you are never, ever going up to the surface! '
     speakerName: Dominic Quila
     displayingImage: {fileID: 21300000, guid: 09ece29b6a40ee34aa3155a4b7179efb, type: 3}
     highlightedWords: []
@@ -206,8 +187,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: She grabs the harpoon gun back from her mother and sprints outside
-      with Dinky before they can catch her.
+  - bodyText: She grabs the harpoon gun back from her mother and sprints outside with Dinky before they can catch her.
     speakerName: 
     displayingImage: {fileID: 0}
     highlightedWords: []
@@ -219,8 +199,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: She'll cool off and be back, sweetheart. Besides, all she's doing is
-      firing that prototype. Plus, Dinky's with her.
+  - bodyText: She'll cool off and be back, sweetheart. Besides, all she's doing is firing that prototype. Plus, Dinky's with her.
     speakerName: Alex Quila
     displayingImage: {fileID: 21300000, guid: 166639403330e764b9bac272772c9291, type: 3}
     highlightedWords: []
@@ -232,3 +211,6 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_928af47697cfd3e448ab40f2f9c05b8a

@@ -16,29 +16,45 @@ MonoBehaviour:
   - bodyText: Nyeh!
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: e538d6a61810ade40935b67e54c43c78, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: "Dinky! Oh my god, you\u2019re alive!"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: Nyeh! Nyeh!
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: e538d6a61810ade40935b67e54c43c78, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: '!'
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: 3c4dfebc856a4d6408d712a2c1dd627a, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: "Dinky, what happened? Dinky, you\u2026 did the Waste get to you?"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 496d468b972644a7e80c2304362112a0, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: "Purrrrrrr\u2026"
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: e538d6a61810ade40935b67e54c43c78, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "We\u2019ll fix this. You\u2019re gonna be fine. We just need to get
-      you back to the town, okay?"
+  - bodyText: "We\u2019ll fix this. You\u2019re gonna be fine. We just need to get you back to the town, okay?"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 496d468b972644a7e80c2304362112a0, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_b03da8e38b370174e9e894f5814ca17a

@@ -13,37 +13,48 @@ MonoBehaviour:
   m_Name: Doctor Dialogue
   m_EditorClassIdentifier: 
   dialogue:
-  - bodyText: Jamie, hello. That was quite a loud sound from the outskirts, I pray
-      you were not harmed?
+  - bodyText: Jamie, hello. That was quite a loud sound from the outskirts, I pray you were not harmed?
     speakerName: Doctor
     displayingImage: {fileID: 0}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: "Doctor, it\u2019s good to see you! No, no, I\u2019m fine."
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
-  - bodyText: Excellent, I am quite pleased to see you uninjured for once. Did you
-      have another reason for seeking me out?
+  - bodyText: Excellent, I am quite pleased to see you uninjured for once. Did you have another reason for seeking me out?
     speakerName: Doctor
     displayingImage: {fileID: 0}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Yeah, it\u2019s about Dinky. He was scared off by that sound and he
-      ran out into the Underground! Could you help me open the gates? Please! I need
-      to find him!"
+  - bodyText: "Yeah, it\u2019s about Dinky. He was scared off by that sound and he ran out into the Underground! Could you help me open the gates? Please! I need to find him!"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 496d468b972644a7e80c2304362112a0, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "My apologies, Jamie, but I\u2019m unable to leave my clinic. What
-      would transpire if someone were to arrive, injured, and I\u2019m not here to
-      attend to them post haste?"
+  - bodyText: "My apologies, Jamie, but I\u2019m unable to leave my clinic. What would transpire if someone were to arrive, injured, and I\u2019m not here to attend to them post haste?"
     speakerName: Doctor
     displayingImage: {fileID: 0}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: 'Perhaps someone more suited to combat could assist you? '
     speakerName: Doctor
     displayingImage: {fileID: 0}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: "Thanks, Doctor\u2026"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 496d468b972644a7e80c2304362112a0, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_363e460a3bee97d418c457ad436386f4

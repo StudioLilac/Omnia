@@ -1,21 +1,16 @@
 using Enemies.Armadillo;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UI;
 using UnityEngine;
 using Utils;
+using Yarn.Unity;
 
 namespace Scenes.World5 {
     public class Surface : MonoBehaviour {
         [SerializeField] private FloatCamera floatCamera;
         [SerializeField] private FadeScreenHandler fadeScreen;
 
-        // this dialogue will be shown in a non-skippable format.
-        [SerializeField] private List<DialogueText> dialogue;
-
-        [SerializeField] private TextMeshPro jamieTextBox;
-        [SerializeField] private TextMeshPro dinkyTextBox;
+        [SerializeField] private DialogueReference dialogue;
 
         public void Start() {
             HUDManager.Instance.gameObject.SetActive(false);
@@ -33,21 +28,7 @@ namespace Scenes.World5 {
         }
 
         private IEnumerator PlayDialogue() {
-            foreach (var dialogueText in dialogue) {
-                TextMeshPro targetTextBox = null;
-
-                // Determine the target text box
-                if (dialogueText.SpeakerName == "Jamie") {
-                    targetTextBox = jamieTextBox;
-                } else if (dialogueText.SpeakerName == "Dinky") {
-                    targetTextBox = dinkyTextBox;
-                }
-
-                if (targetTextBox != null) {
-                    yield return StartCoroutine(Typewriter.TypewriterEffect(targetTextBox, dialogueText.BodyText, 0.05f));
-                    yield return new WaitForSeconds(2f);
-                }
-            }
+            yield return DialogueManager.Instance.StartDialogue(dialogue);
 
             yield return new WaitForSeconds(3f);
             HUDManager.Instance.gameObject.SetActive(true);

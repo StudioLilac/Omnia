@@ -112149,6 +112149,14 @@ PrefabInstance:
       propertyPath: 'locations.Array.data[4]'
       value: 
       objectReference: {fileID: 1333776337}
+    - target: {fileID: 5590812443150669939, guid: 96464ed19ec750e48a6fc68c0c78322a, type: 3}
+      propertyPath: interactDialogue.project
+      value: 
+      objectReference: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    - target: {fileID: 5590812443150669939, guid: 96464ed19ec750e48a6fc68c0c78322a, type: 3}
+      propertyPath: interactDialogue.nodeName
+      value: ExampleScript
+      objectReference: {fileID: 0}
     - target: {fileID: 5710193498280292276, guid: 96464ed19ec750e48a6fc68c0c78322a, type: 3}
       propertyPath: m_Name
       value: Dinky

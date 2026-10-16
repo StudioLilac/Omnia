@@ -13,59 +13,60 @@ MonoBehaviour:
   m_Name: Journal 3
   m_EditorClassIdentifier: 
   dialogue:
-  - bodyText: "Hi kid,  I\u2019m writing this with a broken wrist, so my handwriting
-      may be worse than usual. Don\u2019t laugh at it, I know it\u2019s bad, eh?"
+  - bodyText: "Hi kid,  I\u2019m writing this with a broken wrist, so my handwriting may be worse than usual. Don\u2019t laugh at it, I know it\u2019s bad, eh?"
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "Also, don\u2019t fret, kid, the wrist is healing already. Thanks to
-      these creatures nearby. I hope you\u2019ve befriended them already, they are
-      truly godsends."
+  - bodyText: "Also, don\u2019t fret, kid, the wrist is healing already. Thanks to these creatures nearby. I hope you\u2019ve befriended them already, they are truly godsends."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "My hand\u2019s already begun hurting, but I\u2019m sure you\u2019re
-      doing better than I have been. And I hope Dinky\u2019s been helping you out
-      a little bit, that menace. I didn\u2019t realise how fond of him I was either."
+  - bodyText: "My hand\u2019s already begun hurting, but I\u2019m sure you\u2019re doing better than I have been. And I hope Dinky\u2019s been helping you out a little bit, that menace. I didn\u2019t realise how fond of him I was either."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "Your parents have always trusted the little guy, but I only began
-      understanding these little creatures\u2019 minds after this journey."
+  - bodyText: "Your parents have always trusted the little guy, but I only began understanding these little creatures\u2019 minds after this journey."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "Nothing is ever as valuable as what the road teaches you. I\u2019m
-      sure you\u2019ll realise that in good time. Which better be soon, because I
-      think we\u2019re both nearing the end."
+  - bodyText: "Nothing is ever as valuable as what the road teaches you. I\u2019m sure you\u2019ll realise that in good time. Which better be soon, because I think we\u2019re both nearing the end."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "I have to go now, it looks like the animals are struggling with something.
-      It\u2019s only fair to help them out too, yeah? One good for another. See you
-      on the upper side, kid."
+  - bodyText: "I have to go now, it looks like the animals are struggling with something. It\u2019s only fair to help them out too, yeah? One good for another. See you on the upper side, kid."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
   - bodyText: He was helping them. Of course!
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
   - bodyText: Spoooekksshh!!
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: e538d6a61810ade40935b67e54c43c78, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "And he said he\u2019s nearing the end! Yahoo! Let\u2019s get going,
-      Dinky!"
+  - bodyText: "And he said he\u2019s nearing the end! Yahoo! Let\u2019s get going, Dinky!"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_dbf5e20770429d140aa947ebac11537c

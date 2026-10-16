@@ -16,25 +16,39 @@ MonoBehaviour:
   - bodyText: "Is that\u2026 Dinky?"
     speakerName: Marshall Kane
     displayingImage: {fileID: 0}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: Yes! I found him!
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: But I think the Waste changed him. Please, can you help?
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 496d468b972644a7e80c2304362112a0, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "If Dinky has become a Waste creature\u2026 I owe it no mercy. Hand
-      it over\u2026 it will be a swift end."
+  - bodyText: "If Dinky has become a Waste creature\u2026 I owe it no mercy. Hand it over\u2026 it will be a swift end."
     speakerName: Marshall Kane
     displayingImage: {fileID: 0}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: "NO! I won\u2019t give you Dinky!"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 34062a4c6040e4c068a5a0a77f26c834, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: 'I need to find someone else who can help. '
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e97d70049b5514d0dbe229dc7380a76b, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_98f78114084214c45aa11532124f8567

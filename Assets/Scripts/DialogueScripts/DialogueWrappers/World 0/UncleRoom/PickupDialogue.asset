@@ -25,8 +25,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: I only know one person crafty enough to make something like this out
-      of scrap...
+  - bodyText: I only know one person crafty enough to make something like this out of scrap...
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
     highlightedWords: []
@@ -36,7 +35,7 @@ MonoBehaviour:
     speakerName: Tutorial
     displayingImage: {fileID: 0}
     highlightedWords:
-    - Press [R]
+    - 'Press [R]'
     shadow: 0
     broadcastAnEvent: 0
   - bodyText: The Scrap Gun's [Q] skill blasts you in the air, giving you extra height.
@@ -46,3 +45,6 @@ MonoBehaviour:
     - blasts you in the air
     shadow: 0
     broadcastAnEvent: 1
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_d28e39dd7fd959f44aa9a21cc4bd4922

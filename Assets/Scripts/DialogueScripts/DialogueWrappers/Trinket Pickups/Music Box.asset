@@ -37,8 +37,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "You've picked up the Music Box trinket! Press [I] to open your inventory
-      and see what it does!\r"
+  - bodyText: "You've picked up the Music Box trinket! Press [I] to open your inventory and see what it does!\r"
     speakerName: Tutorial
     displayingImage: {fileID: 0}
     highlightedWords:
@@ -46,3 +45,6 @@ MonoBehaviour:
     - Box
     shadow: 0
     broadcastAnEvent: 1
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_beffc7592d314cd44bef23eab5c4d3d1

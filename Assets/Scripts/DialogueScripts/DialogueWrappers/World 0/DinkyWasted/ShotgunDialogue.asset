@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: ShotgunDialogue
   m_EditorClassIdentifier: 
   dialogue:
-  - bodyText: The Scrap Gun shoots a spray of pellets. Use it at close ranges for
-      more damage.
+  - bodyText: The Scrap Gun shoots a spray of pellets. Use it at close ranges for more damage.
     speakerName: Tutorial
     displayingImage: {fileID: 0}
     highlightedWords: []
@@ -26,8 +25,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: Press [Tab] and open up the Guide to get more details on what each
-      weapon does!
+  - bodyText: Press [Tab] and open up the Guide to get more details on what each weapon does!
     speakerName: Tutorial
     displayingImage: {fileID: 0}
     highlightedWords:
@@ -35,3 +33,6 @@ MonoBehaviour:
     - Guide
     shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_38959bab6363e024a890a646b5388497

@@ -18,10 +18,9 @@ MonoBehaviour:
     displayingImage: {fileID: 0}
     highlightedWords:
     - Tempo
+    shadow: 0
     broadcastAnEvent: 0
-  - bodyText: Gain Tempo by damaging enemies to charge up your blue tempo bar. Once
-      full, swap into your other weapon by pressing the number keys to unleash a
-      special attack!
+  - bodyText: Gain Tempo by damaging enemies to charge up your blue tempo bar. Once full, swap into your other weapon by pressing the number keys to unleash a special attack!
     speakerName: Tutorial
     displayingImage: {fileID: 0}
     highlightedWords:
@@ -29,9 +28,14 @@ MonoBehaviour:
     - blue tempo bar.
     - unleash a special attack!
     - pressing the number keys
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: Alright! Let's go test these new weapons and trinkets out!
     speakerName: Jaime
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
     highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_708f616ddc4c4ad45ae84295bb7edf10

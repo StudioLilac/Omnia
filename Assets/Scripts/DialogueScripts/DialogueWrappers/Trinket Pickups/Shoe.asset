@@ -16,8 +16,15 @@ MonoBehaviour:
   - bodyText: What's a shoe doing down here?
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 092a1591720d645c5993e5e2c781803f, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: Did somebody lose it on the way down?
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e97d70049b5514d0dbe229dc7380a76b, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_afb7fccb91cd0894088d54e7981487a2

@@ -16,20 +16,33 @@ MonoBehaviour:
   - bodyText: Ack! Looks like the harpoons stuck.
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 34062a4c6040e4c068a5a0a77f26c834, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: How am I gonna go get that back...
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 34062a4c6040e4c068a5a0a77f26c834, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: fieuwhalkfhejef, woeifhqiuwh weofdsiul!
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: 5b656bcb8156da74e8d678a4391b0026, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: What's that Dinky? Press [Q] to pull myself towards the harpoon?
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 092a1591720d645c5993e5e2c781803f, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
   - bodyText: Okay!
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_18e5ca2e6c9574fdfa5ed5668f403e9a

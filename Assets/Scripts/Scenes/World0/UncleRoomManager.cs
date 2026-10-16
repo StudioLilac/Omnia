@@ -7,11 +7,11 @@ public class UncleRoomManager : MonoBehaviour {
     private int dialogueProgress = 0;
 
     void OnEnable() {
-        DialogueBox.DialogueBoxEvent += HandleDialogueEvent;
+        DialogueManager.LegacyDialogueEvent += HandleDialogueEvent;
     }
 
     void OnDisable() {
-        DialogueBox.DialogueBoxEvent -= HandleDialogueEvent;
+        DialogueManager.LegacyDialogueEvent -= HandleDialogueEvent;
     }
 
     private void HandleDialogueEvent() {

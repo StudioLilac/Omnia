@@ -1,11 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Yarn.Unity;
 
 [CreateAssetMenu(fileName = "NewDialogue", menuName = "Dialogue/DialogueWrapper", order = 1)]
 public class DialogueWrapper : ScriptableObject
 {
-    [SerializeField] private List<DialogueText> dialogue;
+    [SerializeField] private DialogueReference yarnDialogue = new();
 
-    public List<DialogueText> Dialogue { get { return new List<DialogueText>(dialogue); } }
+    public DialogueReference Dialogue => yarnDialogue;
+    public DialogueReference YarnDialogue => yarnDialogue;
+
+    public void SetYarnDialogue(YarnProject project, string nodeName) {
+        yarnDialogue = new DialogueReference(project, nodeName);
+    }
 }

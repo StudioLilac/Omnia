@@ -16,57 +16,63 @@ MonoBehaviour:
   - bodyText: Dear Jamie,
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
   - bodyText: "If you\u2019re not Jamie\u2013 buzz off, mate."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "But god, kid, I hope it\u2019s you. If I\u2019m right, you\u2019re
-      the one reading this letter, with that goofball of yours\u2014 Dinky, was his
-      name? Sorry, the exhaustion is getting to me."
+  - bodyText: "But god, kid, I hope it\u2019s you. If I\u2019m right, you\u2019re the one reading this letter, with that goofball of yours\u2014 Dinky, was his name? Sorry, the exhaustion is getting to me."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
   - bodyText: "I feel like I\u2019m losing my memories.  But I don't want to. "
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "So I\u2019m hoping you\u2019ll find these letters and bring them back
-      to me someday."
+  - bodyText: "So I\u2019m hoping you\u2019ll find these letters and bring them back to me someday."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "There seems to be only one real path going up, so unless you\u2019re
-      lost, kid, you\u2019ll run into my other letters too. I\u2019m gonna write
-      them every so often, all the way to the top."
+  - bodyText: "There seems to be only one real path going up, so unless you\u2019re lost, kid, you\u2019ll run into my other letters too. I\u2019m gonna write them every so often, all the way to the top."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
   - bodyText: 'Hold on, I gotta go. I can hear something. Love you, kid! '
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "Oh my god. Oh my god! You know what this means, Dinky? Uncle took
-      this same route! He\u2019s still out there, and he\u2019s waiting for us!"
+  - bodyText: "Oh my god. Oh my god! You know what this means, Dinky? Uncle took this same route! He\u2019s still out there, and he\u2019s waiting for us!"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
   - bodyText: Karuumph!
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: e538d6a61810ade40935b67e54c43c78, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Of course I\u2019m gonna ask him about his journey when I see him!
-      Let\u2019s keep moving, munchkin! "
+  - bodyText: "Of course I\u2019m gonna ask him about his journey when I see him! Let\u2019s keep moving, munchkin! "
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_60d8a9e1e751c5a4787da7f281af2f85

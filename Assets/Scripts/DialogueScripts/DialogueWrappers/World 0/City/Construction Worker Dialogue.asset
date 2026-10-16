@@ -13,14 +13,18 @@ MonoBehaviour:
   m_Name: Construction Worker Dialogue
   m_EditorClassIdentifier: 
   dialogue:
-  - bodyText: "God, it\u2019s ridiculous how we\u2019re trying to \u201Cgrow\u201D
-      New Lutum."
+  - bodyText: "God, it\u2019s ridiculous how we\u2019re trying to \u201Cgrow\u201D New Lutum."
     speakerName: Construction Worker
     displayingImage: {fileID: 0}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "No one new\u2019s moving in, and obviously the Waste creatures aren\u2019t
-      happy with us intruding on their territory. Only a guard would be brave enough
-      to open the gate right now."
+  - bodyText: "No one new\u2019s moving in, and obviously the Waste creatures aren\u2019t happy with us intruding on their territory. Only a guard would be brave enough to open the gate right now."
     speakerName: Construction Worker
     displayingImage: {fileID: 0}
+    highlightedWords: []
+    shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_69cfbf6c54af5244389e01c9162905f9

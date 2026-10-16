@@ -16,75 +16,81 @@ MonoBehaviour:
   - bodyText: Dinky! Its another one of Uncle's journals!
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
   - bodyText: Dear Jamie,
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
   - bodyText: "Dude, if you\u2019re not Jamie, then seriously, stop reading. "
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "Bad news, Jamie. I dropped the music box somewhere along my journey.
-      I must have put it down somewhere. I\u2019m so sorry, kid. I hope you find
-      it."
+  - bodyText: "Bad news, Jamie. I dropped the music box somewhere along my journey. I must have put it down somewhere. I\u2019m so sorry, kid. I hope you find it."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: I used to play its music when I was having rough one down here. Or
-      when I missed home.
+  - bodyText: I used to play its music when I was having rough one down here. Or when I missed home.
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "I think about the day I left a lot. Y\u2019know, your dad and I had
-      a huge argument that day. We almost came to blows."
+  - bodyText: "I think about the day I left a lot. Y\u2019know, your dad and I had a huge argument that day. We almost came to blows."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: 'Your dad has always looked up to me, but this day... something broke
-      between us. Does he still talk about me?  '
+  - bodyText: 'Your dad has always looked up to me, but this day... something broke between us. Does he still talk about me?  '
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: And you! You were so sad that I left, and to be honest, so was I, kid.
-      But I knew I had to leave.
+  - bodyText: And you! You were so sad that I left, and to be honest, so was I, kid. But I knew I had to leave.
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: The waste creature attacks were getting out of hand, and I knew the
-      only way to solve the problem was to get to its root.
+  - bodyText: The waste creature attacks were getting out of hand, and I knew the only way to solve the problem was to get to its root.
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "Everybody thought I was crazy for deciding to face the Waste head
-      on. They wouldn\u2019t support me. Did you know even your parents thought I
-      was insane? "
+  - bodyText: "Everybody thought I was crazy for deciding to face the Waste head on. They wouldn\u2019t support me. Did you know even your parents thought I was insane? "
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
-  - bodyText: "But I don\u2019t regret my decision. I\u2019m going to reach the surface
-      and I will find a way to help the people of New Lutum."
+  - bodyText: "But I don\u2019t regret my decision. I\u2019m going to reach the surface and I will find a way to help the people of New Lutum."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
+    highlightedWords: []
     shadow: 0.8
     broadcastAnEvent: 0
   - bodyText: Karuumph!
     speakerName: Dinky
     displayingImage: {fileID: 21300000, guid: e538d6a61810ade40935b67e54c43c78, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
   - bodyText: Yeah! Let's return the music box to Uncle when we see him!
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
+    highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_a80e178a3deef2a4aaf9bd8948e7e85a

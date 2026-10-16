@@ -1,0 +1,375 @@
+title: Legacy_503c6055ebc1801459827a9a0bbf5cbf
+---
+Dummy: Heya!
+Dummy: You can hit me as much as you want... I don't mind!
+Jamie: I'll take that as a challenge!
+===
+title: Legacy_Surface
+---
+Jamie: My god… we made it, Dinky. We really made it.
+Dinky: Nyeh!
+Jamie: Look at it all! This is what we’ve been living under all this time? It’s… amazing!
+<<legacy_dialogue_event>>
+Jamie: Do you think Uncle got to see it? He must have, right?
+<<legacy_dialogue_event>>
+Dinky: Nyeh nyeh!
+<<legacy_dialogue_event>>
+Jamie: We’re gonna find him, Dinky. We’re gonna find him and get you back to normal. That’s what we came here for, right?
+<<legacy_dialogue_event>>
+Dinky: Nyeh…
+<<legacy_dialogue_event>>
+Jamie: Wait… Dinky, do you see that? Over there, by the lake. What is—Gasp! The town! No!
+<<legacy_dialogue_event>>
+Jamie: There has to be something left. Come on, Dinky, we gotta see!
+<<legacy_dialogue_event>>
+===
+title: Legacy_60d8a9e1e751c5a4787da7f281af2f85
+---
+Uncle: Dear Jamie,
+Uncle: If you’re not Jamie– buzz off, mate.
+Uncle: But god, kid, I hope it’s you. If I’m right, you’re the one reading this letter, with that goofball of yours— Dinky, was his name? Sorry, the exhaustion is getting to me.
+Uncle: I feel like I’m losing my memories.  But I don't want to. 
+Uncle: So I’m hoping you’ll find these letters and bring them back to me someday.
+Uncle: There seems to be only one real path going up, so unless you’re lost, kid, you’ll run into my other letters too. I’m gonna write them every so often, all the way to the top.
+Uncle: Hold on, I gotta go. I can hear something. Love you, kid! 
+Jamie: Oh my god. Oh my god! You know what this means, Dinky? Uncle took this same route! He’s still out there, and he’s waiting for us!
+Dinky: Karuumph!
+Jamie: Of course I’m gonna ask him about his journey when I see him! Let’s keep moving, munchkin! 
+===
+title: Legacy_a80e178a3deef2a4aaf9bd8948e7e85a
+---
+Jamie: Dinky! Its another one of Uncle's journals!
+Uncle: Dear Jamie,
+Uncle: Dude, if you’re not Jamie, then seriously, stop reading. 
+Uncle: Bad news, Jamie. I dropped the music box somewhere along my journey. I must have put it down somewhere. I’m so sorry, kid. I hope you find it.
+Uncle: I used to play its music when I was having rough one down here. Or when I missed home.
+Uncle: I think about the day I left a lot. Y’know, your dad and I had a huge argument that day. We almost came to blows.
+Uncle: Your dad has always looked up to me, but this day... something broke between us. Does he still talk about me?  
+Uncle: And you! You were so sad that I left, and to be honest, so was I, kid. But I knew I had to leave.
+Uncle: The waste creature attacks were getting out of hand, and I knew the only way to solve the problem was to get to its root.
+Uncle: Everybody thought I was crazy for deciding to face the Waste head on. They wouldn’t support me. Did you know even your parents thought I was insane? 
+Uncle: But I don’t regret my decision. I’m going to reach the surface and I will find a way to help the people of New Lutum.
+Dinky: Karuumph!
+Jamie: Yeah! Let's return the music box to Uncle when we see him!
+===
+title: Legacy_dbf5e20770429d140aa947ebac11537c
+---
+Uncle: Hi kid,  I’m writing this with a broken wrist, so my handwriting may be worse than usual. Don’t laugh at it, I know it’s bad, eh?
+Uncle: Also, don’t fret, kid, the wrist is healing already. Thanks to these creatures nearby. I hope you’ve befriended them already, they are truly godsends.
+Uncle: My hand’s already begun hurting, but I’m sure you’re doing better than I have been. And I hope Dinky’s been helping you out a little bit, that menace. I didn’t realise how fond of him I was either.
+Uncle: Your parents have always trusted the little guy, but I only began understanding these little creatures’ minds after this journey.
+Uncle: Nothing is ever as valuable as what the road teaches you. I’m sure you’ll realise that in good time. Which better be soon, because I think we’re both nearing the end.
+Uncle: I have to go now, it looks like the animals are struggling with something. It’s only fair to help them out too, yeah? One good for another. See you on the upper side, kid.
+Jamie: He was helping them. Of course!
+Dinky: Spoooekksshh!!
+Jamie: And he said he’s nearing the end! Yahoo! Let’s get going, Dinky!
+===
+title: Legacy_e839d4efb391a1b4ab85041221ac17df
+---
+Jamie: Dinky, look! A bandana!
+Jamie: Let's take it with us!
+===
+title: Legacy_b15fd8e4e7a434b45895af29524831db
+---
+Jamie: A cog? Don't mind if I do!
+===
+title: Legacy_beffc7592d314cd44bef23eab5c4d3d1
+---
+Jamie: ...What's this?
+Jamie: Looks like some sort of box...
+Jamie: Wait! Isn't this the music box I gave Uncle? Why is it here?
+Jamie: He might've lost it... Let's bring it back to him and see...
+Tutorial: You've picked up the Music Box trinket! Press [I] to open your inventory and see what it does! 
+<<legacy_dialogue_event>>
+===
+title: Legacy_afb7fccb91cd0894088d54e7981487a2
+---
+Jamie: What's a shoe doing down here?
+Jamie: Did somebody lose it on the way down?
+===
+title: Legacy_6a84c4cf968618b40839e9eb661d5f32
+---
+Jamie: Aww... this teddy bear is so cute!
+Jamie: Come with me, little guy!
+===
+title: Legacy_739b18e9a7e4fe448bd9a6c0fd90c72a
+---
+Jamie: Whoa... wonder who left this wrench laying around...
+===
+title: Legacy_e5aa86b15d346df4786892885687692b
+---
+Jamie: Right. Where would he have gone?
+===
+title: Legacy_a36062195bc899a4cbaf1aaac54d36b3
+---
+Jamie: Dinky, ready for our journey upwards?
+Dinky: isfvgelrdhnou!!
+===
+title: Legacy_928af47697cfd3e448ab40f2f9c05b8a
+---
+The clock strikes twelve and a young girl rushes downstairs with her pet in tow. Her parents follow after her, carrying a birthday cake.
+She doesn’t pause, quickly blowing on the candles and distractedly cutting the cake before running into the living room, where a pile of presents awaits her on the coffee table.
+Dominic Quila: Jamie! Good lord! At least take Dinky with you, or I’m going to trip over him!
+Dinky: Neeeyhhh!
+Alex Quila: Honey, at least blow out all your candles!
+Digging through the pile, Jamie hunts for a specific gift, Dinky at her heels. She pulls out a present wrapped in red and white striped paper. 
+The tag reads "Happy birthday, Jamie. I'm always thinking of you. Love, Uncle." Jamie rips the package open to find a purple gas canister.
+Jamie: I knew it!
+She runs over to the sofa and reaches far underneath it, pulling a harpoon gun out.
+She lifts the gas canister and fits it into its spot.
+It’s finally done!
+She begins to aim outside the window.
+Her parents appear behind her and snatch the gun out of her hands. 
+Dominic Quila: Don’t point that in the house! What do you think you're doing Jamie? God, it's your fifteenth birthday, and you're still building toys? And that too, behind our backs?
+Alex Quila: How long has the stupid thing been under the sofa?
+Jamie: Hehe, as long as you haven't vacuumed under there, Papa.
+Alex Quila: Jamie. I'm being serious.
+Jamie: For a few months now. No one else knows about it.
+Jamie: Well, maybe if you'd been more supportive of my dream I might have told you earlier!
+Dominic Quila: Hold on, supposedly no one knows, yet Uncle knew exactly which part to give you, precisely when you needed it?! God, Jamie.
+Jamie: It's not like I could have told him, Mama. He somehow still knows me better than anyone here.
+Alex Quila: Knew you. Your uncle is long gone, sweetheart, and you should come to terms with it.
+Alex Quila: Besides, no one has ever gone beyond the Underground, and neither should you. It's too dangerous, and you know that. You need to start focusing your time elsewhere now, honey.
+Jamie: Uncle went.
+Alex Quila: Look how that turned out. He’ll likely be the first and last. 
+Jamie: I am brave like him, Papa. I've never wanted to do anything else, and you know that! I want to explore the world, not rot away in some corner of darkness.
+Dominic Quila: This is not "some darkness", Jamie, this is our home! And you're going to have to adjust your expectations, because you are never, ever going up to the surface! 
+Jamie purses her lips, her eyes filled with rage.
+Jamie: We'll see about that. Let's go, Dinky-boy.
+She grabs the harpoon gun back from her mother and sprints outside with Dinky before they can catch her.
+Dominic Quila: It's too late for excursions, young lady!! Come back, now!!!
+Alex Quila: She'll cool off and be back, sweetheart. Besides, all she's doing is firing that prototype. Plus, Dinky's with her.
+Dominic Quila: That silly creature is going to be the death of me.
+===
+title: Legacy_95376c607df45e945a5ace44cc3bcdbf
+---
+Crazy Old Man: What’s eatin’ ya, squirt?
+Jamie: Dinky touched the Waste…
+Crazy Old Man: Doggonit! He’s a goner, he is! ‘Less you get ‘im up there, ‘course.
+Jamie: Up… there? You mean, the surface?
+Crazy Old Man: Yeah! The sun oughta do ‘im some good.
+Jamie: (Going back? I wonder if Uncle made it up there… if he did, maybe he could help. This might be the only way.)
+Jamie: Well Dinky, looks like the only way to go is up. You ready, boy?
+===
+title: Legacy_7f1d28ceb049f6e4a8dcba4fd1f17619
+---
+Jamie: Doctor, please, I need your help! It’s Dinky, I found him covered in Waste in the Underground.
+Doctor: It appears the Waste has mutated him… Forgive me, Jamie, I know how important Dinky is to you, but I cannot help you. Our resources are limited, so I have to save them for the people of this town.
+Jamie: That’s… such a dumb excuse! 
+Jamie: Why… why can’t you help him? He’s my best friend, Doctor.
+Doctor: The Waste is dangerous, Jamie. We mustn’t mess with it.
+Jamie: Maybe someone else can help Dinky.
+===
+title: Legacy_98f78114084214c45aa11532124f8567
+---
+Marshall Kane: Is that… Dinky?
+Jamie: Yes! I found him!
+Jamie: But I think the Waste changed him. Please, can you help?
+Marshall Kane: If Dinky has become a Waste creature… I owe it no mercy. Hand it over… it will be a swift end.
+Jamie: NO! I won’t give you Dinky!
+Jamie: I need to find someone else who can help. 
+===
+title: Legacy_69cfbf6c54af5244389e01c9162905f9
+---
+Construction Worker: God, it’s ridiculous how we’re trying to “grow” New Lutum.
+Construction Worker: No one new’s moving in, and obviously the Waste creatures aren’t happy with us intruding on their territory. Only a guard would be brave enough to open the gate right now.
+===
+title: Legacy_363e460a3bee97d418c457ad436386f4
+---
+Doctor: Jamie, hello. That was quite a loud sound from the outskirts, I pray you were not harmed?
+Jamie: Doctor, it’s good to see you! No, no, I’m fine.
+Doctor: Excellent, I am quite pleased to see you uninjured for once. Did you have another reason for seeking me out?
+Jamie: Yeah, it’s about Dinky. He was scared off by that sound and he ran out into the Underground! Could you help me open the gates? Please! I need to find him!
+Doctor: My apologies, Jamie, but I’m unable to leave my clinic. What would transpire if someone were to arrive, injured, and I’m not here to attend to them post haste?
+Doctor: Perhaps someone more suited to combat could assist you? 
+Jamie: Thanks, Doctor…
+===
+title: Legacy_fc6367a187981904783d375ba59233cd
+---
+Guard: Careful, kid. We’ve been seeing a rise of aggressive Waste creatures around New Lutum lately. I wonder why… 
+Jamie: Oh no! My pet Dinky ran out of the town a few minutes ago! Please, would you be able to help me open the gate? It’ll just be for a moment, I promise I’ll find him and come back quick!
+Guard: Hm, I did just say it’s getting more dangerous in the Underground, but I lost a pet once. The grief never leaves you.
+Guard: C’mon, I’ll help you open the gate, just don’t tell anyone, okay?
+Jamie: Oh, thank you! Thank you so much!
+===
+title: Legacy_dcae8db4ed3760a4892bebf6e70d7459
+---
+Marshall Kane: Jamie. That loud sound… is your harpoon gun working?
+Jamie: Marshall Kane! Yes! Well, kind of? It seems to be working but I didn’t think it would be that loud.
+Marshall Kane: Hm, keep up your training. With your skills… you could join me one day… to protect this town from the Waste monsters.
+Jamie: Actually, that’s what I came here for.  Dinky got into the Underground, but I can’t get out to help him! Would you be able to help me open the gate?
+Marshall Kane: What?
+Jamie: It’s Dinky! He got scared when we were training and he burrowed past the gate. I need to get him back!
+Marshall Kane: I can’t help. The dangers past the gate… if they were to make it in here… sorry, Jamie. The other guard… she also lost a pet… 
+===
+title: Legacy_6f3e0dc6972b6f643812c72c15b7e4f8
+---
+Jamie: Time to try this scrap gun out for real this time...
+Jamie: Just need to equip it!
+Tutorial: Press [R] to switch to the Scrap Gun.
+===
+title: Legacy_b03da8e38b370174e9e894f5814ca17a
+---
+Dinky: Nyeh!
+Jamie: Dinky! Oh my god, you’re alive!
+Dinky: Nyeh! Nyeh!
+Dinky: !
+Jamie: Dinky, what happened? Dinky, you… did the Waste get to you?
+Dinky: Purrrrrrr…
+Jamie: We’ll fix this. You’re gonna be fine. We just need to get you back to the town, okay?
+===
+title: Legacy_38959bab6363e024a890a646b5388497
+---
+Tutorial: The Scrap Gun shoots a spray of pellets. Use it at close ranges for more damage.
+Tutorial: Use your skill [Q] while holding the Scrap Gun to jump great distances.
+Tutorial: Press [Tab] and open up the Guide to get more details on what each weapon does!
+===
+title: Legacy_e61a73a4c76b14002b6851aca435c747
+---
+Jamie: Time to try out this thing...
+Jamie: ...I'll hit those dummies!
+Dinky: fehbladlguyiuw!!
+Tutorial: Use your [Mouse] to aim, and [Left Click] To shoot.
+Tutorial: Keep track of your ammo, displayed as yellow ticks in the top-left corner. You can't shoot without ammo!
+Tutorial: While using the Harpoon Gun, restore ammo by picking up harpoons that have landed on the ground.
+===
+title: Legacy_6d9e6742d03124dd88b927f3c6fb633d
+---
+Jamie: No, Dinky, wait! It’s okay!
+Jamie: Dinky! No! Please come back… please!
+Jamie: I’ve gotta go after him! Someone in the town has to know how to get this gate open.
+===
+title: Legacy_ae792a7db37824d38a2d4256a25ba17f
+---
+Dinky: !!!!
+Dinky: (Dinky digs into the ground, scared.)
+===
+title: Legacy_8751140c175993f44aeb4dbe6734cbf9
+---
+Jamie: Hmm, how would I hit that dummy above us...
+Jaime: I know! If I get the angle just right... I can grapple up there with my harpoon gun!
+Tutorial: Each weapon has a unique skill which is activated by pressing [Q]. Using the Harpoon Gun's skill will pull you to the last semi-solid platform or enemy you hit.
+Tutorial: You can only use the skill every once in a while. Keep track of it's cooldown by watching the white bar in the top-left corner.
+Jaime: Alright, let's give this a shot!
+===
+title: Legacy_18e5ca2e6c9574fdfa5ed5668f403e9a
+---
+Jamie: Ack! Looks like the harpoons stuck.
+Jamie: How am I gonna go get that back...
+Dinky: fieuwhalkfhejef, woeifhqiuwh weofdsiul!
+Jamie: What's that Dinky? Press [Q] to pull myself towards the harpoon?
+Jamie: Okay!
+===
+title: Legacy_708f616ddc4c4ad45ae84295bb7edf10
+---
+Tutorial: Tempo has also been permanently unlocked!
+Tutorial: Gain Tempo by damaging enemies to charge up your blue tempo bar. Once full, swap into your other weapon by pressing the number keys to unleash a special attack!
+Jaime: Alright! Let's go test these new weapons and trinkets out!
+===
+title: Legacy_182a216a21f545548befb106d643facf
+---
+Jamie: I wonder what that shiny thing was earlier...
+===
+title: Legacy_d28e39dd7fd959f44aa9a21cc4bd4922
+---
+Jamie: What's this?
+Jamie: Looks like some kind of... gun?
+Jamie: I only know one person crafty enough to make something like this out of scrap...
+Tutorial: You picked up the Scrap Gun! Press [R] to swap between weapons!
+Tutorial: The Scrap Gun's [Q] skill blasts you in the air, giving you extra height.
+<<legacy_dialogue_event>>
+===
+title: Legacy_d4ca1683618a402489a333eb53c06286
+---
+Jamie: You did this all by yourself?
+Uncle: It’s like you said. The Waste is only getting worse down there. I needed a way to help, and here she is.
+Jamie: It’s… incredible.
+Dinky: …
+Uncle: Wait ‘til you see her in action. Here, go grab me one of those Waste objects on the table there. I’ll show you how she works.
+Jamie: Here you go!
+Uncle: Right. Here we are.
+Uncle loads the object into the machine and turns it on.
+Machine: Clang... Whirrrrr... Clank...
+Uncle: Done. Go on and grab it now, Jamie.
+Jamie: Wow…
+Uncle: Good as new, eh?
+Jamie: And it can do the same for Dinky?
+Dinky: Grrrrrr…
+Uncle: No reason why it shouldn’t. I’ve wanted to help out the infected animals ever since I started building the machine.
+Uncle: Though it took a long time to get it runnin’ how I wanted it to. That’s what all these critters have been waiting for.
+Uncle: You came at a good time there, Jamie. I was just about to do my first live trial when I found you. Dinky’s a lucky little fella, first dibs! 
+Jamie: And you’re positive he’ll be safe?
+Uncle: Don’t worry, Jamie. If anything goes wrong, there’s a kill switch that should let him out right away. It’ll be okay, promise.
+Jamie: Alright, then. Come on, Dinky. You ready?
+Dinky: Grrrrrr… nyeh, nyeh!
+Jamie: Dinky...
+Jamie: I know you’re scared. But this is going to help you! It’ll all be worth it, you’ll see. Right?
+Dinky: Nyeh, NYEH!
+Jamie: Ready Dinky? One, two, three!
+===
+title: Legacy_82860ae8fd6ea4a439903a514bfa2310
+---
+Jamie: Dinky?! Uncle, what’s happening?!
+Machine: Unexpected levels of Waste concentration detected, initiating hyper-cleaning protocol.
+Uncle: What?! His Waste… it seems to be making the machine act on its own! Jamie! Cover me as I work on shutting off the machine.
+Uncle: Pull the kill switch levers on any tanks that may activate! That should help short circuit the machine and stop any monsters from escaping! 
+===
+title: Legacy_e7bbe75dcda4a3e44b309e540d439e4f
+---
+Dinky: NYEH!
+Jamie: It’s okay boy! It’s okay! You’re gonna be okay.
+Uncle: We’re here to help you, little guy. Won’t be more than a moment. You ready, Jamie?
+Jamie: Ready. Make it quick, please…
+Uncle: Right, here we go.
+===
+title: Legacy_0fa1dd0cd911242449569a48228fa9e4
+---
+Jamie: Dinky!!! My precious munchkin! 
+Dinky: Haruuupptt! 
+ Dinky and Jamie embrace, jumping in delight as they finally meet again. Uncle trails behind, folding his arms and sighing. 
+Uncle: I think I understand it now. The Waste was never the problem. All it did was change a few things around here, nothing more.
+Jamie: It’s alright, Uncle. The more important thing is that everybody’s safe and sound now. Right, Dinky? 
+Dinky: Plerrkk!
+Uncle pats Dinky’s head lovingly.
+Uncle: You’re right, Jamie. And I’m glad that Dinky made it out okay even though I put him through all that. Sorry ‘bout that, Dinky.
+Dinky: Greahh!!  
+Uncle: I wonder what my brother would say about all of this. And all them townspeople. 
+Jamie: Actually, Uncle, since we now know the Waste isn’t harmful, don’t you think we should try and move everybody above ground again? 
+Uncle: Oh, definitely. It’s time for another journey, kid. But this time, together. 
+===
+title: Legacy_b2bb6480bf4a2cd438ec8de421295e52
+---
+Jamie: Uncle?! Is that it, its finally over?
+Uncle: Yes Jamie, its over. Now let's get your Dinky down..
+===
+title: Legacy_67b946a2b3d74ef44a869ddfd7f96e70
+---
+Jamie: Argh, nothing... the meteor did a real number on this place. What about you, boy? Smell anything? 
+Dinky: Hrrrmmmm. Nyeh…
+Jamie: It’s alright, buddy. I’m just glad we all made it out. That’s all that matters, right? 
+Dinky chirps, and Jamie gives him a scratch behind the ears.
+Jamie: Glad you agree. Everyone back home thought we’d never see the surface again. But now that we’re here… maybe it’s not so impossible after all.
+Dinky: Hummmmmmm…
+Jamie: Wouldn’t that be something, huh? Everyone back up here? But if the Waste got to everything, they’d never…
+Voice: Jamie?
+Dinky: !
+Jamie: Huh? Who’s there?
+===
+title: Legacy_d4dff5c3815945a4295291a12e41342f
+---
+Uncle: *chuckles* ‘Course I am. Who do you take me for? 
+Jamie: *giggles, tears sliding down her cheeks* I missed you so much, Uncle.
+Uncle: I missed you more, sprout. You got my letters then?
+Jamie: Sure did. They helped us find the way.
+Dinky: Nyeh!
+Uncle: What made you decide to come? Your parents were none too fond of the idea when I left. 
+Jamie: Right. Dinky got infected by the Waste. It’s been seeping farther and farther down, Uncle. It’s real bad.
+Jamie: No one would help us… I didn't see another way. Can you help Dinky?
+Dinky: …
+Uncle: He’s been got good… but I’ve been studying the Waste. I think I’ve got just the thing. Come with me.
+===
+title: Legacy_b3701827e6d10754f999b9c41c341467
+---
+Uncle: It is you, kid. You made it!
+Jamie: Uncle? Uncle! You’re alive!
+===

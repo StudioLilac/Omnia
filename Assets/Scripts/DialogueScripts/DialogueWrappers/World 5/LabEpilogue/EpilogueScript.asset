@@ -29,22 +29,19 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "\rDinky and Jamie embrace, jumping in delight as they finally meet
-      again. Uncle trails behind, folding his arms and sighing.\r\n"
+  - bodyText: "\rDinky and Jamie embrace, jumping in delight as they finally meet again. Uncle trails behind, folding his arms and sighing.\r\n"
     speakerName: 
     displayingImage: {fileID: 0}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: I think I understand it now. The Waste was never the problem. All it
-      did was change a few things around here, nothing more.
+  - bodyText: I think I understand it now. The Waste was never the problem. All it did was change a few things around here, nothing more.
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "It\u2019s alright, Uncle. The more important thing is that everybody\u2019s
-      safe and sound now. Right, Dinky?\r\n"
+  - bodyText: "It\u2019s alright, Uncle. The more important thing is that everybody\u2019s safe and sound now. Right, Dinky?\r\n"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: e45f1839db2784540934541013900a29, type: 3}
     highlightedWords: []
@@ -62,8 +59,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "You\u2019re right, Jamie. And I\u2019m glad that Dinky made it out
-      okay even though I put him through all that. Sorry \u2018bout that, Dinky."
+  - bodyText: "You\u2019re right, Jamie. And I\u2019m glad that Dinky made it out okay even though I put him through all that. Sorry \u2018bout that, Dinky."
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: 8a3f35d299a79cf41b20d45fc654fa8e, type: 3}
     highlightedWords: []
@@ -75,8 +71,7 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: 'I wonder what my brother would say about all of this. And all them
-      townspeople.
+  - bodyText: 'I wonder what my brother would say about all of this. And all them townspeople.
 
 '
     speakerName: Uncle
@@ -84,17 +79,18 @@ MonoBehaviour:
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Actually, Uncle, since we now know the Waste isn\u2019t harmful, don\u2019t
-      you think we should try and move everybody above ground again?\r\n"
+  - bodyText: "Actually, Uncle, since we now know the Waste isn\u2019t harmful, don\u2019t you think we should try and move everybody above ground again?\r\n"
     speakerName: Jamie
     displayingImage: {fileID: 21300000, guid: 092a1591720d645c5993e5e2c781803f, type: 3}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
-  - bodyText: "Oh, definitely. It\u2019s time for another journey, kid. But this
-      time, together.\r\n"
+  - bodyText: "Oh, definitely. It\u2019s time for another journey, kid. But this time, together.\r\n"
     speakerName: Uncle
     displayingImage: {fileID: 21300000, guid: b9960c2a9c079824b9837bbe9e91bc9a, type: 3}
     highlightedWords: []
     shadow: 0
     broadcastAnEvent: 0
+  yarnDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: Legacy_0fa1dd0cd911242449569a48228fa9e4
