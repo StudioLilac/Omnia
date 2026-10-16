@@ -61,6 +61,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3859336324316773513, guid: 52571f68872914e24837210513edea1d, type: 3}
+      propertyPath: inputMode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3859336324316773513, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: hasTransferredLegacyMapping
       value: 1
       objectReference: {fileID: 0}
@@ -150,7 +154,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3859336324316773512, guid: 52571f68872914e24837210513edea1d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2425729099178298361}
+      addedObject: {fileID: 2459217233933992193}
   m_SourcePrefab: {fileID: 100100000, guid: 52571f68872914e24837210513edea1d, type: 3}
 --- !u!114 &8006181304265401034 stripped
 MonoBehaviour:
@@ -168,7 +172,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3859336324316773512, guid: 52571f68872914e24837210513edea1d, type: 3}
   m_PrefabInstance: {fileID: 6527042464857284163}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2425729099178298361
+--- !u!114 &2459217233933992193
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -177,11 +181,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8006181304265401035}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad15240c88dde41159620e5f27277386, type: 3}
+  m_Script: {fileID: 11500000, guid: be0e9bd0088070b43980e7d573ace799, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: YarnSpinner.Unity::Yarn.Unity.LineAdvancerInput.KeyCodes
+  m_EditorClassIdentifier: Assembly-CSharp::YarnInputSystemLineAdvancer
   lineAdvancer: {fileID: 8006181304265401034}
-  hurryUpLineKeyCode: 32
-  nextLineKeyCode: 27
-  hurryUpOptionsKeyCode: 32
-  cancelDialogueKeyCode: 0
+  advanceAction: {fileID: 458678326611253272, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
+  fastForwardAction: {fileID: 3818010804340039222, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
