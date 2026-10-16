@@ -14,11 +14,11 @@ namespace Scenes {
         [SerializeField] private ColliderEventBroadcaster dummyAirCheck;
         [SerializeField] private Transform dinkyAppearTransform;
 
-        [SerializeField] private DialogueWrapper beginDialogue;
-        [SerializeField] private DialogueWrapper platformDummyDialogue;
-        [SerializeField] private DialogueWrapper pullToDummyDialogue;
-        [SerializeField] private DialogueWrapper dinkyScaredDialogue;
-        [SerializeField] private DialogueWrapper dinkyGoneDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference beginDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference platformDummyDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference pullToDummyDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference dinkyScaredDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference dinkyGoneDialogue;
 
         [SerializeField] private Dummy dummy1;
         [SerializeField] private Dummy dummy2;
@@ -48,7 +48,7 @@ namespace Scenes {
             AudioManager.Instance.SwitchBGM(AudioTracks.SunkBeneath);
 
             yield return new WaitForSeconds(1.5f);
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue));
 
             RegisterDummyHurt(dummy1);
             RegisterDummyHurt(dummy2);
@@ -71,7 +71,7 @@ namespace Scenes {
 
         private IEnumerator PlatformDummySequence() {
             yield return new WaitForSeconds(0.5f);
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(platformDummyDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(platformDummyDialogue));
 
             RegisterDummyHurt(dummy4);
             RegisterDummyHurt(dummy5);
@@ -85,7 +85,7 @@ namespace Scenes {
 
         private IEnumerator PullToDummySequence() {
             yield return new WaitForSeconds(1.5f);
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(pullToDummyDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(pullToDummyDialogue));
             dummyAirCheck.OnEnter += HandleHitAirDummy;
         }
 
@@ -115,7 +115,7 @@ namespace Scenes {
 
             yield return new WaitForSeconds(0.7f);
 
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(dinkyScaredDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(dinkyScaredDialogue));
 
             yield return new WaitForSeconds(0.3f);
             dinky.Walk(15.5f, 7f);
@@ -123,7 +123,7 @@ namespace Scenes {
             dinky.Disappear();
             yield return new WaitForSeconds(1f);
 
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(dinkyGoneDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(dinkyGoneDialogue));
             yield return new WaitForSeconds(1f);
             LevelManager.Instance.NextLevel();
         }

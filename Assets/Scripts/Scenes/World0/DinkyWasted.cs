@@ -8,8 +8,8 @@ using Utils;
 
 namespace Scenes {
     public class DinkyWasted : MonoBehaviour {
-        [SerializeField] private DialogueWrapper beginDialogue;
-        [SerializeField] private DialogueWrapper shotgunDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference beginDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference shotgunDialogue;
         [SerializeField] private Player player;
 
         private bool changedWeapon = false;
@@ -32,12 +32,12 @@ namespace Scenes {
 
         private IEnumerator BeginSequence() {
             yield return new WaitForSeconds(0.5f);
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue));
             beginDialoguePlayed = true;
         }
 
         private IEnumerator ShotgunTutorialSequence() {
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(shotgunDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(shotgunDialogue));
         }
 
         private void EndScene() {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UncleRoomManager : MonoBehaviour {
-    [SerializeField] private DialogueWrapper flowUnlockedDialogue;
+    [SerializeField] private Yarn.Unity.DialogueReference flowUnlockedDialogue;
     private int dialogueProgress = 0;
 
     void OnEnable() {
@@ -25,6 +25,6 @@ public class UncleRoomManager : MonoBehaviour {
     IEnumerator ProgressDialogue() {
         yield return new WaitUntil(() => dialogueProgress == 2);
         yield return new WaitUntil(() => !DialogueManager.Instance.IsInDialogue());
-        yield return DialogueManager.Instance.StartDialogue(flowUnlockedDialogue.Dialogue);
+        yield return DialogueManager.Instance.StartDialogue(flowUnlockedDialogue);
     }
 }

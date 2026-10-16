@@ -8,7 +8,7 @@ using Utils;
 
 namespace Scenes {
     public class ArmadilloRoom2 : MonoBehaviour {
-        [SerializeField] private DialogueWrapper beginDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference beginDialogue;
         [SerializeField] private Transform fireFliesLocation;
         [SerializeField] private Collider2D fireFlyTrigger;
 
@@ -29,7 +29,7 @@ namespace Scenes {
 
         private IEnumerator BeginSequence() {
             yield return new WaitForSeconds(0.5f);
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue));
         }
 
     }

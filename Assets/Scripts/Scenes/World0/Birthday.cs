@@ -7,7 +7,7 @@ namespace Scenes {
     public class Birthday : MonoBehaviour {
         [SerializeField] private FadeScreenHandler fadeScreen;
 
-        [SerializeField] private DialogueWrapper birthdayDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference birthdayDialogue;
         void Start() {
             StartCoroutine(BeginSequence());
 
@@ -19,7 +19,7 @@ namespace Scenes {
         private IEnumerator BeginSequence() {
             AudioManager.Instance.SwitchBGM(AudioTracks.JamiesTheme);
             yield return StartCoroutine(fadeScreen.FadeInLightScreen(2f));
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(birthdayDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(birthdayDialogue));
             yield return StartCoroutine(fadeScreen.FadeInDarkScreen(2f));
             LevelManager.Instance.NextLevel();
         }

@@ -1,10 +1,10 @@
-title: Legacy_503c6055ebc1801459827a9a0bbf5cbf
+title: DummyIntro
 ---
 Dummy: Heya!
 Dummy: You can hit me as much as you want... I don't mind!
 Jamie: I'll take that as a challenge!
 ===
-title: Legacy_Surface
+title: SurfaceArrival
 ---
 Jamie: My god… we made it, Dinky. We really made it.
 Dinky: Nyeh!
@@ -23,7 +23,7 @@ Jamie: Wait… Dinky, do you see that? Over there, by the lake. What is—Gasp! 
 Jamie: There has to be something left. Come on, Dinky, we gotta see!
 <<legacy_dialogue_event>>
 ===
-title: Legacy_60d8a9e1e751c5a4787da7f281af2f85
+title: Journal1
 ---
 Uncle: Dear Jamie,
 Uncle: If you’re not Jamie– buzz off, mate.
@@ -36,7 +36,7 @@ Jamie: Oh my god. Oh my god! You know what this means, Dinky? Uncle took this sa
 Dinky: Karuumph!
 Jamie: Of course I’m gonna ask him about his journey when I see him! Let’s keep moving, munchkin! 
 ===
-title: Legacy_a80e178a3deef2a4aaf9bd8948e7e85a
+title: Journal2
 ---
 Jamie: Dinky! Its another one of Uncle's journals!
 Uncle: Dear Jamie,
@@ -52,7 +52,7 @@ Uncle: But I don’t regret my decision. I’m going to reach the surface and I 
 Dinky: Karuumph!
 Jamie: Yeah! Let's return the music box to Uncle when we see him!
 ===
-title: Legacy_dbf5e20770429d140aa947ebac11537c
+title: Journal3
 ---
 Uncle: Hi kid,  I’m writing this with a broken wrist, so my handwriting may be worse than usual. Don’t laugh at it, I know it’s bad, eh?
 Uncle: Also, don’t fret, kid, the wrist is healing already. Thanks to these creatures nearby. I hope you’ve befriended them already, they are truly godsends.
@@ -64,16 +64,16 @@ Jamie: He was helping them. Of course!
 Dinky: Spoooekksshh!!
 Jamie: And he said he’s nearing the end! Yahoo! Let’s get going, Dinky!
 ===
-title: Legacy_e839d4efb391a1b4ab85041221ac17df
+title: BandanaPickup
 ---
 Jamie: Dinky, look! A bandana!
 Jamie: Let's take it with us!
 ===
-title: Legacy_b15fd8e4e7a434b45895af29524831db
+title: GearPickup
 ---
 Jamie: A cog? Don't mind if I do!
 ===
-title: Legacy_beffc7592d314cd44bef23eab5c4d3d1
+title: MusicBoxPickup
 ---
 Jamie: ...What's this?
 Jamie: Looks like some sort of box...
@@ -82,30 +82,30 @@ Jamie: He might've lost it... Let's bring it back to him and see...
 Tutorial: You've picked up the Music Box trinket! Press [I] to open your inventory and see what it does! 
 <<legacy_dialogue_event>>
 ===
-title: Legacy_afb7fccb91cd0894088d54e7981487a2
+title: ShoePickup
 ---
 Jamie: What's a shoe doing down here?
 Jamie: Did somebody lose it on the way down?
 ===
-title: Legacy_6a84c4cf968618b40839e9eb661d5f32
+title: TeddyBearPickup
 ---
 Jamie: Aww... this teddy bear is so cute!
 Jamie: Come with me, little guy!
 ===
-title: Legacy_739b18e9a7e4fe448bd9a6c0fd90c72a
+title: WrenchPickup
 ---
 Jamie: Whoa... wonder who left this wrench laying around...
 ===
-title: Legacy_e5aa86b15d346df4786892885687692b
+title: ArmadilloRoomIntro
 ---
 Jamie: Right. Where would he have gone?
 ===
-title: Legacy_a36062195bc899a4cbaf1aaac54d36b3
+title: ArmadilloRoom2Intro
 ---
 Jamie: Dinky, ready for our journey upwards?
 Dinky: isfvgelrdhnou!!
 ===
-title: Legacy_928af47697cfd3e448ab40f2f9c05b8a
+title: BirthdayIntro
 ---
 The clock strikes twelve and a young girl rushes downstairs with her pet in tow. Her parents follow after her, carrying a birthday cake.
 She doesn’t pause, quickly blowing on the candles and distractedly cutting the cake before running into the living room, where a pile of presents awaits her on the coffee table.
@@ -141,7 +141,7 @@ Dominic Quila: It's too late for excursions, young lady!! Come back, now!!!
 Alex Quila: She'll cool off and be back, sweetheart. Besides, all she's doing is firing that prototype. Plus, Dinky's with her.
 Dominic Quila: That silly creature is going to be the death of me.
 ===
-title: Legacy_95376c607df45e945a5ace44cc3bcdbf
+title: City2CrazyOldMan
 ---
 Crazy Old Man: What’s eatin’ ya, squirt?
 Jamie: Dinky touched the Waste…
@@ -151,7 +151,7 @@ Crazy Old Man: Yeah! The sun oughta do ‘im some good.
 Jamie: (Going back? I wonder if Uncle made it up there… if he did, maybe he could help. This might be the only way.)
 Jamie: Well Dinky, looks like the only way to go is up. You ready, boy?
 ===
-title: Legacy_7f1d28ceb049f6e4a8dcba4fd1f17619
+title: City2Doctor
 ---
 Jamie: Doctor, please, I need your help! It’s Dinky, I found him covered in Waste in the Underground.
 Doctor: It appears the Waste has mutated him… Forgive me, Jamie, I know how important Dinky is to you, but I cannot help you. Our resources are limited, so I have to save them for the people of this town.
@@ -160,7 +160,7 @@ Jamie: Why… why can’t you help him? He’s my best friend, Doctor.
 Doctor: The Waste is dangerous, Jamie. We mustn’t mess with it.
 Jamie: Maybe someone else can help Dinky.
 ===
-title: Legacy_98f78114084214c45aa11532124f8567
+title: City2Marshall
 ---
 Marshall Kane: Is that… Dinky?
 Jamie: Yes! I found him!
@@ -169,12 +169,12 @@ Marshall Kane: If Dinky has become a Waste creature… I owe it no mercy. Hand i
 Jamie: NO! I won’t give you Dinky!
 Jamie: I need to find someone else who can help. 
 ===
-title: Legacy_69cfbf6c54af5244389e01c9162905f9
+title: CityConstructionWorker
 ---
 Construction Worker: God, it’s ridiculous how we’re trying to “grow” New Lutum.
 Construction Worker: No one new’s moving in, and obviously the Waste creatures aren’t happy with us intruding on their territory. Only a guard would be brave enough to open the gate right now.
 ===
-title: Legacy_363e460a3bee97d418c457ad436386f4
+title: CityDoctor
 ---
 Doctor: Jamie, hello. That was quite a loud sound from the outskirts, I pray you were not harmed?
 Jamie: Doctor, it’s good to see you! No, no, I’m fine.
@@ -184,7 +184,7 @@ Doctor: My apologies, Jamie, but I’m unable to leave my clinic. What would tra
 Doctor: Perhaps someone more suited to combat could assist you? 
 Jamie: Thanks, Doctor…
 ===
-title: Legacy_fc6367a187981904783d375ba59233cd
+title: CityGuard
 ---
 Guard: Careful, kid. We’ve been seeing a rise of aggressive Waste creatures around New Lutum lately. I wonder why… 
 Jamie: Oh no! My pet Dinky ran out of the town a few minutes ago! Please, would you be able to help me open the gate? It’ll just be for a moment, I promise I’ll find him and come back quick!
@@ -192,7 +192,7 @@ Guard: Hm, I did just say it’s getting more dangerous in the Underground, but 
 Guard: C’mon, I’ll help you open the gate, just don’t tell anyone, okay?
 Jamie: Oh, thank you! Thank you so much!
 ===
-title: Legacy_dcae8db4ed3760a4892bebf6e70d7459
+title: CityMarshall
 ---
 Marshall Kane: Jamie. That loud sound… is your harpoon gun working?
 Jamie: Marshall Kane! Yes! Well, kind of? It seems to be working but I didn’t think it would be that loud.
@@ -202,13 +202,13 @@ Marshall Kane: What?
 Jamie: It’s Dinky! He got scared when we were training and he burrowed past the gate. I need to get him back!
 Marshall Kane: I can’t help. The dangers past the gate… if they were to make it in here… sorry, Jamie. The other guard… she also lost a pet… 
 ===
-title: Legacy_6f3e0dc6972b6f643812c72c15b7e4f8
+title: DinkyWastedScrapGunIntro
 ---
 Jamie: Time to try this scrap gun out for real this time...
 Jamie: Just need to equip it!
 Tutorial: Press [R] to switch to the Scrap Gun.
 ===
-title: Legacy_b03da8e38b370174e9e894f5814ca17a
+title: DinkyWastedReunion
 ---
 Dinky: Nyeh!
 Jamie: Dinky! Oh my god, you’re alive!
@@ -218,13 +218,13 @@ Jamie: Dinky, what happened? Dinky, you… did the Waste get to you?
 Dinky: Purrrrrrr…
 Jamie: We’ll fix this. You’re gonna be fine. We just need to get you back to the town, okay?
 ===
-title: Legacy_38959bab6363e024a890a646b5388497
+title: ScrapGunTutorial
 ---
 Tutorial: The Scrap Gun shoots a spray of pellets. Use it at close ranges for more damage.
 Tutorial: Use your skill [Q] while holding the Scrap Gun to jump great distances.
 Tutorial: Press [Tab] and open up the Guide to get more details on what each weapon does!
 ===
-title: Legacy_e61a73a4c76b14002b6851aca435c747
+title: TutorialIntro
 ---
 Jamie: Time to try out this thing...
 Jamie: ...I'll hit those dummies!
@@ -233,18 +233,18 @@ Tutorial: Use your [Mouse] to aim, and [Left Click] To shoot.
 Tutorial: Keep track of your ammo, displayed as yellow ticks in the top-left corner. You can't shoot without ammo!
 Tutorial: While using the Harpoon Gun, restore ammo by picking up harpoons that have landed on the ground.
 ===
-title: Legacy_6d9e6742d03124dd88b927f3c6fb633d
+title: TutorialDinkyLeaves
 ---
 Jamie: No, Dinky, wait! It’s okay!
 Jamie: Dinky! No! Please come back… please!
 Jamie: I’ve gotta go after him! Someone in the town has to know how to get this gate open.
 ===
-title: Legacy_ae792a7db37824d38a2d4256a25ba17f
+title: TutorialDinkyScared
 ---
 Dinky: !!!!
 Dinky: (Dinky digs into the ground, scared.)
 ===
-title: Legacy_8751140c175993f44aeb4dbe6734cbf9
+title: TutorialPlatformDummy
 ---
 Jamie: Hmm, how would I hit that dummy above us...
 Jaime: I know! If I get the angle just right... I can grapple up there with my harpoon gun!
@@ -252,7 +252,7 @@ Tutorial: Each weapon has a unique skill which is activated by pressing [Q]. Usi
 Tutorial: You can only use the skill every once in a while. Keep track of it's cooldown by watching the white bar in the top-left corner.
 Jaime: Alright, let's give this a shot!
 ===
-title: Legacy_18e5ca2e6c9574fdfa5ed5668f403e9a
+title: TutorialPullToDummy
 ---
 Jamie: Ack! Looks like the harpoons stuck.
 Jamie: How am I gonna go get that back...
@@ -260,17 +260,17 @@ Dinky: fieuwhalkfhejef, woeifhqiuwh weofdsiul!
 Jamie: What's that Dinky? Press [Q] to pull myself towards the harpoon?
 Jamie: Okay!
 ===
-title: Legacy_708f616ddc4c4ad45ae84295bb7edf10
+title: UncleRoomFlowUnlocked
 ---
 Tutorial: Tempo has also been permanently unlocked!
 Tutorial: Gain Tempo by damaging enemies to charge up your blue tempo bar. Once full, swap into your other weapon by pressing the number keys to unleash a special attack!
 Jaime: Alright! Let's go test these new weapons and trinkets out!
 ===
-title: Legacy_182a216a21f545548befb106d643facf
+title: UncleRoomNotPickedUp
 ---
 Jamie: I wonder what that shiny thing was earlier...
 ===
-title: Legacy_d28e39dd7fd959f44aa9a21cc4bd4922
+title: UncleRoomScrapGunPickup
 ---
 Jamie: What's this?
 Jamie: Looks like some kind of... gun?
@@ -279,7 +279,7 @@ Tutorial: You picked up the Scrap Gun! Press [R] to swap between weapons!
 Tutorial: The Scrap Gun's [Q] skill blasts you in the air, giving you extra height.
 <<legacy_dialogue_event>>
 ===
-title: Legacy_d4ca1683618a402489a333eb53c06286
+title: LabPrefightIntro
 ---
 Jamie: You did this all by yourself?
 Uncle: It’s like you said. The Waste is only getting worse down there. I needed a way to help, and here she is.
@@ -307,14 +307,14 @@ Jamie: I know you’re scared. But this is going to help you! It’ll all be wor
 Dinky: Nyeh, NYEH!
 Jamie: Ready Dinky? One, two, three!
 ===
-title: Legacy_82860ae8fd6ea4a439903a514bfa2310
+title: LabPrefightDinkyHurt
 ---
 Jamie: Dinky?! Uncle, what’s happening?!
 Machine: Unexpected levels of Waste concentration detected, initiating hyper-cleaning protocol.
 Uncle: What?! His Waste… it seems to be making the machine act on its own! Jamie! Cover me as I work on shutting off the machine.
 Uncle: Pull the kill switch levers on any tanks that may activate! That should help short circuit the machine and stop any monsters from escaping! 
 ===
-title: Legacy_e7bbe75dcda4a3e44b309e540d439e4f
+title: LabPrefightDinkyThrown
 ---
 Dinky: NYEH!
 Jamie: It’s okay boy! It’s okay! You’re gonna be okay.
@@ -322,7 +322,7 @@ Uncle: We’re here to help you, little guy. Won’t be more than a moment. You 
 Jamie: Ready. Make it quick, please…
 Uncle: Right, here we go.
 ===
-title: Legacy_0fa1dd0cd911242449569a48228fa9e4
+title: LabEpilogue
 ---
 Jamie: Dinky!!! My precious munchkin! 
 Dinky: Haruuupptt! 
@@ -337,12 +337,12 @@ Uncle: I wonder what my brother would say about all of this. And all them townsp
 Jamie: Actually, Uncle, since we now know the Waste isn’t harmful, don’t you think we should try and move everybody above ground again? 
 Uncle: Oh, definitely. It’s time for another journey, kid. But this time, together. 
 ===
-title: Legacy_b2bb6480bf4a2cd438ec8de421295e52
+title: LabFightComplete
 ---
 Jamie: Uncle?! Is that it, its finally over?
 Uncle: Yes Jamie, its over. Now let's get your Dinky down..
 ===
-title: Legacy_67b946a2b3d74ef44a869ddfd7f96e70
+title: RuinedCityIntro
 ---
 Jamie: Argh, nothing... the meteor did a real number on this place. What about you, boy? Smell anything? 
 Dinky: Hrrrmmmm. Nyeh…
@@ -355,7 +355,7 @@ Voice: Jamie?
 Dinky: !
 Jamie: Huh? Who’s there?
 ===
-title: Legacy_d4dff5c3815945a4295291a12e41342f
+title: RuinedCityReunion
 ---
 Uncle: *chuckles* ‘Course I am. Who do you take me for? 
 Jamie: *giggles, tears sliding down her cheeks* I missed you so much, Uncle.
@@ -368,7 +368,7 @@ Jamie: No one would help us… I didn't see another way. Can you help Dinky?
 Dinky: …
 Uncle: He’s been got good… but I’ve been studying the Waste. I think I’ve got just the thing. Come with me.
 ===
-title: Legacy_b3701827e6d10754f999b9c41c341467
+title: RuinedCityUncleReveal
 ---
 Uncle: It is you, kid. You made it!
 Jamie: Uncle? Uncle! You’re alive!

@@ -1375,7 +1375,7 @@ MonoBehaviour:
   fadeScreen: {fileID: 1681744399}
   dialogue:
     project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
-    nodeName: Legacy_Surface
+    nodeName: SurfaceArrival
 --- !u!1 &1463867462
 GameObject:
   m_ObjectHideFlags: 0
