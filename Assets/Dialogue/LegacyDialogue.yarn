@@ -79,7 +79,7 @@ Jamie: ...What's this?
 Jamie: Looks like some sort of box...
 Jamie: Wait! Isn't this the music box I gave Uncle? Why is it here?
 Jamie: He might've lost it... Let's bring it back to him and see...
-Tutorial: You've picked up the Music Box trinket! Press [I] to open your inventory and see what it does! 
+Tutorial: You've picked up the Music Box trinket! Press [nomarkup][I][/nomarkup] to open your inventory and see what it does! 
 <<legacy_dialogue_event>>
 ===
 title: ShoePickup
@@ -206,7 +206,7 @@ title: DinkyWastedScrapGunIntro
 ---
 Jamie: Time to try this scrap gun out for real this time...
 Jamie: Just need to equip it!
-Tutorial: Press [R] to switch to the Scrap Gun.
+Tutorial: Press [nomarkup][R][/nomarkup] to switch to the Scrap Gun.
 ===
 title: DinkyWastedReunion
 ---
@@ -221,15 +221,15 @@ Jamie: We’ll fix this. You’re gonna be fine. We just need to get you back to
 title: ScrapGunTutorial
 ---
 Tutorial: The Scrap Gun shoots a spray of pellets. Use it at close ranges for more damage.
-Tutorial: Use your skill [Q] while holding the Scrap Gun to jump great distances.
-Tutorial: Press [Tab] and open up the Guide to get more details on what each weapon does!
+Tutorial: Use your skill [nomarkup][Q][/nomarkup] while holding the Scrap Gun to jump great distances.
+Tutorial: Press [nomarkup][Tab][/nomarkup] and open up the Guide to get more details on what each weapon does!
 ===
 title: TutorialIntro
 ---
 Jamie: Time to try out this thing...
 Jamie: ...I'll hit those dummies!
 Dinky: fehbladlguyiuw!!
-Tutorial: Use your [Mouse] to aim, and [Left Click] To shoot.
+Tutorial: Use your [nomarkup][Mouse][/nomarkup] to aim, and [nomarkup][Left Click][/nomarkup] to shoot.
 Tutorial: Keep track of your ammo, displayed as yellow ticks in the top-left corner. You can't shoot without ammo!
 Tutorial: While using the Harpoon Gun, restore ammo by picking up harpoons that have landed on the ground.
 ===
@@ -248,7 +248,7 @@ title: TutorialPlatformDummy
 ---
 Jamie: Hmm, how would I hit that dummy above us...
 Jaime: I know! If I get the angle just right... I can grapple up there with my harpoon gun!
-Tutorial: Each weapon has a unique skill which is activated by pressing [Q]. Using the Harpoon Gun's skill will pull you to the last semi-solid platform or enemy you hit.
+Tutorial: Each weapon has a unique skill which is activated by pressing [nomarkup][Q][/nomarkup]. Using the Harpoon Gun's skill will pull you to the last semi-solid platform or enemy you hit.
 Tutorial: You can only use the skill every once in a while. Keep track of it's cooldown by watching the white bar in the top-left corner.
 Jaime: Alright, let's give this a shot!
 ===
@@ -257,7 +257,7 @@ title: TutorialPullToDummy
 Jamie: Ack! Looks like the harpoons stuck.
 Jamie: How am I gonna go get that back...
 Dinky: fieuwhalkfhejef, woeifhqiuwh weofdsiul!
-Jamie: What's that Dinky? Press [Q] to pull myself towards the harpoon?
+Jamie: What's that Dinky? Press [nomarkup][Q][/nomarkup] to pull myself towards the harpoon?
 Jamie: Okay!
 ===
 title: UncleRoomFlowUnlocked
@@ -275,8 +275,8 @@ title: UncleRoomScrapGunPickup
 Jamie: What's this?
 Jamie: Looks like some kind of... gun?
 Jamie: I only know one person crafty enough to make something like this out of scrap...
-Tutorial: You picked up the Scrap Gun! Press [R] to swap between weapons!
-Tutorial: The Scrap Gun's [Q] skill blasts you in the air, giving you extra height.
+Tutorial: You picked up the Scrap Gun! Press [nomarkup][R][/nomarkup] to swap between weapons!
+Tutorial: The Scrap Gun's [nomarkup][Q][/nomarkup] skill blasts you in the air, giving you extra height.
 <<legacy_dialogue_event>>
 ===
 title: LabPrefightIntro
