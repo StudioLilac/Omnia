@@ -123,6 +123,7 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
     }
 
     private void Start() {
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
         musicSlider.value = PauseMenu.musicVol;
         MusicVolume();
     }
@@ -148,21 +149,36 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
 
     public void ResumeScene()
     {
-        pauseMenuPanel.SetActive(false);
-        Time.timeScale = 1f;
+        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
+        TimeManager.Resume();
         IsPaused = false;
         OnPauseMenuDeactivate?.Invoke();
     }
 
     public void PauseScene() {
+        if (IsPaused) return;
+
         pauseMenuPanel.SetActive(true);
-        Time.timeScale = 0f;
         IsPaused = true;
+        TimeManager.Freeze();
 
         if (isDialogueHistoryShowing) {
             RenderHistory();
         }
         OnPauseMenuActivate?.Invoke();
+    }
+
+    private void OnDestroy() {
+        if (Instance != this) return;
+
+        SceneManager.activeSceneChanged -= OnActiveSceneChanged;
+        TimeManager.Resume();
+        if (IsPaused) OnPauseMenuDeactivate?.Invoke();
+        IsPaused = false;
+    }
+
+    private void OnActiveSceneChanged(Scene current, Scene next) {
+        if (IsPaused) ResumeScene();
     }
 
     public void LevelSelectScene() {
