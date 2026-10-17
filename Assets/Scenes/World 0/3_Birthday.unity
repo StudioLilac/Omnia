@@ -206,7 +206,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeScreen: {fileID: 547402382}
-  birthdayDialogue: {fileID: 11400000, guid: 928af47697cfd3e448ab40f2f9c05b8a, type: 2}
+  birthdayDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: BirthdayIntro
 --- !u!4 &505520574
 Transform:
   m_ObjectHideFlags: 0

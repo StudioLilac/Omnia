@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 public class ShotgunPickup : MonoBehaviour, IInteractable
 {
-    [SerializeField] private DialogueWrapper pickupDialogue;
+    [SerializeField] private Yarn.Unity.DialogueReference pickupDialogue;
     [SerializeField] private GameObject makeInteractable;
     [SerializeField] private SpriteRenderer shotgunSprite;
     [SerializeField] private Player player;
@@ -17,7 +17,7 @@ public class ShotgunPickup : MonoBehaviour, IInteractable
     }
 
     private IEnumerator InteractCoroutine() {
-        yield return DialogueManager.Instance.StartDialogue(pickupDialogue.Dialogue);
+        yield return DialogueManager.Instance.StartDialogue(pickupDialogue);
         pickedUp = true;
         shotgunSprite.enabled = false;
         player.hasShotgun = true;

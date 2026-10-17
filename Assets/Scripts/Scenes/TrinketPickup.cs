@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 
 public class TrinketPickup : MonoBehaviour, IInteractable
 {
-    [SerializeField] private DialogueWrapper pickupDialogue;
+    [SerializeField] private Yarn.Unity.DialogueReference pickupDialogue;
     [SerializeField] private GameObject makeInteractable;
     [SerializeField] private SpriteRenderer glowSprite;
     [SerializeField] private Trinket trinket;
@@ -18,7 +18,7 @@ public class TrinketPickup : MonoBehaviour, IInteractable
     }
 
     private IEnumerator InteractCoroutine() {
-        yield return DialogueManager.Instance.StartDialogue(pickupDialogue.Dialogue);
+        yield return DialogueManager.Instance.StartDialogue(pickupDialogue);
         PlayerDataManager.Instance.AddTrinket(trinket);
         pickedUp = true;
         glowSprite.enabled = false;

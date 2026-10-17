@@ -19436,8 +19436,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7421099ededd4af0a611c23334e23881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beginDialogue: {fileID: 11400000, guid: 6f3e0dc6972b6f643812c72c15b7e4f8, type: 2}
-  shotgunDialogue: {fileID: 11400000, guid: 38959bab6363e024a890a646b5388497, type: 2}
+  beginDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: DinkyWastedScrapGunIntro
+  shotgunDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: ScrapGunTutorial
   player: {fileID: 1975500272}
 --- !u!4 &1809636733
 Transform:

@@ -15,9 +15,9 @@ namespace Scenes.World5 {
         [SerializeField] private Player player;
         [SerializeField] private Uncle uncle;
 
-        [SerializeField] private DialogueWrapper beginDialogue;
-        [SerializeField] private DialogueWrapper uncleDialogue;
-        [SerializeField] private DialogueWrapper hugDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference beginDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference uncleDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference hugDialogue;
 
         private bool uncleTriggered;
 
@@ -28,7 +28,7 @@ namespace Scenes.World5 {
 
         private IEnumerator BeginSequence() {
             yield return new WaitForSeconds(0.5f);
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue));
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
@@ -44,7 +44,7 @@ namespace Scenes.World5 {
             uncleTriggered = true;
             uncle.Walk(-5f, 3f);
             yield return new WaitForSeconds(2f);
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(uncleDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(uncleDialogue));
 
             Player.controlsLocked = false;
             player.GetComponent<UseInput>().enabled = false;
@@ -58,7 +58,7 @@ namespace Scenes.World5 {
             player.GetComponent<UseInput>().enabled = true;
 
 
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(hugDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(hugDialogue));
             StartCoroutine(fadescreen.FadeInDarkScreen(2f));
             LevelManager.Instance.NextLevel();
         }

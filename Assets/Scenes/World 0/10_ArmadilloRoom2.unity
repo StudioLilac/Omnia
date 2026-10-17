@@ -4032,7 +4032,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a057b399ae94a87ab514d0b035bb9e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beginDialogue: {fileID: 11400000, guid: a36062195bc899a4cbaf1aaac54d36b3, type: 2}
+  beginDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: ArmadilloRoom2Intro
   fireFliesLocation: {fileID: 1828954893}
   fireFlyTrigger: {fileID: 962570103}
 --- !u!4 &962570102
