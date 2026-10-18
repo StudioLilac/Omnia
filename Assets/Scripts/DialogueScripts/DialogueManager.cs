@@ -46,7 +46,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         if (InventoryManager.Instance?.IsInventoryOpen ?? false) InventoryManager.Instance.CloseInventory();
 
         inDialogue = true;
-        TimeManager.Freeze();
+        TimeManager.Freeze(this);
         ownsFreeze = true;
         yarnDialogueRunner.SetProject(dialogueReference.project);
         SetDialogueUiVisible(true);
@@ -63,7 +63,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         if (!ownsFreeze) return;
 
         ownsFreeze = false;
-        TimeManager.Resume();
+        TimeManager.Unfreeze(this);
     }
 
     private void OnPause() {

@@ -10,8 +10,9 @@ using UnityEngine.UI;
 using Utils;
 
 public class PauseMenu : PersistentSingleton<PauseMenu> {
-    public static bool IsPaused = false;
+    public static bool IsPaused => Instance != null && Instance.paused;
     public static bool ScreenShake = true;
+    private bool paused;
     [SerializeField] private GameObject pauseMenuPanel;
     [SerializeField] private Canvas pauseCanvas;
 
@@ -48,7 +49,7 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
 
     public delegate void PauseMenuEventHandler();
 
-    public static event PauseMenuEventHandler OnPauseMenuActivate;   // for more complex functions that cannot use isPaused
+    public static event PauseMenuEventHandler OnPauseMenuActivate;
     public static event PauseMenuEventHandler OnPauseMenuDeactivate;
 
 
@@ -79,10 +80,6 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
 
             isControlsShowing = value;
         }
-    }
-
-    protected override void OnAwake() {
-        return;
     }
 
     void ShowHistory() {
@@ -133,7 +130,7 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
     }
 
     void TogglePause() {
-        if (IsPaused)
+        if (paused)
         {
             ResumeScene();
         } else
@@ -145,36 +142,51 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
 
     public void ResumeScene()
     {
-        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
-        TimeManager.Resume();
-        IsPaused = false;
+        try {
+            if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
+        } finally {
+            ReleasePause();
+        }
+    }
+
+    private void ReleasePause() {
+        if (!paused) return;
+
+        paused = false;
+        TimeManager.Unfreeze(this);
         OnPauseMenuDeactivate?.Invoke();
     }
 
     public void PauseScene() {
-        if (IsPaused) return;
+        if (paused) return;
 
-        pauseMenuPanel.SetActive(true);
-        IsPaused = true;
-        TimeManager.Freeze();
+        paused = true;
+        try {
+            TimeManager.Freeze(this);
+            pauseMenuPanel.SetActive(true);
+            if (!paused) return;
 
-        if (isDialogueHistoryShowing) {
-            RenderHistory();
+            if (isDialogueHistoryShowing) {
+                RenderHistory();
+            }
+            OnPauseMenuActivate?.Invoke();
+        } catch {
+            if (paused) ResumeScene();
+            throw;
         }
-        OnPauseMenuActivate?.Invoke();
+    }
+
+    private void OnDisable() {
+        ResumeScene();
     }
 
     private void OnDestroy() {
-        if (Instance != this) return;
-
         SceneManager.activeSceneChanged -= OnActiveSceneChanged;
-        TimeManager.Resume();
-        if (IsPaused) OnPauseMenuDeactivate?.Invoke();
-        IsPaused = false;
+        ReleasePause();
     }
 
     private void OnActiveSceneChanged(Scene current, Scene next) {
-        if (IsPaused) ResumeScene();
+        if (paused) ResumeScene();
     }
 
     public void LevelSelectScene() {
