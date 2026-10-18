@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Text;
 using Utils;
 using UnityEngine;
 
 public sealed class TimeManager : PersistentSingleton<TimeManager> {
-    private sealed class TimedScale {
+    private sealed class TimeScale {
         public float Scale;
         public float Duration;
         public float Elapsed;
@@ -14,25 +15,10 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
 
     private float defaultTimeScale = 1f;
 
-    private readonly List<TimedScale> scales = new();
+    private readonly List<TimeScale> scales = new();
     private readonly HashSet<object> freezeSources = new();
 
     private bool IsFrozen => freezeSources.Count > 0;
-
-    private float CurrentScale {
-        get {
-            if (scales.Count == 0) return defaultTimeScale;
-
-            float scale = float.PositiveInfinity;
-            foreach (TimedScale timedScale in scales) {
-                float progress = timedScale.Elapsed / timedScale.Duration;
-                float blend = timedScale.Ease == null ? 0f : Mathf.Clamp01(timedScale.Ease.Evaluate(progress));
-                scale = Mathf.Min(scale, Mathf.Lerp(timedScale.Scale, defaultTimeScale, blend));
-            }
-
-            return scale;
-        }
-    }
 
     private static TimeManager Manager {
         get {
@@ -49,7 +35,6 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
 
     protected override void OnAwake() {
         instance = this;
-        Apply();
     }
 
     private void OnDestroy() {
@@ -64,50 +49,34 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
 
         TimeManager manager = Manager;
         if (!manager.freezeSources.Add(source)) return;
-
-        manager.Apply();
     }
 
     public static void Unfreeze(object source) {
         if (instance == null || source == null || !instance.freezeSources.Remove(source)) return;
-
-        instance.Apply();
     }
 
     public static void Push(float scale, float duration, AnimationCurve ease) {
         TimeManager manager = Manager;
-        if (scale == 0f && ease == null && manager.scales.Count > 0) {
-            TimedScale top = manager.scales[^1];
-            if (top.Scale == 0f && top.Ease == null) {
-                // Overlapping hits should extend one freeze instead of stacking freezes.
-                top.Duration = Mathf.Max(top.Duration, top.Elapsed + duration);
-                return;
-            }
-        }
-
-        manager.scales.Add(new TimedScale {
+        manager.scales.Add(new TimeScale {
             Scale = scale,
             Duration = duration,
             Ease = ease,
         });
-        manager.Apply();
     }
 
     private void Update() {
-        if (IsFrozen || scales.Count == 0) return;
-
-        for (int i = scales.Count - 1; i >= 0; i--) {
-            scales[i].Elapsed += Time.unscaledDeltaTime;
-
-            if (scales[i].Elapsed >= scales[i].Duration) {
-                scales.RemoveAt(i);
-            }
+        if (IsFrozen) {
+            Time.timeScale = 0f;
+            return;
         }
+        scales.ForEach(scale => scale.Elapsed += Time.unscaledDeltaTime);
+        int expiredCount = scales.RemoveAll(scale => scale.Elapsed >= scale.Duration);
 
-        Apply();
-    }
-
-    private void Apply() {
-        Time.timeScale = IsFrozen ? 0f : CurrentScale;
+        float scale = defaultTimeScale;
+        foreach (TimeScale TimeScale in scales) {
+            float easedScale = TimeScale.Ease == null ? TimeScale.Scale : Mathf.Lerp(TimeScale.Scale, 0f, Mathf.Clamp01(TimeScale.Ease.Evaluate(TimeScale.Elapsed / TimeScale.Duration)));
+            scale = Mathf.Min(scale, easedScale);
+        }
+        Time.timeScale = scale;
     }
 }
