@@ -18,14 +18,38 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
 
     private bool IsFrozen => freezeSources.Count > 0;
 
+    private string DescribeState(string action) {
+        StringBuilder message = new StringBuilder()
+            .Append("[TimeManager] ").Append(action)
+            .Append(" | frame=").Append(Time.frameCount)
+            .Append(" | frozen=").Append(IsFrozen)
+            .Append(" | subscribers=").Append(freezeSources.Count)
+            .Append(" | timeScale=").Append(Time.timeScale)
+            .Append(" | scales=[");
+
+        for (int i = 0; i < scales.Count; i++) {
+            if (i > 0) message.Append(", ");
+
+            TimeScale timeScale = scales[i];
+            message.Append('#').Append(i)
+                .Append(" {scale=").Append(timeScale.Scale)
+                .Append(", elapsed=").Append(timeScale.Elapsed)
+                .Append('/').Append(timeScale.Duration)
+                .Append(", ease=").Append(timeScale.Ease == null ? "none" : "curve")
+                .Append('}');
+        }
+
+        return message.Append(']').ToString();
+    }
+
     public void Freeze(object source) {
         if (source == null) return;
-        freezeSources.Add(source);
+        if (freezeSources.Add(source)) Debug.Log(DescribeState("Freeze"), this);
     }
 
     public void Unfreeze(object source) {
         if (source == null) return;
-        freezeSources.Remove(source);
+        if (freezeSources.Remove(source)) Debug.Log(DescribeState("Unfreeze"), this);
     }
 
     public void Push(float scale, float duration, AnimationCurve ease) {
@@ -34,6 +58,7 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
             Duration = duration,
             Ease = ease,
         });
+        Debug.Log(DescribeState("Push"), this);
     }
 
     private void Update() {
@@ -50,5 +75,6 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
             scale = Mathf.Min(scale, easedScale);
         }
         Time.timeScale = scale;
+        if (expiredCount > 0) Debug.Log(DescribeState($"Expired {expiredCount} scale(s)"), this);
     }
 }
