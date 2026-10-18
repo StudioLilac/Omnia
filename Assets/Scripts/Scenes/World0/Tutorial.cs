@@ -60,12 +60,12 @@ namespace Scenes {
         private void RegisterDummyHurt(Dummy dummy) {
             dummy.OnHurt += HandleDummyHurt;
             dummy.canBeHurt = true;
-            HighlightManager.Instance.HighlightGameObject(dummy.gameObject);
+            HighlightManager.Instance.CrosshairGameObject(dummy.gameObject);
         }
 
         private void HandleDummyHurt(Dummy dummy) {
             dummy.OnHurt -= HandleDummyHurt;
-            HighlightManager.Instance.UnhighlightGameObject(dummy.gameObject);
+            HighlightManager.Instance.UncrosshairGameObject(dummy.gameObject);
             dummiesHit++;
         }
 
