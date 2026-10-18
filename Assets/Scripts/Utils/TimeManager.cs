@@ -21,11 +21,13 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
 
     private float CurrentScale {
         get {
-            float scale = defaultTimeScale;
+            if (scales.Count == 0) return defaultTimeScale;
+
+            float scale = float.PositiveInfinity;
             foreach (TimedScale timedScale in scales) {
                 float progress = timedScale.Elapsed / timedScale.Duration;
                 float blend = timedScale.Ease == null ? 0f : Mathf.Clamp01(timedScale.Ease.Evaluate(progress));
-                scale = Mathf.Lerp(timedScale.Scale, scale, blend);
+                scale = Mathf.Min(scale, Mathf.Lerp(timedScale.Scale, defaultTimeScale, blend));
             }
 
             return scale;
