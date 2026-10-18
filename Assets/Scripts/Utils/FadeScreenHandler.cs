@@ -123,4 +123,24 @@ public static class FadeHelpers {
         }
     }
 
+    public static IEnumerator FadeMaterialColor(Material material, int propertyID, Color baseColor, float startAlpha, float endAlpha, float duration) {
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration) {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+
+            float easedT = 1f - Mathf.Pow(1f - t, 3f); // Cubic ease-out
+
+            baseColor.a = Mathf.Lerp(startAlpha, endAlpha, easedT);
+            material.SetColor(propertyID, baseColor);
+
+            yield return null;
+        }
+
+        baseColor.a = endAlpha;
+        material.SetColor(propertyID, baseColor);
+    }
+
 }
