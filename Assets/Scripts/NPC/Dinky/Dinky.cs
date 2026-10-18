@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Yarn.Unity;
 
 namespace NPC.Dinky {
     public class Dinky : MonoBehaviour, IInteractable {
@@ -10,8 +11,7 @@ namespace NPC.Dinky {
         [SerializeField] private GameObject graphics;
         [SerializeField] public Animator animator;
 
-        [FormerlySerializedAs("tempDialogue")] [SerializeField]
-        private DialogueWrapper interactDialogue;
+        [SerializeField] private DialogueReference interactDialogue;
 
         [SerializeField] private List<Transform> locations;
 
@@ -72,7 +72,7 @@ namespace NPC.Dinky {
         }
 
         private IEnumerator StartDialogue() {
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(interactDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(interactDialogue));
             OnInteract?.Invoke();
         }
 

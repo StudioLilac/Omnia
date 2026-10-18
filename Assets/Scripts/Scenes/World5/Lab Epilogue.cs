@@ -15,7 +15,7 @@ namespace Scenes.World5 {
         [SerializeField] private FadeScreenHandler fadeScreen;
         [SerializeField] private Interactable interactable;
 
-        [SerializeField] DialogueWrapper beginDialogue;
+        [SerializeField] Yarn.Unity.DialogueReference beginDialogue;
         private bool interacted = false; 
         public void Interact() {
             if (interacted) return;
@@ -44,7 +44,7 @@ namespace Scenes.World5 {
 
             yield return StartCoroutine(FadeHelpers.FadeSpriteRendererColor(dinkySpriteRenderer, dinkySpriteRenderer.color, new Color(1,1,1), 1f));
 
-            yield return DialogueManager.Instance.StartDialogue(beginDialogue.Dialogue);
+            yield return DialogueManager.Instance.StartDialogue(beginDialogue);
 
             yield return StartCoroutine(fadeScreen.FadeInDarkScreen(3f));
 

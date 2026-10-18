@@ -5184,11 +5184,21 @@ MonoBehaviour:
   dinky: {fileID: 1215970529}
   dummyAirCheck: {fileID: 1235722730}
   dinkyAppearTransform: {fileID: 371974271}
-  beginDialogue: {fileID: 11400000, guid: e61a73a4c76b14002b6851aca435c747, type: 2}
-  platformDummyDialogue: {fileID: 11400000, guid: 8751140c175993f44aeb4dbe6734cbf9, type: 2}
-  pullToDummyDialogue: {fileID: 11400000, guid: 18e5ca2e6c9574fdfa5ed5668f403e9a, type: 2}
-  dinkyScaredDialogue: {fileID: 11400000, guid: ae792a7db37824d38a2d4256a25ba17f, type: 2}
-  dinkyGoneDialogue: {fileID: 11400000, guid: 6d9e6742d03124dd88b927f3c6fb633d, type: 2}
+  beginDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: TutorialIntro
+  platformDummyDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: TutorialPlatformDummy
+  pullToDummyDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: TutorialPullToDummy
+  dinkyScaredDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: TutorialDinkyScared
+  dinkyGoneDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: TutorialDinkyLeaves
   dummy1: {fileID: 1358407371}
   dummy2: {fileID: 809369182}
   dummy3: {fileID: 273401439}

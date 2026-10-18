@@ -11,7 +11,7 @@ public class DinkyBossFightManager : MonoBehaviour {
     [SerializeField] private HealthBar bossHealth;
     [SerializeField] private DinkyBossFightTanks dinkyBossfightTanks;
 
-    [SerializeField] DialogueWrapper afterwordDialogue;
+    [SerializeField] Yarn.Unity.DialogueReference afterwordDialogue;
     [SerializeField] SpriteRenderer lighting;
     [SerializeField] SpriteRenderer uncle;
 
@@ -110,7 +110,7 @@ public class DinkyBossFightManager : MonoBehaviour {
 
         yield return new WaitForSeconds(1f);
 
-        yield return DialogueManager.Instance.StartDialogue(afterwordDialogue.Dialogue);
+        yield return DialogueManager.Instance.StartDialogue(afterwordDialogue);
 
         yield return new WaitForSeconds(0.5f);
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TriggerDialogueOnContact : MonoBehaviour
 {
-    [SerializeField] private DialogueWrapper dialogueWrapper;
+    [SerializeField] private Yarn.Unity.DialogueReference dialogueWrapper;
     private bool triggered = false;
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -14,7 +14,7 @@ public class TriggerDialogueOnContact : MonoBehaviour
         {
             if (!triggered) {
                 triggered = true;
-                StartCoroutine(DialogueManager.Instance.StartDialogue(dialogueWrapper.Dialogue));
+                StartCoroutine(DialogueManager.Instance.StartDialogue(dialogueWrapper));
             }
         }
     }

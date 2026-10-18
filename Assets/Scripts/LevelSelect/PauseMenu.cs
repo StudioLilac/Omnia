@@ -97,11 +97,7 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
     }
 
     void RenderHistory() {
-        List<DialogueText> list = DialogueManager.Instance?.GetHistory();
-        historyText.text = "";
-        foreach (DialogueText dialogue in list) {
-            historyText.text += "<b>" + dialogue.SpeakerName + "</b>" + "\n" + dialogue.BodyText + "\n\n";
-        }
+        historyText.text = "Dialogue history is unavailable during the Yarn migration.";
     }
 
     public void SetHistoryState(bool state) {

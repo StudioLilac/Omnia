@@ -6,7 +6,7 @@ using Utils;
 
 namespace Scenes {
     public class ArmadilloRoom : MonoBehaviour {
-        [SerializeField] private DialogueWrapper beginDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference beginDialogue;
         public void Start() {
             StartCoroutine(BeginSequence());
             AudioManager.Instance.SwitchBGM(AudioTracks.CaveSpeak);
@@ -15,7 +15,7 @@ namespace Scenes {
 
         private IEnumerator BeginSequence() {
             yield return new WaitForSeconds(0.5f);
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue));
         }
 
     }

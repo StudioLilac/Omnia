@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UncleRoomDoor : MonoBehaviour, IInteractable
 {
-    [SerializeField] private DialogueWrapper notPickedUpDialogue;
+    [SerializeField] private Yarn.Unity.DialogueReference notPickedUpDialogue;
     [SerializeField] private Trinket musicBox;
 
     public virtual void Interact() {
@@ -13,7 +13,7 @@ public class UncleRoomDoor : MonoBehaviour, IInteractable
 
     private IEnumerator InteractCoroutine() {
         if (!ShotgunPickup.pickedUp || (musicBox && musicBox.IsLocked)) {
-            yield return DialogueManager.Instance.StartDialogue(notPickedUpDialogue.Dialogue);
+        yield return DialogueManager.Instance.StartDialogue(notPickedUpDialogue);
         } else {
             LevelManager.Instance.NextLevel();
         }

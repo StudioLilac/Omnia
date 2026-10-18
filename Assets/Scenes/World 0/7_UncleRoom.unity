@@ -604,7 +604,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f429e42b5eba471419f0269e770b808d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flowUnlockedDialogue: {fileID: 11400000, guid: 708f616ddc4c4ad45ae84295bb7edf10, type: 2}
+  flowUnlockedDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: UncleRoomFlowUnlocked
 --- !u!4 &374721752
 Transform:
   m_ObjectHideFlags: 0
@@ -794,7 +796,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bb660411343d08441eaf0696aed37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notPickedUpDialogue: {fileID: 11400000, guid: 182a216a21f545548befb106d643facf, type: 2}
+  notPickedUpDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: UncleRoomNotPickedUp
   musicBox: {fileID: 11400000, guid: 77d602b8e4ba79c46b02522eea294d32, type: 2}
 --- !u!1 &682334518
 GameObject:
@@ -1243,7 +1247,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea0d771bef90fcb4ab925ebf7e5dd1d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupDialogue: {fileID: 11400000, guid: d28e39dd7fd959f44aa9a21cc4bd4922, type: 2}
+  pickupDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: UncleRoomScrapGunPickup
   makeInteractable: {fileID: 1178337836}
   shotgunSprite: {fileID: 298790892}
   player: {fileID: 1975500272}
