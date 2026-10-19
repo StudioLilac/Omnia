@@ -13,7 +13,7 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
 
     private static TimeManager instance;
 
-    private float defaultTimeScale = 1f;
+    private static float defaultTimeScale = 1f;
 
     private readonly List<TimeScale> scales = new();
     private readonly HashSet<object> freezeSources = new();
@@ -46,13 +46,13 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
 
     public static void Freeze(object source) {
         if (source == null) return;
-
         TimeManager manager = Manager;
-        if (!manager.freezeSources.Add(source)) return;
+        manager.freezeSources.Add(source);
     }
 
     public static void Unfreeze(object source) {
-        if (instance == null || source == null || !instance.freezeSources.Remove(source)) return;
+        if (source == null) return;
+        instance?.freezeSources.Remove(source);
     }
 
     public static void Push(float scale, float duration, AnimationCurve ease) {
@@ -75,7 +75,6 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
         float scale = defaultTimeScale;
         foreach (TimeScale TimeScale in scales) {
             float easedScale = TimeScale.Ease == null ? TimeScale.Scale : Mathf.Lerp(TimeScale.Scale, defaultTimeScale, Mathf.Clamp01(TimeScale.Ease.Evaluate(TimeScale.Elapsed / TimeScale.Duration)));
-            Time.timeScale = easedScale;
             scale = Mathf.Min(scale, easedScale);
         }
         Time.timeScale = scale;
