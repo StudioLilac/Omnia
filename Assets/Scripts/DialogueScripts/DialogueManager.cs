@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utils;
 using Yarn.Unity;
 
@@ -29,11 +30,13 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
     }
 
     void Start() {
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
         PauseMenu.OnPauseMenuActivate += OnPause;
         PauseMenu.OnPauseMenuDeactivate += OnUnpause;
     }
 
     void OnDestroy() {
+        SceneManager.activeSceneChanged -= OnActiveSceneChanged;
         ReleaseFreeze();
         PauseMenu.OnPauseMenuActivate -= OnPause;
         PauseMenu.OnPauseMenuDeactivate -= OnUnpause;
@@ -46,7 +49,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         if (InventoryManager.Instance?.IsInventoryOpen ?? false) InventoryManager.Instance.CloseInventory();
 
         inDialogue = true;
-        TimeManager.Freeze(this);
+        TimeManager.Instance.Freeze(this);
         ownsFreeze = true;
         yarnDialogueRunner.SetProject(dialogueReference.project);
         SetDialogueUiVisible(true);
@@ -63,7 +66,11 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         if (!ownsFreeze) return;
 
         ownsFreeze = false;
-        TimeManager.Unfreeze(this);
+        TimeManager.Instance.Unfreeze(this);
+    }
+
+    private void OnActiveSceneChanged(Scene current, Scene next) {
+        ReleaseFreeze();
     }
 
     private void OnPause() {

@@ -11,8 +11,6 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
         public AnimationCurve Ease;
     }
 
-    private static TimeManager instance;
-
     private const float defaultTimeScale = 1f;
 
     private readonly List<TimeScale> scales = new();
@@ -20,44 +18,18 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
 
     private bool IsFrozen => freezeSources.Count > 0;
 
-    private static TimeManager Manager {
-        get {
-            if (instance != null) return instance;
-
-            instance = FindAnyObjectByType<TimeManager>();
-            if (instance == null) {
-                instance = new GameObject(nameof(TimeManager)).AddComponent<TimeManager>();
-            }
-
-            return instance;
-        }
-    }
-
-    protected override void OnAwake() {
-        instance = this;
-    }
-
-    private void OnDestroy() {
-        if (instance != this) return;
-
-        Time.timeScale = defaultTimeScale;
-        instance = null;
-    }
-
-    public static void Freeze(object source) {
+    public void Freeze(object source) {
         if (source == null) return;
-        TimeManager manager = Manager;
-        manager.freezeSources.Add(source);
+        freezeSources.Add(source);
     }
 
-    public static void Unfreeze(object source) {
+    public void Unfreeze(object source) {
         if (source == null) return;
-        instance?.freezeSources.Remove(source);
+        freezeSources.Remove(source);
     }
 
-    public static void Push(float scale, float duration, AnimationCurve ease) {
-        TimeManager manager = Manager;
-        manager.scales.Add(new TimeScale {
+    public void Push(float scale, float duration, AnimationCurve ease) {
+        scales.Add(new TimeScale {
             Scale = scale,
             Duration = duration,
             Ease = ease,

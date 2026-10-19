@@ -59,4 +59,5 @@ MonoBehaviour:
   - {fileID: 3063838850607568246, guid: b0b67e9456896443ca66fbd9f6a47713, type: 3}
   - {fileID: 1514540741666410862, guid: daab3fc359b970845a39aaeb8b7e7d92, type: 3}
   - {fileID: 541092851418386870, guid: ac259b6f372a8441e81789736434cd2a, type: 3}
+  - {fileID: 7290418253610374521, guid: d737dc1cbbae49f8841cf395d531870d, type: 3}
   transition: {fileID: 1475504873076089010, guid: 8c52d1dd2a61c41199622e2e87b270bf, type: 3}

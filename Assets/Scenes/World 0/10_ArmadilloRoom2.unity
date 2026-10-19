@@ -3600,7 +3600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3913066680617439840, guid: dec067d666e464088a06b526d65856c9, type: 3}
       propertyPath: managers.Array.size
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 3913066680617439840, guid: dec067d666e464088a06b526d65856c9, type: 3}
       propertyPath: 'managers.Array.data[11]'
