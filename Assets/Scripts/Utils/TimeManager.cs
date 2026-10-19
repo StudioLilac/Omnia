@@ -13,7 +13,7 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
 
     private static TimeManager instance;
 
-    private static float defaultTimeScale = 1f;
+    private const float defaultTimeScale = 1f;
 
     private readonly List<TimeScale> scales = new();
     private readonly HashSet<object> freezeSources = new();
@@ -73,8 +73,8 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
         int expiredCount = scales.RemoveAll(scale => scale.Elapsed >= scale.Duration);
 
         float scale = defaultTimeScale;
-        foreach (TimeScale TimeScale in scales) {
-            float easedScale = TimeScale.Ease == null ? TimeScale.Scale : Mathf.Lerp(TimeScale.Scale, defaultTimeScale, Mathf.Clamp01(TimeScale.Ease.Evaluate(TimeScale.Elapsed / TimeScale.Duration)));
+        foreach (TimeScale timeScale in scales) {
+            float easedScale = timeScale.Ease == null ? timeScale.Scale : Mathf.Lerp(timeScale.Scale, defaultTimeScale, Mathf.Clamp01(timeScale.Ease.Evaluate(timeScale.Elapsed / timeScale.Duration)));
             scale = Mathf.Min(scale, easedScale);
         }
         Time.timeScale = scale;
