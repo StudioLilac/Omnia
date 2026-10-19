@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Players;
 using Enemies;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace UI {
     public class Minimap : MonoBehaviour {
@@ -13,12 +14,14 @@ namespace UI {
         private float maxDotSize = 20f;
 
         [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private InputActionReference toggleAction;
         [SerializeField] private float obscuredAlpha = 0.3f;
         [SerializeField] private float fadeOutDuration = 0.15f;
         [SerializeField] private float fadeInDuration = 0.4f;
 
         private SpriteRenderer playerSprite;
         private Transform mapCenter;
+        private bool shown = false;
         private readonly Dictionary<Enemy, (RectTransform dot, Collider2D body)> dots = new();
         private readonly List<Enemy> destroyed = new();
 
@@ -35,6 +38,10 @@ namespace UI {
         }
 
         private void OnLevelLoaded(LevelData _) => mapCenter = null;
+
+        private void Update() {
+            if (toggleAction != null && toggleAction.action.WasPressedThisFrame()) SetShown(!shown);
+        }
 
         private void OnEnemySpawn(Enemy enemy) {
             // Destructable walls inherit from Enemy but are terrain, so they don't get a dot
@@ -60,6 +67,7 @@ namespace UI {
                     // The minimap camera is a child of the player prefab. Its view radius must match the mask radius
                     Camera minimapCamera = obj.GetComponentInChildren<Camera>();
                     minimapCamera.orthographicSize = enemyDotParent.rect.width / 2f / pixelsPerUnit;
+                    minimapCamera.enabled = shown;
                     // camera's transform is at the center of the player while obj.transform is at the feet
                     mapCenter = minimapCamera.transform;
                 }
@@ -79,7 +87,14 @@ namespace UI {
             foreach (Enemy enemy in destroyed) OnEnemyDeath(enemy);
             destroyed.Clear();
 
-            UpdateFade();
+            // Fading sets the alpha every frame, so skip it while the minimap is hidden
+            if (shown) UpdateFade();
+        }
+
+        private void SetShown(bool value) {
+            shown = value;
+            canvasGroup.alpha = value ? 1f : 0f;
+            if (mapCenter) mapCenter.GetComponent<Camera>().enabled = value;
         }
 
         private void UpdateFade() {
