@@ -369,6 +369,7 @@ MonoBehaviour:
   enemyDotPrefab: {fileID: 6035558281500425231, guid: bef5be0bb54c6b34e9e9a2f00db92f72, type: 3}
   pixelsPerUnit: 10
   canvasGroup: {fileID: 7064790941920445290}
+  toggleAction: {fileID: 2886584243913278008, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}
   obscuredAlpha: 0.3
   fadeOutDuration: 0.15
   fadeInDuration: 0.4
