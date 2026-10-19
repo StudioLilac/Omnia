@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ using System.Collections.Generic;
 using Players;
 using Enemies;
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace UI {
         [SerializeField] private float fadeInDuration = 0.4f;
 
         private SpriteRenderer playerSprite;
-        private Transform mapCenter;
+        private Camera minimapCamera;
         private bool shown = false;
         private readonly Dictionary<Enemy, (RectTransform dot, Collider2D body)> dots = new();
         private readonly List<Enemy> destroyed = new();
@@ -37,7 +37,7 @@ namespace UI {
             LevelManager.OnLevelLoaded -= OnLevelLoaded;
         }
 
-        private void OnLevelLoaded(LevelData _) => mapCenter = null;
+        private void OnLevelLoaded(LevelData _) => minimapCamera = null;
 
         private void Update() {
             if (toggleAction != null && toggleAction.action.WasPressedThisFrame()) SetShown(!shown);
@@ -60,25 +60,25 @@ namespace UI {
         }
 
         private void LateUpdate() {
-            if (!mapCenter) {
+            if (!minimapCamera) {
                 GameObject obj = GameObject.FindGameObjectWithTag("Player");
                 if (obj) {
                     playerSprite = obj.GetComponent<Player>().sprite;
                     // The minimap camera is a child of the player prefab. Its view radius must match the mask radius
-                    Camera minimapCamera = obj.GetComponentInChildren<Camera>();
+                    minimapCamera = obj.GetComponentInChildren<Camera>();
                     minimapCamera.orthographicSize = enemyDotParent.rect.width / 2f / pixelsPerUnit;
                     minimapCamera.enabled = shown;
-                    // camera's transform is at the center of the player while obj.transform is at the feet
-                    mapCenter = minimapCamera.transform;
                 }
                 else return;
             }
+
+            if (!shown) return;
 
             foreach (var (enemy, (dot, body)) in dots) {
                 if (!enemy) { destroyed.Add(enemy); continue; }
                 // Not every enemy has a collider
                 Vector3 position = body ? body.bounds.center : enemy.transform.position;
-                dot.anchoredPosition = (position - mapCenter.position) * pixelsPerUnit;
+                dot.anchoredPosition = (position - minimapCamera.transform.position) * pixelsPerUnit;
                 dot.gameObject.SetActive(enemy is not HiddenEnemy h || !h.hidden);
             }
 
@@ -87,14 +87,13 @@ namespace UI {
             foreach (Enemy enemy in destroyed) OnEnemyDeath(enemy);
             destroyed.Clear();
 
-            // Fading sets the alpha every frame, so skip it while the minimap is hidden
-            if (shown) UpdateFade();
+            UpdateFade();
         }
 
         private void SetShown(bool value) {
             shown = value;
             canvasGroup.alpha = value ? 1f : 0f;
-            if (mapCenter) mapCenter.GetComponent<Camera>().enabled = value;
+            if (minimapCamera) minimapCamera.enabled = value;
         }
 
         private void UpdateFade() {
