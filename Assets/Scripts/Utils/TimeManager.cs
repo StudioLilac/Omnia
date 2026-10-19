@@ -75,6 +75,7 @@ public sealed class TimeManager : PersistentSingleton<TimeManager> {
         float scale = defaultTimeScale;
         foreach (TimeScale TimeScale in scales) {
             float easedScale = TimeScale.Ease == null ? TimeScale.Scale : Mathf.Lerp(TimeScale.Scale, defaultTimeScale, Mathf.Clamp01(TimeScale.Ease.Evaluate(TimeScale.Elapsed / TimeScale.Duration)));
+            Time.timeScale = easedScale;
             scale = Mathf.Min(scale, easedScale);
         }
         Time.timeScale = scale;
