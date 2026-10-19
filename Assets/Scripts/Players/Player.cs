@@ -299,7 +299,7 @@ namespace Players {
             StartCoroutine(DoHurtInvincibilityFlicker());
 
             TimeManager.Push(0f, 0.3f, null);
-            TimeManager.Push(0.5f, 15f, AnimationCurve.EaseInOut(0f, 1f, 1f, 0f));
+            TimeManager.Push(0.5f, 15f, AnimationCurve.EaseInOut(0f, 0f, 1f, 1f));
             TimeManager.Push(2.0f, 15f, null);
             ScreenShakeManager.Instance?.Shake(0.5f, 0.15f);
 
