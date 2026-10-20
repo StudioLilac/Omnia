@@ -1374,62 +1374,8 @@ MonoBehaviour:
   floatCamera: {fileID: 1919072577}
   fadeScreen: {fileID: 1681744399}
   dialogue:
-  - bodyText: "My god\u2026 we made it, Dinky. We really made it."
-    speakerName: Jamie
-    displayingImage: {fileID: 0}
-    highlightedWords: []
-    shadow: 0
-    broadcastAnEvent: 0
-  - bodyText: Nyeh!
-    speakerName: Dinky
-    displayingImage: {fileID: 0}
-    highlightedWords: []
-    shadow: 0
-    broadcastAnEvent: 0
-  - bodyText: "Look at it all! This is what we\u2019ve been living under all this time? It\u2019s\u2026 amazing! "
-    speakerName: Jamie
-    displayingImage: {fileID: 0}
-    highlightedWords: []
-    shadow: 0
-    broadcastAnEvent: 1
-  - bodyText: Do you think Uncle got to see it? He must have, right?
-    speakerName: Jamie
-    displayingImage: {fileID: 0}
-    highlightedWords: []
-    shadow: 0
-    broadcastAnEvent: 1
-  - bodyText: Nyeh nyeh!
-    speakerName: Dinky
-    displayingImage: {fileID: 0}
-    highlightedWords: []
-    shadow: 0
-    broadcastAnEvent: 1
-  - bodyText: "We\u2019re gonna find him, Dinky. We\u2019re gonna find him and get you back to normal. That\u2019s what we came here for, right? "
-    speakerName: Jamie
-    displayingImage: {fileID: 0}
-    highlightedWords: []
-    shadow: 0
-    broadcastAnEvent: 1
-  - bodyText: "Nyeh\u2026"
-    speakerName: Dinky
-    displayingImage: {fileID: 0}
-    highlightedWords: []
-    shadow: 0
-    broadcastAnEvent: 1
-  - bodyText: "Wait\u2026 Dinky, do you see that? Over there, by the lake. What is\u2014Gasp! The town! No!"
-    speakerName: Jamie
-    displayingImage: {fileID: 0}
-    highlightedWords: []
-    shadow: 0
-    broadcastAnEvent: 1
-  - bodyText: There has to be something left. Come on, Dinky, we gotta see!
-    speakerName: Jamie
-    displayingImage: {fileID: 0}
-    highlightedWords: []
-    shadow: 0
-    broadcastAnEvent: 1
-  jamieTextBox: {fileID: 894359017}
-  dinkyTextBox: {fileID: 626789827}
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: SurfaceArrival
 --- !u!1 &1463867462
 GameObject:
   m_ObjectHideFlags: 0

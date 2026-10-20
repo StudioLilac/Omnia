@@ -148,7 +148,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f973269dfa4c4b4cb8a968553a0adbfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beginDialogue: {fileID: 11400000, guid: e5aa86b15d346df4786892885687692b, type: 2}
+  beginDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: ArmadilloRoomIntro
 --- !u!4 &92007502
 Transform:
   m_ObjectHideFlags: 0

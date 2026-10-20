@@ -347,4 +347,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e780219d7b814de186e3868380c6cecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcDialogue: {fileID: 11400000, guid: fc6367a187981904783d375ba59233cd, type: 2}
+  npcDialogue:
+    project: {fileID: 0}
+    nodeName: 

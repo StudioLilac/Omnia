@@ -255,7 +255,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc030969e25adfa48a9d4b251e4419e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcDialogue: {fileID: 11400000, guid: 503c6055ebc1801459827a9a0bbf5cbf, type: 2}
+  npcDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: DummyIntro
 --- !u!1 &6097319545696068051
 GameObject:
   m_ObjectHideFlags: 0

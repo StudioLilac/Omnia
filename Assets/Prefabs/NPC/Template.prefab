@@ -253,6 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonIcon: {fileID: 7741403599785964390}
+  interactAction: {fileID: 0}
 --- !u!61 &6019806576371800203
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -346,4 +347,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc030969e25adfa48a9d4b251e4419e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcDialogue: {fileID: 11400000, guid: 503c6055ebc1801459827a9a0bbf5cbf, type: 2}
+  npcDialogue:
+    project: {fileID: 7545569452688597077, guid: 40cab0cfd74c5c64caf0b460479d0797, type: 3}
+    nodeName: DummyIntro

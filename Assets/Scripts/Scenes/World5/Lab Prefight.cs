@@ -16,9 +16,9 @@ namespace Scenes.World5 {
         [SerializeField] Tank birdTank;
         [SerializeField] Tank armadilloTankk;
 
-        [SerializeField] DialogueWrapper beginDialogue;
-        [SerializeField] DialogueWrapper dinkyThrownDialogue;
-        [SerializeField] DialogueWrapper dinkyHurtDialogue;
+        [SerializeField] Yarn.Unity.DialogueReference beginDialogue;
+        [SerializeField] Yarn.Unity.DialogueReference dinkyThrownDialogue;
+        [SerializeField] Yarn.Unity.DialogueReference dinkyHurtDialogue;
         public void Start() {
             Player.controlsLocked = true;
             StartCoroutine(BeginSequence());
@@ -29,7 +29,7 @@ namespace Scenes.World5 {
             tanks.ForEach(t => t.TurnOff());
 
             yield return new WaitForSeconds(2f);
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(beginDialogue));
 
             yield return new WaitForSeconds(1f);
             Rigidbody2D rb = dinky.GetComponent<Rigidbody2D>();
@@ -56,7 +56,7 @@ namespace Scenes.World5 {
             yield return new WaitForSeconds(2f);
 
 
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(dinkyThrownDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(dinkyThrownDialogue));
 
             StartCoroutine(AudioManager.Instance.StopBGM());
             // machine starts
@@ -79,7 +79,7 @@ namespace Scenes.World5 {
 
             yield return new WaitForSeconds(2f);
 
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(dinkyHurtDialogue.Dialogue));
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(dinkyHurtDialogue));
 
             Player.controlsLocked = false;
             LevelManager.Instance.NextLevel();
