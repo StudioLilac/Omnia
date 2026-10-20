@@ -1,13 +1,12 @@
 using System;
 using System.Collections;
-using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine;
 using Utils;
 using Yarn.Unity;
 
 public class DialogueManager : PersistentSingleton<DialogueManager> {
     [SerializeField] private DialogueRunner yarnDialogueRunnerPrefab;
-    private bool ownsFreeze;
 
     private DialogueRunner yarnDialogueRunner;
     private Canvas[] dialogueCanvases;
@@ -30,16 +29,15 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
     }
 
     void Start() {
-        SceneManager.activeSceneChanged += OnActiveSceneChanged;
         PauseMenu.OnPauseMenuActivate += OnPause;
         PauseMenu.OnPauseMenuDeactivate += OnUnpause;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnDestroy() {
-        SceneManager.activeSceneChanged -= OnActiveSceneChanged;
-        ReleaseFreeze();
         PauseMenu.OnPauseMenuActivate -= OnPause;
         PauseMenu.OnPauseMenuDeactivate -= OnUnpause;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public bool IsInDialogue() => inDialogue;
@@ -50,7 +48,6 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
 
         inDialogue = true;
         TimeManager.Instance.Freeze(this);
-        ownsFreeze = true;
         yarnDialogueRunner.SetProject(dialogueReference.project);
         SetDialogueUiVisible(true);
         yield return YarnTask.ToCoroutine(async () => {
@@ -59,18 +56,12 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         });
         SetDialogueUiVisible(false);
         inDialogue = false;
-        ReleaseFreeze();
-    }
-
-    private void ReleaseFreeze() {
-        if (!ownsFreeze) return;
-
-        ownsFreeze = false;
         TimeManager.Instance.Unfreeze(this);
     }
 
-    private void OnActiveSceneChanged(Scene current, Scene next) {
-        ReleaseFreeze();
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        if (!inDialogue) return;
+        yarnDialogueRunner.Stop();
     }
 
     private void OnPause() {
@@ -79,6 +70,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
 
     private void OnUnpause() {
         if (inDialogue) {
+            TimeManager.Instance.Unfreeze(this);
             SetDialogueUiVisible(true);
         }
     }
