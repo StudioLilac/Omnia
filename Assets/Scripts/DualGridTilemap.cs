@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 [ExecuteAlways]
 public class DualGridTilemap : MonoBehaviour
 {
@@ -15,12 +19,27 @@ public class DualGridTilemap : MonoBehaviour
     private void OnEnable()
     {
         Tilemap.tilemapTileChanged += OnChanged;
+#if UNITY_EDITOR
+        Undo.undoRedoPerformed += RebuildAfterUndoRedo;
+#endif
     }
 
     private void OnDisable()
     {
         Tilemap.tilemapTileChanged -= OnChanged;
+#if UNITY_EDITOR
+        Undo.undoRedoPerformed -= RebuildAfterUndoRedo;
+#endif
     }
+
+#if UNITY_EDITOR
+    // Tilemap tile-change events are not guaranteed to fire while Unity restores history.
+    // Visual is derived data, so rebuild it after every editor Undo or Redo.
+    private void RebuildAfterUndoRedo()
+    {
+        RebuildAll();
+    }
+#endif
 
     private void OnChanged(Tilemap tilemap, Tilemap.SyncTile[] changes)
     {
