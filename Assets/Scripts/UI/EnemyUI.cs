@@ -24,11 +24,6 @@ namespace UI {
             drawTrails();
         }
 
-        private void drawTrails() {
-            slider.value = subject.maximumHealth == 0 ? 0 : subject.currentHealth / subject.maximumHealth;
-            trail.value = slider.value;
-        }
-
         public void Update() {
             UpdateHiddenVisibility();
             UpdateHealthBar();
@@ -59,6 +54,11 @@ namespace UI {
         private void UpdateHealthBar() {
             float health = subject.maximumHealth == 0 ? 0 : subject.currentHealth / subject.maximumHealth;
             staggerHPDrain(health);
+        }
+
+        private void drawTrails() {
+            slider.value = subject.maximumHealth == 0 ? 0 : subject.currentHealth / subject.maximumHealth;
+            trail.value = slider.value;
         }
 
         private void staggerHPDrain(float health) {
