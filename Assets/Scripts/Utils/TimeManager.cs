@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Utils {
     public sealed class TimeManager : PersistentSingleton<TimeManager> {
-        private sealed class TimeScale {
-            private const float DefaultTimeScale = 1f;
+        private const float DefaultTimeScale = 1f;
 
+        private sealed class TimeScale {
             public float Scale;
             public float Duration;
             public float Elapsed;
@@ -39,7 +39,7 @@ namespace Utils {
         }
 
         private void Update() {
-            if (freezeSources.Count > 0) {
+            if (freezeSources.Any()) {
                 Time.timeScale = 0f;
                 return;
             }
@@ -47,7 +47,7 @@ namespace Utils {
             scales.ForEach(scale => scale.Elapsed += Time.unscaledDeltaTime);
             scales.RemoveAll(scale => scale.Elapsed >= scale.Duration);
 
-            Time.timeScale = scales.Select(scale => scale.CurrentScale).Min();
+            Time.timeScale = scales.Select(scale => scale.CurrentScale).DefaultIfEmpty(DefaultTimeScale).Min();
         }
     }
 }
