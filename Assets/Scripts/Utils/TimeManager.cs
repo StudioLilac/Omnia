@@ -47,7 +47,7 @@ namespace Utils {
             scales.ForEach(scale => scale.Elapsed += Time.unscaledDeltaTime);
             scales.RemoveAll(scale => scale.Elapsed >= scale.Duration);
 
-            Time.timeScale = scales.Select(scale => scale.CurrentScale).Min();
+            Time.timeScale = scales.Count == 0 ? 1f : scales.Select(scale => scale.CurrentScale).Min();
         }
     }
 }
