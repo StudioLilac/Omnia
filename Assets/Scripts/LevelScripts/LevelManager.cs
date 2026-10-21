@@ -30,21 +30,21 @@ public class LevelManager : PersistentSingleton<LevelManager> {
     }
 
     public void Restart() {
-        SceneInitializer.LoadScene(LevelData.SceneName);
+        SceneInitializer.LoadScene(LevelData);
     }
 
     public void NextLevel() {
-        SceneInitializer.LoadScene(LevelData.NextLevel.SceneName);
+        SceneInitializer.LoadScene(LevelData.NextLevel);
         OnLevelLoaded?.Invoke(LevelData.NextLevel);
     }
 
     public void PrevLevel() {
-        SceneInitializer.LoadScene(LevelData.PrevLevel.SceneName);
+        SceneInitializer.LoadScene(LevelData.PrevLevel);
         OnLevelLoaded?.Invoke(LevelData.NextLevel);
     }
 
     public void CustomLevel(LevelData data) {
-        SceneInitializer.LoadScene(data.SceneName);
+        SceneInitializer.LoadScene(data);
         OnLevelLoaded?.Invoke(LevelData.NextLevel);
     }
 }

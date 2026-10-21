@@ -15,9 +15,8 @@ namespace Initializers {
     public interface IScenePayload { };
 
     public class SceneInitializer : PersistentSingleton<SceneInitializer> {
-        [SerializeField] internal GameObject[] managers;
-        [SerializeField] internal GameObject transition;
-        [SerializeField] internal SceneInitializerPrefabs prefabs;
+        [SerializeField] internal GameObject transition = null!;
+        [SerializeField] internal SceneInitializerPrefabs prefabs = null!;
         private IScenePayload? scenePayload;
 
         /**
@@ -97,8 +96,9 @@ namespace Initializers {
         public Pathfinder pathfinder;
         public PlayerDataManager playerDataManager;
         public PlayerHealthVignettePPFX playerHealthFx;
+        public TimeManager timeManager;
 
-        public List<MonoBehaviour> Always => new List<MonoBehaviour>() {
+        public List<MonoBehaviour> All => new() {
             dialogueManager,
             audioManager,
             inventoryManager,
@@ -111,6 +111,7 @@ namespace Initializers {
             pathfinder,
             playerDataManager,
             playerHealthFx,
+            timeManager,
         };
     }
 }

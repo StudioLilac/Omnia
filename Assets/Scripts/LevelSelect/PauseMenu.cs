@@ -146,14 +146,14 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
     public void ResumeScene()
     {
         pauseMenuPanel.SetActive(false);
-        Time.timeScale = 1f;
+        TimeManager.Instance.Unfreeze(this);
         IsPaused = false;
         OnPauseMenuDeactivate?.Invoke();
     }
 
     public void PauseScene() {
         pauseMenuPanel.SetActive(true);
-        Time.timeScale = 0f;
+        TimeManager.Instance.Freeze(this);
         IsPaused = true;
 
         if (isDialogueHistoryShowing) {

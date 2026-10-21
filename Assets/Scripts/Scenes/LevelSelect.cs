@@ -30,7 +30,7 @@ namespace Scenes {
         }
 
         public void Back() {
-            SceneManager.LoadScene("1_Title");
+            SceneInitializer.LoadScene(LevelData.Get<global::Title>());
         }
 
 
