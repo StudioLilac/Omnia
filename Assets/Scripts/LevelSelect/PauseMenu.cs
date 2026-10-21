@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Initializers;
 using Players.Buff;
+using Scenes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -164,18 +165,18 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
     public void LevelSelectScene() {
         ResumeScene();
         BuffManager.Instance.ClearAllBuffs();
-        SceneInitializer.LoadScene("LevelSelect");
+        SceneInitializer.LoadScene(LevelData.Get<Level_Select>());
     }
 
     public void MainMenuScene() {
         ResumeScene();
         BuffManager.Instance.ClearAllBuffs();
-        SceneInitializer.LoadScene("1_Title");
+        SceneInitializer.LoadScene(LevelData.Get<Title>());
     }
 
     public void ResetScene() {
         ResumeScene();
-        SceneInitializer.LoadScene(SceneManager.GetActiveScene().name);
+        SceneInitializer.Restart();
     }
 
     public void SkipScene() {

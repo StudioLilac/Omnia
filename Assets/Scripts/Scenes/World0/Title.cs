@@ -97,11 +97,11 @@ namespace Scenes {
         }
 
         public void GoToLevelSelect() {
-            SceneManager.LoadScene("LevelSelect");
+            SceneInitializer.LoadScene(LevelData.Get<Level_Select>(), shouldFade: false);
         }
 
         public void GoToWarpedDepths() {
-            SceneManager.LoadScene("WarpedDepths");
+            SceneInitializer.LoadScene(LevelData.Get<Warped_Depths>(), shouldFade: false);
         }
 
         private IEnumerator StartGameSequence() {
@@ -113,8 +113,7 @@ namespace Scenes {
             yield return new WaitForSeconds(3f);
             yield return StartCoroutine(strongFadeHandler.FadeInDarkScreen(2f));
 
-            // Done to avoid scene transition
-            SceneManager.LoadScene("2_Opening");
+            SceneInitializer.LoadScene(LevelData.Get<global::Opening>(), shouldFade: false);
         }
 
         public void LaunchDinky() {

@@ -37,30 +37,30 @@ namespace Scenes {
         public void GoToWorld(int worldNumber) {
             switch (worldNumber) {
                 case 0:
-                    SceneInitializer.LoadScene("2_Opening");
+                    SceneInitializer.LoadScene(LevelData.Get<global::Opening>());
                     break;
                 case 1:
-                    SceneInitializer.LoadScene("W-1-2");
+                    SceneInitializer.LoadScene(LevelData.Get<Level_1_2>());
                     AudioManager.Instance.PlayBGM(AudioTracks.CaveSpeak);
                     break;
                 case 2:
-                    SceneInitializer.LoadScene("W-2-1");
+                    SceneInitializer.LoadScene(LevelData.Get<Level_2_1>());
                     AudioManager.Instance.PlayBGM(AudioTracks.CaveSpeak);
                     break;
                 case 3:
-                    SceneInitializer.LoadScene("W-3-1");
+                    SceneInitializer.LoadScene(LevelData.Get<Level_3_1>());
                     AudioManager.Instance.PlayBGM(AudioTracks.CaveSpeak);
                     break;
                 case 4:
-                    SceneInitializer.LoadScene("W-4-1");
+                    SceneInitializer.LoadScene(LevelData.Get<Level_4_1>());
                     AudioManager.Instance.PlayBGM(AudioTracks.CaveSpeak);
                     break;
                 case 5:
-                    SceneInitializer.LoadScene("W-B-B");
+                    SceneInitializer.LoadScene(LevelData.Get<Level_B_B>());
                     break;
                 default:
                     Debug.Log("Invalid world number");
-                    SceneInitializer.LoadScene("1_Title");
+                    SceneInitializer.LoadScene(LevelData.Get<global::Title>());
                     break;
             }
         }
