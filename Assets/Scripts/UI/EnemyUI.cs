@@ -21,7 +21,7 @@ namespace UI {
         public void Start() {
             shield.gameObject.SetActive(subject is ShieldedEnemy && ((ShieldedEnemy)subject).maxShieldHealth > 0);
             ShowParent(false);
-            drawTrails();
+            DrawTrails();
         }
 
         public void Update() {
@@ -53,15 +53,15 @@ namespace UI {
 
         private void UpdateHealthBar() {
             float health = subject.maximumHealth == 0 ? 0 : subject.currentHealth / subject.maximumHealth;
-            staggerHPDrain(health);
+            StaggerHPDrain(health);
         }
 
-        private void drawTrails() {
+        private void DrawTrails() {
             slider.value = subject.maximumHealth == 0 ? 0 : subject.currentHealth / subject.maximumHealth;
             trail.value = slider.value;
         }
 
-        private void staggerHPDrain(float health) {
+        private void StaggerHPDrain(float health) {
             if (health < slider.value) trailTimer = trailDelay;
             slider.value = health;
 
