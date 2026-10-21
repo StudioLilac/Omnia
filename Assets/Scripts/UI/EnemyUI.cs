@@ -53,7 +53,7 @@ namespace UI {
 
         private void UpdateHealthBar() {
             float health = subject.maximumHealth == 0 ? 0 : subject.currentHealth / subject.maximumHealth;
-            StaggerHPDrain(health);
+            DelayHealthDrain(health);
         }
 
         private void DrawTrails() {
@@ -61,7 +61,7 @@ namespace UI {
             trail.value = slider.value;
         }
 
-        private void StaggerHPDrain(float health) {
+        private void DelayHealthDrain(float health) {
             if (health < slider.value) trailTimer = trailDelay;
             slider.value = health;
 
