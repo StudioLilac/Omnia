@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 namespace Utils {
-    public sealed class TimeManager : PersistentSingleton<TimeManager> {
+    public sealed class TimeManager : MonoBehaviour {
         private const float DefaultTimeScale = 1f;
 
         private sealed class TimeScale {

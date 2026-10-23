@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Scenes;
+using UnityEngine.SceneManagement;
 
 public enum LevelType {
     Normal,
@@ -19,13 +20,21 @@ public abstract class LevelData : Enum<LevelData> {
     public abstract LevelData NextLevel { get; }
     public abstract LevelData PrevLevel { get; }
 
+    // Helpers
     public static LevelData Get<T>() where T : LevelData => ParseFromType(typeof(T));
     public static LevelData Parse(Type type) => ParseFromType(type);
-    public static readonly Dictionary<string, LevelData> SceneToLevelMap = new();
+    public static LevelData FromScene(Scene scene) {
+        LevelData value = SceneToLevelMap.GetValueOrDefault(scene.name);
+        if (value == null)
+            throw new KeyNotFoundException($"No LevelData found for scene, please add a LevelData for scene: {scene.name}");
+        return value;
+    }
 
     static LevelData() {
         InitializeSceneToLevelMap();
     }
+
+    private static readonly Dictionary<string, LevelData> SceneToLevelMap = new();
 
     private static void InitializeSceneToLevelMap() {
         foreach (LevelData item in Values) {
@@ -350,5 +359,13 @@ public class ResultsScreen : LevelData {
     public override string SceneName => "Results";
     public override LevelType Type => LevelType.Other;
     public override LevelData NextLevel => Get<Fragment_Selection>();
+    public override LevelData PrevLevel => Get<Title>();
+}
+
+public class TestScene : LevelData {
+    public override string PlainName => "Test Scene";
+    public override string SceneName => "MainScene";
+    public override LevelType Type => LevelType.Other;
+    public override LevelData NextLevel => Get<Title>();
     public override LevelData PrevLevel => Get<Title>();
 }

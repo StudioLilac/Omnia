@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using Utils;
 
 namespace UI {
-    public class HUDManager : PersistentSingleton<HUDManager> {
+    public class HUDManager: MonoBehaviour {
         private Player _p;
         private Player player {
             get {
@@ -38,11 +38,8 @@ namespace UI {
         private Coroutine flowAnimationCoroutine;
         private Coroutine bearEffectCoroutine;
 
-        protected override void OnAwake() {
-            gameObject.SetActive(true);
-
+        protected void Awake() {
             FindPlayer();
-            OnEnable();
         }
 
         private void OnEnable() {
@@ -52,7 +49,6 @@ namespace UI {
             WeaponClass.OnAmmoChanged += UpdateAmmo;
             Player.OnSkillCooldownUpdated += UpdateSkillCooldown;
             Player.OnBearEffectReady += UpdateBearEffect;
-            LevelManager.OnLevelLoaded += OnSceneChange;
         }
 
         private void OnDisable() {
@@ -62,11 +58,6 @@ namespace UI {
             WeaponClass.OnAmmoChanged -= UpdateAmmo;
             Player.OnSkillCooldownUpdated -= UpdateSkillCooldown;
             Player.OnBearEffectReady -= UpdateBearEffect;
-            LevelManager.OnLevelLoaded -= OnSceneChange;
-        }
-
-        public void OnSceneChange(LevelData level) {
-            FindPlayer();
         }
 
         private void UpdateHealth(int currentHealth) {

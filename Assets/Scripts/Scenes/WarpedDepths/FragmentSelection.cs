@@ -28,9 +28,6 @@ namespace Scenes {
                 img.gameObject.AddComponent<FloatingImage>();
             }
 
-            DisablePersistentSingletons.DisableHUD();
-            DisablePersistentSingletons.DisableInventory();
-            DisablePersistentSingletons.DisablePause();
 
             RandomFragments();
             AudioManager.Instance.PlayBGM(AudioTracks.JamiesTheme);
