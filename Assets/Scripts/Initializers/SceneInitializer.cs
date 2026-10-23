@@ -57,25 +57,30 @@ namespace Initializers {
         }
 
         private void InitializeManagersForScene(LevelData sceneData) {
+            cachedManagers.Clear();
             var requiredManagers = sceneData.Init(prefabs);
             var managersParent = new GameObject("[SceneInitialized]");
 
             foreach (var managerPrefab in requiredManagers) {
-                var existing = FindAnyObjectByType(managerPrefab.GetType());
+                var existing = FindAnyObjectByType(managerPrefab.GetType()) as MonoBehaviour;
                 if (existing != null) {
                     if (existing is not IPersistentSingleton)
                         Debug.LogWarning($"{managerPrefab.GetType()} already exists!");
+                    Register(existing);
                     continue;
                 }
 
-                InstantiatePrefab(managerPrefab, managersParent);
+                Register(InstantiatePrefab(managerPrefab, managersParent));
             }
+        }
+
+        private void Register(MonoBehaviour monoBehaviour) {
+            cachedManagers.Add(monoBehaviour.GetType(), monoBehaviour);
         }
 
         private T InstantiatePrefab<T>(T prefab, GameObject managersParent) where T : MonoBehaviour {
             var newManagerInstance = Instantiate(prefab, managersParent.transform);
             newManagerInstance.name = prefab.name;
-            cachedManagers.Add(typeof(T), newManagerInstance);
             return newManagerInstance;
         }
 
@@ -131,7 +136,7 @@ namespace Initializers {
     }
 }
 
-// Your injection options for T are found in the class above or else throws an exception.
+// Returns a singleton instance of type T found in the class above or else throws an exception.
 // Careful with calling this on Awake, as some managers may not be initialized yet.
 public static class SceneInitializerExtensions {
     public static T Inject<T>(this MonoBehaviour m) where T : MonoBehaviour {

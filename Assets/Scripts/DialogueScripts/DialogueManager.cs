@@ -13,6 +13,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
     private CanvasGroup[] dialogueCanvasGroups;
     public static event Action LegacyDialogueEvent;
     public bool inDialogue;
+    private TimeManager TimeManager => this.Inject<TimeManager>();
 
     protected override void OnAwake() {
         if (yarnDialogueRunnerPrefab == null) {
@@ -47,7 +48,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         if (InventoryManager.Instance?.IsInventoryOpen ?? false) InventoryManager.Instance.CloseInventory();
 
         inDialogue = true;
-        TimeManager.Instance.Freeze(this);
+        TimeManager.Freeze(this);
         yarnDialogueRunner.SetProject(dialogueReference.project);
         SetDialogueUiVisible(true);
         yield return YarnTask.ToCoroutine(async () => {
@@ -56,12 +57,12 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         });
         SetDialogueUiVisible(false);
         inDialogue = false;
-        TimeManager.Instance.Unfreeze(this);
+        TimeManager.Unfreeze(this);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         if (!inDialogue) return;
-        TimeManager.Instance.Unfreeze(this);
+        TimeManager.Unfreeze(this);
         yarnDialogueRunner.Stop();
     }
 

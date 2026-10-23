@@ -28,6 +28,7 @@ public class PauseMenu : MonoBehaviour {
 
 
     [SerializeField] private InputActionReference pauseAction;
+    private TimeManager TimeManager => this.Inject<TimeManager>();
 
     // Workaround To Import Mute Icon's Toggle Image from Title since it is not possible to toggle the image without
     // the associated onValueChanged function being called
@@ -146,14 +147,14 @@ public class PauseMenu : MonoBehaviour {
     public void ResumeScene()
     {
         pauseMenuPanel.SetActive(false);
-        TimeManager.Instance.Unfreeze(this);
+        TimeManager.Unfreeze(this);
         IsPaused = false;
         OnPauseMenuDeactivate?.Invoke();
     }
 
     public void PauseScene() {
         pauseMenuPanel.SetActive(true);
-        TimeManager.Instance.Freeze(this);
+        TimeManager.Freeze(this);
         IsPaused = true;
 
         if (isDialogueHistoryShowing) {
