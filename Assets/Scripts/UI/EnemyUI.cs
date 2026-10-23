@@ -9,13 +9,19 @@ namespace UI {
         [SerializeField] internal RectTransform rect;
         [SerializeField] internal Canvas canvas;
         [SerializeField] internal Slider slider;  // Health bar
+        [SerializeField] private Slider trail;
         [SerializeField] internal Slider shield;  // Shield bar
         [SerializeField] internal Enemy subject;
         [SerializeField] internal Canvas parentCanvas;
 
+        private float trailTimer;
+        private const float trailDelay = 0.3f;
+        private const float drainSpeed = 0.9f;
+
         public void Start() {
             shield.gameObject.SetActive(subject is ShieldedEnemy && ((ShieldedEnemy)subject).maxShieldHealth > 0);
             ShowParent(false);
+            DrawTrails();
         }
 
         public void Update() {
@@ -46,7 +52,26 @@ namespace UI {
         }
 
         private void UpdateHealthBar() {
+            float health = subject.maximumHealth == 0 ? 0 : subject.currentHealth / subject.maximumHealth;
+            DelayHealthDrain(health);
+        }
+
+        private void DrawTrails() {
             slider.value = subject.maximumHealth == 0 ? 0 : subject.currentHealth / subject.maximumHealth;
+            trail.value = slider.value;
+        }
+
+        private void DelayHealthDrain(float health) {
+            if (health < slider.value) trailTimer = trailDelay;
+            slider.value = health;
+
+            if (health > trail.value) {
+                trail.value = health;
+            } else if (trailTimer > 0) {
+                trailTimer -= Time.deltaTime;
+            } else {
+                trail.value = Mathf.MoveTowards(trail.value, health, drainSpeed * Time.deltaTime);
+            }
         }
 
         private void UpdateShieldBar() {
