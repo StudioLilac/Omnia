@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Utils;
 
-public class PauseMenu : PersistentSingleton<PauseMenu> {
+public class PauseMenu : MonoBehaviour {
     public static bool IsPaused = false;
     public static bool ScreenShake = true;
     [SerializeField] private GameObject pauseMenuPanel;
@@ -82,8 +82,8 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
         }
     }
 
-    protected override void OnAwake() {
-        return;
+    private void Awake() {
+        IsPaused = false;
     }
 
     void ShowHistory() {

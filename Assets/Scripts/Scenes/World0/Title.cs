@@ -82,9 +82,6 @@ namespace Scenes {
             AudioManager.Instance.PlayBGM(AudioTracks.LullabyForAScrapyard);
             fadeScreen.SetLightScreen();
 
-            DisablePersistentSingletons.DisableHUD();
-            DisablePersistentSingletons.DisableInventory();
-            DisablePersistentSingletons.DisablePause();
 
         }
 

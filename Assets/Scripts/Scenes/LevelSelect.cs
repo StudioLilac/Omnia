@@ -24,9 +24,6 @@ namespace Scenes {
                 img.gameObject.AddComponent<FloatingImage>();
             }
 
-            DisablePersistentSingletons.DisableHUD();
-            DisablePersistentSingletons.DisableInventory();
-            DisablePersistentSingletons.DisablePause();
         }
 
         public void Back() {

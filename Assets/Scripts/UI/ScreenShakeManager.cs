@@ -5,25 +5,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 
-public class ScreenShakeManager : PersistentSingleton<ScreenShakeManager> {
+public class ScreenShakeManager : MonoBehaviour {
+    public static ScreenShakeManager Instance { get; private set; }
     private CinemachineBasicMultiChannelPerlin perlinNoise;
     private Coroutine shakeCoroutine;
 
-    protected override void OnAwake() {
-        FindPerlinNoise();
-    }
+    private void Awake() {
+        if (Instance != null && Instance != this) {
+            Destroy(gameObject);
+            return;
+        }
 
-    private void OnEnable() {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable() {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        if (shakeCoroutine != null) StopCoroutine(shakeCoroutine);
-        shakeCoroutine = null;
+        Instance = this;
         FindPerlinNoise();
     }
 

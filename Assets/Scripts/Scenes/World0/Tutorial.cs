@@ -41,7 +41,6 @@ namespace Scenes {
 
             StartCoroutine(BeginSequence());
 
-            DisablePersistentSingletons.DisableInventory();
         }
 
         private IEnumerator BeginSequence() {

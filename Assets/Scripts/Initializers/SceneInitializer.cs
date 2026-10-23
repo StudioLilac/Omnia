@@ -4,6 +4,7 @@ using Players;
 using Players.Buff;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UI;
 using UnityEditor;
 using UnityEngine;
@@ -113,5 +114,9 @@ namespace Initializers {
             playerHealthFx,
             timeManager,
         };
+
+        public List<MonoBehaviour> AllExcept(params MonoBehaviour[] exclude) {
+            return All.Except(exclude).ToList();
+        }
     }
 }
