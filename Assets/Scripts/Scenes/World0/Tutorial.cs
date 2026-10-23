@@ -27,6 +27,7 @@ namespace Scenes {
         [SerializeField] private Dummy dummy5;
 
         private int dummiesHit = 0;
+        private ScreenShakeManager ScreenShakeManager => this.Inject<ScreenShakeManager>();
 
         private void Start() {
             dinky.TurnBrown(true);
@@ -110,7 +111,7 @@ namespace Scenes {
             // dummy hits ground
             yield return new WaitUntil(() => rb.position.y < -4.5f);
 
-            ScreenShakeManager.Instance.Shake(10f);
+            ScreenShakeManager.Shake(10f);
 
             yield return new WaitForSeconds(0.7f);
 

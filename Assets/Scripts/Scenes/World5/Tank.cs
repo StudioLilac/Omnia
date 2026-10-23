@@ -24,6 +24,7 @@ public class Tank : MonoBehaviour {
     [SerializeField] private Enemy enemyPrefab;
     [SerializeField] private List<TransformInfo> spawnLocations;
     private IProgress progressLever;
+    private ScreenShakeManager ScreenShakeManager => this.Inject<ScreenShakeManager>();
 
 
 #nullable enable
@@ -168,7 +169,7 @@ public class Tank : MonoBehaviour {
 
     // Helper to reduce clutter for screenShakeManager find references
     private void Shake(float intensity = 1.0f, float duration = 0.5f) {
-        ScreenShakeManager.Instance.Shake(intensity, duration);
+        ScreenShakeManager.Shake(intensity, duration);
     }
 
 

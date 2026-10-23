@@ -6,17 +6,10 @@ using UnityEngine.SceneManagement;
 using Utils;
 
 public class ScreenShakeManager : MonoBehaviour {
-    public static ScreenShakeManager Instance { get; private set; }
     private CinemachineBasicMultiChannelPerlin perlinNoise;
     private Coroutine shakeCoroutine;
 
     private void Awake() {
-        if (Instance != null && Instance != this) {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
         FindPerlinNoise();
     }
 

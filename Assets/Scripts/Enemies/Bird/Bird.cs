@@ -10,7 +10,6 @@ using StateMachine = Omnia.State.StateMachine;
 namespace Enemies.Bird {
     public class Bird : Enemy {
         public override EnemyWeightType WeightType => EnemyWeightType.Light;
-
         [SerializeField] internal float detectionRadius;
         [SerializeField] internal float fuse;
         [SerializeField] internal float triggerDistance;
@@ -28,7 +27,7 @@ namespace Enemies.Bird {
         [SerializeField] internal LayerMask ground;
         [SerializeField] internal LayerMask player;
         [SerializeField] internal Player targetInstance;
-
+        private ScreenShakeManager ScreenShakeManager => this.Inject<ScreenShakeManager>();
         public Action<Bird> NotifyOnDestroy;
 
         public void OnDestroy() => NotifyOnDestroy?.Invoke(this);
@@ -49,7 +48,7 @@ namespace Enemies.Bird {
 
         public override void Die() {
             Attack();
-            ScreenShakeManager.Instance.Shake(screenShakeIntensity, screenShakeDuration);
+            ScreenShakeManager.Shake(screenShakeIntensity, screenShakeDuration);
 
             base.Die();
             Instantiate(explosion, rb.worldCenterOfMass, Quaternion.identity);

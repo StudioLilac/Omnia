@@ -28,6 +28,7 @@ public class Shotgun : WeaponClass {
     [SerializeField] private float skillLockDuration = 0.2f;
     [SerializeField] private float introDelayTime = 0.5f;
 
+    private ScreenShakeManager ScreenShakeManager => this.Inject<ScreenShakeManager>();
     private float skillLockTimer = 0f;
     private bool lockedPlayerGravity = false;
     private Coroutine reloadCoroutine;
@@ -80,7 +81,7 @@ public class Shotgun : WeaponClass {
         SkillAndUltimateFire();
         AudioManager.Instance.PlaySFX(AudioTracks.ScrapgunSpecial);
         player.GetComponent<Player>().UseRecoil(10);
-        ScreenShakeManager.Instance.Shake(3f);
+        ScreenShakeManager.Shake(3f);
     }
 
     private void Update() {

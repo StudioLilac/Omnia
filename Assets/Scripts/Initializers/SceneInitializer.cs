@@ -2,6 +2,7 @@ using Enemies.Common;
 using FX;
 using Players;
 using Players.Buff;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,13 @@ namespace Initializers {
         [SerializeField] internal GameObject transition = null!;
         [SerializeField] internal SceneInitializerPrefabs prefabs = null!;
         private IScenePayload? scenePayload;
+        private Dictionary<Type, MonoBehaviour> cachedManagers = new();
+        public static T Get<T>() where T : MonoBehaviour {
+            if (Instance.cachedManagers.TryGetValue(typeof(T), out var manager)) {
+                return (T)manager;
+            }
+            throw new KeyNotFoundException($"Manager of type {typeof(T)} not found. Make sure it is initialized in the scene or check initialization order if you called this on Awake.");
+        }
 
         /**
          * Load the scene with a transition effect to hide any stutters.
@@ -67,6 +75,7 @@ namespace Initializers {
         private T InstantiatePrefab<T>(T prefab, GameObject managersParent) where T : MonoBehaviour {
             var newManagerInstance = Instantiate(prefab, managersParent.transform);
             newManagerInstance.name = prefab.name;
+            cachedManagers.Add(typeof(T), newManagerInstance);
             return newManagerInstance;
         }
 
@@ -83,6 +92,7 @@ namespace Initializers {
     }
 
 #nullable disable
+
     [System.Serializable]
     public class SceneInitializerPrefabs {
         public DialogueManager dialogueManager;
@@ -118,5 +128,13 @@ namespace Initializers {
         public List<MonoBehaviour> AllExcept(params MonoBehaviour[] exclude) {
             return All.Except(exclude).ToList();
         }
+    }
+}
+
+// Your injection options for T are found in the class above or else throws an exception.
+// Careful with calling this on Awake, as some managers may not be initialized yet.
+public static class SceneInitializerExtensions {
+    public static T Inject<T>(this MonoBehaviour m) where T : MonoBehaviour {
+        return Initializers.SceneInitializer.Get<T>();
     }
 }
