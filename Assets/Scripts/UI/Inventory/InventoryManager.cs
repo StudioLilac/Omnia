@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 using Utils;
 
 public class InventoryManager : MonoBehaviour {
-    public static InventoryManager Instance { get; private set; }
     [SerializeField] private GameObject inventoryUI; // Reference to Inventory UI Panel
     [SerializeField] private TrinketSlot[] trinketSlots; // Grid of trinket slots
     [SerializeField] private TrinketSlot equippedTrinket;
@@ -23,15 +22,6 @@ public class InventoryManager : MonoBehaviour {
 
     public bool IsInventoryOpen { get; private set; }
 
-    private void Awake() {
-        if (Instance != null && Instance != this) {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-
-    }
 
     private void Start() {
         InitializeTrinketSlots();

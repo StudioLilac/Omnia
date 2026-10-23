@@ -7,13 +7,14 @@ using Yarn.Unity;
 
 public class DialogueManager : PersistentSingleton<DialogueManager> {
     [SerializeField] private DialogueRunner yarnDialogueRunnerPrefab;
-
     private DialogueRunner yarnDialogueRunner;
     private Canvas[] dialogueCanvases;
     private CanvasGroup[] dialogueCanvasGroups;
-    public static event Action LegacyDialogueEvent;
+#nullable enable
+    public static event Action? LegacyDialogueEvent;
     public bool inDialogue;
     private TimeManager TimeManager => this.Inject<TimeManager>();
+    private InventoryManager? InventoryManager => this.InjectOptional<InventoryManager>();
 
     protected override void OnAwake() {
         if (yarnDialogueRunnerPrefab == null) {
@@ -45,7 +46,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
 
     public IEnumerator StartDialogue(DialogueReference dialogueReference) {
         if (inDialogue || yarnDialogueRunner == null || dialogueReference == null || dialogueReference.project == null || string.IsNullOrWhiteSpace(dialogueReference.nodeName)) yield break;
-        if (InventoryManager.Instance?.IsInventoryOpen ?? false) InventoryManager.Instance.CloseInventory();
+        if (InventoryManager?.IsInventoryOpen ?? false) InventoryManager.CloseInventory();
 
         inDialogue = true;
         TimeManager.Freeze(this);

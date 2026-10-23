@@ -7,7 +7,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UI;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
@@ -20,13 +19,7 @@ namespace Initializers {
         [SerializeField] internal GameObject transition = null!;
         [SerializeField] internal SceneInitializerPrefabs prefabs = null!;
         private IScenePayload? scenePayload;
-        private Dictionary<Type, MonoBehaviour> cachedManagers = new();
-        public static T Get<T>() where T : MonoBehaviour {
-            if (Instance.cachedManagers.TryGetValue(typeof(T), out var manager)) {
-                return (T)manager;
-            }
-            throw new KeyNotFoundException($"Manager of type {typeof(T)} not found. Make sure it is initialized in the scene or check initialization order if you called this on Awake.");
-        }
+        internal Dictionary<Type, MonoBehaviour> CachedManagers = new();
 
         /**
          * Load the scene with a transition effect to hide any stutters.
@@ -57,7 +50,7 @@ namespace Initializers {
         }
 
         private void InitializeManagersForScene(LevelData sceneData) {
-            cachedManagers.Clear();
+            CachedManagers.Clear();
             var requiredManagers = sceneData.Init(prefabs);
             var managersParent = new GameObject("[SceneInitialized]");
 
@@ -75,7 +68,7 @@ namespace Initializers {
         }
 
         private void Register(MonoBehaviour monoBehaviour) {
-            cachedManagers.Add(monoBehaviour.GetType(), monoBehaviour);
+            CachedManagers.Add(monoBehaviour.GetType(), monoBehaviour);
         }
 
         private T InstantiatePrefab<T>(T prefab, GameObject managersParent) where T : MonoBehaviour {
@@ -136,10 +129,16 @@ namespace Initializers {
     }
 }
 
+#nullable enable
+
 // Returns a singleton instance of type T found in the class above or else throws an exception.
 // Careful with calling this on Awake, as some managers may not be initialized yet.
 public static class SceneInitializerExtensions {
     public static T Inject<T>(this MonoBehaviour m) where T : MonoBehaviour {
-        return Initializers.SceneInitializer.Get<T>();
+        return m.InjectOptional<T>() ?? throw new KeyNotFoundException($"Manager of type {typeof(T)} not found. Make sure it is initialized in the scene or check initialization order if you called this on Awake.");
+    }
+
+    public static T? InjectOptional<T>(this MonoBehaviour m) where T : MonoBehaviour {
+        return Initializers.SceneInitializer.Instance.CachedManagers.GetValueOrDefault(typeof(T)) as T;
     }
 }
