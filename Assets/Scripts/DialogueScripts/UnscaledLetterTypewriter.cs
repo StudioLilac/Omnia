@@ -22,6 +22,12 @@ public class UnscaledLetterTypewriter : MonoBehaviour, IAsyncTypewriter {
 
         for (var i = 0; i < characterCount; i++) {
             while (!cancellationToken.IsCancellationRequested && elapsed < secondsPerCharacter) {
+                if (PauseMenu.IsPaused) {
+                    await YarnTask.WaitUntil(() => !PauseMenu.IsPaused, cancellationToken)
+                        .SuppressCancellationThrow();
+                    continue;
+                }
+
                 var before = Time.unscaledTimeAsDouble;
                 await YarnTask.Yield();
                 elapsed += Time.unscaledTimeAsDouble - before;
