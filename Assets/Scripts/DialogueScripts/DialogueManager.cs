@@ -61,6 +61,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         if (!inDialogue) return;
         TimeManager.Unfreeze(this);
         yarnDialogueRunner.Stop();
+        inDialogue = false;
     }
 
     private void SetDialogueUiVisible(bool isVisible) {
