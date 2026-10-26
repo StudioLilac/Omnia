@@ -27,7 +27,6 @@ namespace Enemies {
         [SerializeField] internal float knockbackForce = 10f;
         [SerializeField] internal float knockbackAngle = 45f;
         [SerializeField] internal float staggerDurationS = 1f;
-        [SerializeField, Range(0f, 1f)] private float idleStunPoint;
 
         protected IBehaviour behaviour;
         public IBehaviour prevBehaviour { get; protected set; }
@@ -40,8 +39,6 @@ namespace Enemies {
         public virtual void Start() {
             currentHealth = maximumHealth;
             UseAnimation(new StateMachine());
-            var animator = GetComponentInChildren<Animator>();
-            animationStateMachine.AddAnyTransition(new StunnedAnimation(this, animator, idleStunPoint), new FuncPredicate(() => behaviour is Stunned));
             Spawn?.Invoke(this);
         }
 
