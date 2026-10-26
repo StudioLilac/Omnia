@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -9,9 +8,9 @@ public static class DualGridTilemapSetup
 {
     private const string RootName = "Dual Grid";
     private const string TileFolder = "Assets/Tiles/DualGrid";
-    private const string PlaceholderTexturePath = TileFolder + "/DataPlaceholder.png";
-    private const string PlaceholderTilePath = TileFolder + "/DataPlaceholder.asset";
-    private const string ExampleTileFolder = "Assets/Tiles/Underground/Example";
+    private const string PlaceholderTexturePath = "Assets/Sprites/Tiles/Data Tiles/DataPlaceholder.png";
+    private const string PlaceholderTilePath = TileFolder + "/ExampleTerrain.asset";
+    private const string ExampleTileFolder = "Assets/Tiles/LushCaves/Example";
 
     [MenuItem("Tools/Setup Dual Grid")]
     public static void SetupDualGrid()
@@ -43,10 +42,13 @@ public static class DualGridTilemapSetup
         var dualGrid = GetOrAdd<DualGridTilemap>(root);
         dualGrid.data = data;
         dualGrid.visual = visual;
-        dualGrid.tiles = LoadTilesInSheetOrder();
-
-        // Ensure the Data palette tile exists and carries full-cell Grid collision.
-        CreateOrUpdatePlaceholderTile();
+        var terrain = CreateOrUpdatePlaceholderTile();
+        // Previously every ordinary tile represented the same occupied material.
+        var paintedTiles = new TileBase[data.GetUsedTilesCount()];
+        data.GetUsedTilesNonAlloc(paintedTiles);
+        foreach (var paintedTile in paintedTiles)
+            if (!(paintedTile is DualGridTerrainTile)) data.SwapTile(paintedTile, terrain);
+        dualGrid.RebuildAll();
 
         EditorUtility.SetDirty(root);
         EditorUtility.SetDirty(data);
@@ -56,7 +58,8 @@ public static class DualGridTilemapSetup
         EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Debug.Log("Dual Grid setup complete. Paint Data with Assets/Tiles/DualGrid/DataPlaceholder.asset.");
+        Debug.Log("Dual Grid setup complete. Paint Data with " + PlaceholderTilePath
+            + ". Create more types with Create > Tiles > Dual Grid Terrain.");
     }
 
     private static Tilemap GetOrCreateTilemap(Transform parent, string childName)
@@ -111,7 +114,7 @@ public static class DualGridTilemapSetup
         return result;
     }
 
-    private static void CreateOrUpdatePlaceholderTile()
+    private static DualGridTerrainTile CreateOrUpdatePlaceholderTile()
     {
         EnsureFolder("Assets/Tiles", "DualGrid");
         if (AssetDatabase.LoadAssetAtPath<Texture2D>(PlaceholderTexturePath) == null)
@@ -133,15 +136,17 @@ public static class DualGridTilemapSetup
         importer.textureCompression = TextureImporterCompression.Uncompressed;
         importer.SaveAndReimport();
 
-        var tile = AssetDatabase.LoadAssetAtPath<Tile>(PlaceholderTilePath);
+        var tile = AssetDatabase.LoadAssetAtPath<DualGridTerrainTile>(PlaceholderTilePath);
         if (tile == null)
         {
-            tile = ScriptableObject.CreateInstance<Tile>();
+            tile = ScriptableObject.CreateInstance<DualGridTerrainTile>();
+            tile.visualTiles = LoadTilesInSheetOrder();
             AssetDatabase.CreateAsset(tile, PlaceholderTilePath);
         }
         tile.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(PlaceholderTexturePath);
         tile.colliderType = Tile.ColliderType.Grid;
         EditorUtility.SetDirty(tile);
+        return tile;
     }
 
     private static void EnsureFolder(string parent, string child)
