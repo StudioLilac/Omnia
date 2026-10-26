@@ -22,7 +22,7 @@ public static class ProfileFlamethrower {
             clock.Start(); for(int i=0;i<2000;i++) emitter.Renderer.Advance(0.05f); clock.Stop();
             long allocated=GC.GetAllocatedBytesForCurrentThread()-before;
             if(allocated!=0) throw new Exception("Full tick allocated "+allocated);
-            result+=(mode==0?"Doc defaults":"Project prefab")+": "+(clock.Elapsed.TotalMilliseconds/2000).ToString("F4")+" ms/tick including physics, raster, palette and texture upload; "+allocated+" bytes allocated. ";
+            result+=(mode==0?"Doc defaults":"96-pixel reference")+": "+(clock.Elapsed.TotalMilliseconds/2000).ToString("F4")+" ms/tick including physics, raster, palette and texture upload; "+allocated+" bytes allocated. ";
             Object.Destroy(obj);
         }
         return result;

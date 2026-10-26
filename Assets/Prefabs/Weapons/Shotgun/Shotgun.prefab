@@ -176,6 +176,10 @@ MonoBehaviour:
   maxParticles: 512
   pixelsPerUnit: 32
   simHz: 20
+  coreRibbon: 1
+  ribbonSmoothness: 0.85
+  ribbonWidthScale: 1.75
+  ribbonTipTaper: 0.2
   maxRange: 96
   jetSpeed: 10
   pulsePeriod: 1
@@ -188,20 +192,21 @@ MonoBehaviour:
   coreRadius: 1
   colorFalloff: 0.55
   radialFalloff: 0.3
-  shedChance: 0.25
-  flapWaveNumber: 0.35
-  flapFreq: 1.2
-  wingOffsetMax: 2
-  wingForward: 0.5
-  wingLift: 0.15
-  wingSpread: 0.08
-  wingSpreadSteps: 3
-  backDrag: 0.35
-  liftAccel: 0.03
-  wingLifeMin: 4
-  wingLifeMax: 9
-  wingHeat: 0.7
-  wingRadius: 1
+  shedChance: 0.55
+  flapWaveNumber: 0.22
+  flapFreq: 0.7
+  wingOffsetMax: 4
+  wingForward: 0.35
+  wingLift: 0.25
+  wingSpread: 0.16
+  wingSpreadSteps: 5
+  backDrag: 0.75
+  liftAccel: 0.065
+  wingLifeMin: 9
+  wingLifeMax: 15
+  wingHeat: 0.62
+  wingRadius: 0.85
+  wingTrail: 1
   spread: 1
   emberGravity: 0.06
   maxEmbers: 64

@@ -204,4 +204,86 @@ public class FlameSimTests {
         sim.Step(true, Pose(), Pose(), FlameSimSettings.Default); fresh.Step(true, Pose(), Pose(), FlameSimSettings.Default);
         EqualParticles(sim, fresh);
     }
+    private static int Components(FlameSim sim) {
+        int side = sim.WindowSize;
+        var visited = new bool[side * side]; var queue = new int[visited.Length];
+        int components = 0;
+        for (int seed = 0; seed < sim.OccupiedCount; seed++) {
+            int start = sim.OccupiedIndex(seed);
+            if (visited[start] || sim.CellHeat(start) <= 0.08f) continue;
+            components++; int read = 0, write = 0; queue[write++] = start; visited[start] = true;
+            while (read < write) {
+                int cell = queue[read++], x = cell % side, y = cell / side;
+                for (int dy = -1; dy <= 1; dy++) for (int dx = -1; dx <= 1; dx++) {
+                    int nx = x + dx, ny = y + dy;
+                    if (nx < 0 || ny < 0 || nx >= side || ny >= side) continue;
+                    int next = ny * side + nx;
+                    if (visited[next] || sim.CellHeat(next) <= 0.08f) continue;
+                    visited[next] = true; queue[write++] = next;
+                }
+            }
+        }
+        return components;
+    }
+
+    [Test] public void FastSpinRendersOneConnectedCoreInsteadOfProjectileIslands() {
+        var sim = new FlameSim(512, 224); var settings = Quiet();
+        settings.maxRange = 96; settings.jetSpeed = 10; settings.pulsePeriod = 1; settings.slugLength = 6;
+        settings.coreDroop = 0; settings.coreRibbon = true;
+        var previous = Pose();
+        for (int i = 0; i < 24; i++) {
+            var current = Pose(0, 0, i * 0.8f);
+            sim.Step(true, previous, current, settings); previous = current;
+            Assert.AreEqual(1, Components(sim), "Separated core pieces on spin tick " + i);
+        }
+    }
+
+    private static FlameSim Corner(bool ribbon, IFlameCollision collision = null) {
+        var sim = new FlameSim(512, 224); var settings = Quiet();
+        settings.maxRange = 96; settings.jetSpeed = 10; settings.pulsePeriod = 1; settings.slugLength = 1;
+        settings.coreDroop = settings.inheritVelocity = 0; settings.coreRibbon = ribbon;
+        for (int i = 0; i < 4; i++) sim.Step(true, Pose(), Pose(), settings, collision);
+        var up = Pose(0, 0, (float)Math.PI / 2);
+        sim.Step(true, Pose(), up, settings, collision); sim.Step(true, up, up, settings, collision);
+        return sim;
+    }
+
+    [Test] public void RibbonFillsTheCurvingArcBetweenEmissionSamples() {
+        var ribbon = Corner(true); var streaks = Corner(false);
+        Assert.Greater(ribbon.SampleWorld(9.5f, 5.5f), 0.35f, "The visible arc must also contain damaging heat");
+        Assert.AreEqual(0, streaks.SampleWorld(9.5f, 5.5f));
+    }
+
+    private sealed class ArcWall : IFlameCollision {
+        private static bool Axis(float from, float delta, float min, float max, ref float enter, ref float exit) {
+            if (Math.Abs(delta) < 0.00001f) return from >= min && from <= max;
+            float a = (min - from) / delta, b = (max - from) / delta;
+            enter = Math.Max(enter, Math.Min(a, b)); exit = Math.Min(exit, Math.Max(a, b));
+            return enter <= exit;
+        }
+        public bool HitsSolid(FlameVector from, FlameVector to) {
+            float enter = 0, exit = 1;
+            return Axis(from.x, to.x - from.x, 8, 12, ref enter, ref exit)
+                && Axis(from.y, to.y - from.y, 4, 8, ref enter, ref exit);
+        }
+        public bool CellSolid(int x, int y) => x >= 8 && x < 12 && y >= 4 && y < 8;
+    }
+
+    [Test] public void InterpolatedArcStopsAtWallsBetweenClearParticlePaths() {
+        var clear = Corner(true); var blocked = Corner(true, new ArcWall());
+        Assert.Greater(clear.SampleWorld(14.5f, 2.5f), 0);
+        Assert.AreEqual(0, blocked.SampleWorld(9.5f, 5.5f));
+        Assert.AreEqual(0, blocked.SampleWorld(14.5f, 2.5f), "A curve must not resume beyond an obstacle within one link");
+        Assert.Greater(blocked.SampleWorld(25.5f, 0.5f), 0, "Independent old fire on the clear side is still valid");
+    }
+
+    [Test] public void ReleasedRibbonDoesNotFollowTheNewNozzlePose() {
+        var a = new FlameSim(); var b = new FlameSim(); var settings = Quiet();
+        settings.pulsePeriod = 1;
+        for (int i = 0; i < 8; i++) { a.Step(true, Pose(), Pose(), settings); b.Step(true, Pose(), Pose(), settings); }
+        a.Step(false, Pose(), Pose(), settings); b.Step(false, Pose(), Pose(500, 500, 3), settings);
+        Assert.AreEqual(a.OriginX, b.OriginX); Assert.AreEqual(a.OriginY, b.OriginY);
+        for (int i = 0; i < a.WindowSize * a.WindowSize; i++) Assert.AreEqual(a.CellHeat(i), b.CellHeat(i));
+    }
+
 }

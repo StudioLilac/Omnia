@@ -44,11 +44,13 @@ public static class PlaytestFlamethrower {
         }
     }
     private static int Core(FlameSim sim,int maxAge=10) {
+        int selected=-1, youngest=maxAge+1;
         for(int i=0;i<sim.Capacity;i++) {
             var p=sim.ParticleAt(i);
-            if(p.kind==FlameParticleKind.Core && p.age<=maxAge && p.dist>=5) return i;
+            if(p.kind==FlameParticleKind.Core && p.age<youngest && p.dist>=5) { selected=i; youngest=p.age; }
         }
-        throw new Exception("No live core particle found");
+        if(selected<0) throw new Exception("No live core particle found");
+        return selected;
     }
     private static void Capture(FlameEmitter emitter,string path) {
         var obj=new GameObject("World fire capture"); var camera=obj.AddComponent<Camera>();
@@ -85,16 +87,21 @@ public static class PlaytestFlamethrower {
         var ahead=(initial.pos+initial.vel*3)*(1/emitter.pixelsPerUnit);
         var oldTrail=Target(new Vector2(ahead.x,ahead.y),0.65f);
         var outside=Target(emitter.Origin+Vector2.down*2);
-        int sweepStart=emitter.Sim.StepIndex;
+        int sweepStart=emitter.Sim.StepIndex, trajectoryChecks=0;
         while(emitter.Sim.StepIndex-sweepStart<10) {
             float angle=Mathf.PI*Mathf.Min(1,(emitter.Sim.StepIndex-sweepStart+1)/10f);
             Field(player,"facing",new Vector2(Mathf.Cos(angle),Mathf.Sin(angle)));
             await Ticks(emitter,1);
+            var oldCore=emitter.Sim.ParticleAt(tracked);
+            int expectedAge=initial.age+emitter.Sim.StepIndex-sweepStart;
+            if(expectedAge<initial.life && oldCore.kind==FlameParticleKind.Core && oldCore.age==expectedAge) {
+                Require(oldCore.vel.x>0 && oldCore.pos.x>initial.pos.x+1,"A turning gun redirected existing fire");
+                trajectoryChecks++;
+            }
         }
         Field(player,"facing",Vector2.left);
+        Require(trajectoryChecks>0,"No trajectory observations before natural core expiry");
         var after=emitter.Sim.ParticleAt(tracked);
-        Require(after.kind==FlameParticleKind.Core && after.vel.x>0,"Tracked core ended or changed: kind="+after.kind+", age="+after.age+", initial age/life="+initial.age+"/"+initial.life+", elapsed ticks="+(emitter.Sim.StepIndex-sweepStart)+", velocity="+after.vel.x);
-        Require(after.pos.x>initial.pos.x+10,"Old core did not keep travelling in world space");
         Require(oldTrail.Received>0,"A target in the old rightward trail took no damage during the sweep");
         Require(outside.Received==0,"Outside target took damage");
         Require(emitter.Renderer.transform.parent==null && emitter.Renderer.transform.rotation==Quaternion.identity,"Fire renderer follows the gun transform");

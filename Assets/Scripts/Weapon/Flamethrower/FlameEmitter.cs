@@ -11,7 +11,12 @@ namespace Omnia.Fire {
         [Min(1)] public int maxParticles = 512;
         [Min(1)] public float pixelsPerUnit = 32;
         [InspectorName("Animation FPS"), Min(1)] public float simHz = 20;
-        [Header("Pulsed Core (pixels per tick)")]
+        [Header("Core Stream (pixels per tick)")]
+        [Tooltip("Rasterize a connected curve through the stream instead of individual particle streaks.")]
+        public bool coreRibbon = true;
+        [Range(0, 1)] public float ribbonSmoothness = 0.85f;
+        [Range(0.25f, 4)] public float ribbonWidthScale = 1.75f;
+        [Range(0, 1)] public float ribbonTipTaper = 0.2f;
         [Min(1)] public int maxRange = 48;
         [Min(0.1f)] public float jetSpeed = 2.5f;
         [Min(1)] public int pulsePeriod = 3;
@@ -40,6 +45,8 @@ namespace Omnia.Fire {
         [Min(1)] public int wingLifeMax = 9;
         [Range(0, 1)] public float wingHeat = 0.7f;
         [Range(0, 3)] public float wingRadius = 1;
+        [Tooltip("Fraction of the last world-space movement drawn as a tapering wisp.")]
+        [Range(0, 1)] public float wingTrail = 1;
         [HideInInspector] public int spread = 1;
         [Header("Tip Embers")]
         [Min(0)] public float emberGravity = 0.06f;
@@ -109,7 +116,9 @@ namespace Omnia.Fire {
             emberHeat = emberHeat, emberLifeMin = emberLifeMin, emberLifeMax = emberLifeMax,
             coreRadius = coreRadius, wingRadius = wingRadius, emberRadius = emberRadius,
             radialFalloff = radialFalloff, colorFalloff = colorFalloff,
-            releaseCooling = releaseCooling, stepSeconds = seconds
+            releaseCooling = releaseCooling, stepSeconds = seconds,
+            coreRibbon = coreRibbon, ribbonSmoothness = ribbonSmoothness, ribbonWidthScale = ribbonWidthScale,
+            ribbonTipTaper = ribbonTipTaper, wingTrail = wingTrail
         };
 
         private void AdvanceSimulation(float elapsed) {
