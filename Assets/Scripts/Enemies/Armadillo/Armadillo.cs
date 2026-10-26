@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace Enemies.Armadillo {
     public class Armadillo : ShieldedEnemy {
+        public override EnemyWeightType WeightType => EnemyWeightType.Heavy;
+        internal override IBehaviour PostStunBehaviour => new Idle(this);
+
         [SerializeField] internal SpriteRenderer sprite;
         [SerializeField] internal Animator animator;
         [SerializeField] internal Rigidbody2D rb;
@@ -32,15 +35,33 @@ namespace Enemies.Armadillo {
         [SerializeField] internal GameObject deathExplosion;
         [SerializeField] internal ParticleSystem dirtParticles;
 
+        private Transform stunEffect;
+        private float stunEffectHeadX;
+
 #nullable enable
         internal Player? aggrodPlayer;
         public void Awake() {
+            stunEffect = animator.transform.Find("StunEffect");
+            if (stunEffect) stunEffectHeadX = Mathf.Abs(stunEffect.localPosition.x);
             UseBehaviour(new Move(this));
         }
 
         public override void Update() {
             base.Update();
             sprite.flipX = facing.x == 0 ? sprite.flipX : facing.x > 0;
+            if (stunEffect) {
+                drawStunEffect();
+            }
+        }
+
+        private void drawStunEffect() {
+            var position = stunEffect.localPosition;
+            position.x = sprite.flipX ? stunEffectHeadX : -stunEffectHeadX;
+            stunEffect.localPosition = position;
+        }
+
+        internal override void OnStunned() {
+            dirtParticles.Stop();
         }
 
         public override void Die() {

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Enemies.Bird.Animation;
 using Enemies.Bird.Behaviour;
+using Enemies.Common.Behaviour;
 using Omnia.State;
 using Players;
 using UnityEngine;
@@ -10,6 +11,8 @@ using StateMachine = Omnia.State.StateMachine;
 namespace Enemies.Bird {
     public class Bird : Enemy {
         public override EnemyWeightType WeightType => EnemyWeightType.Light;
+        internal override IBehaviour PostStunBehaviour => new Idle(this);
+
         [SerializeField] internal float detectionRadius;
         [SerializeField] internal float fuse;
         [SerializeField] internal float triggerDistance;
