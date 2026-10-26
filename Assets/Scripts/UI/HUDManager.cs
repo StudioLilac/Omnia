@@ -103,6 +103,10 @@ namespace UI {
             flowAnimationCoroutine = StartCoroutine(SlideFlowValue(targetFlow));
         }
 
+        private int displayedAmmo = -1;
+        private int displayedCapacity = -1;
+        private WeaponClass displayedWeapon;
+
         private void UpdateAmmo(int currentAmmo) {
             FindPlayer();
             if (!player.weapons[player.selectedWeapon]) {
@@ -110,11 +114,21 @@ namespace UI {
                 return;
             }
 
+            var weapon = player.weapons[player.selectedWeapon];
+            int maxAmmo = weapon.maxAmmoCount;
+            if (weapon is Flamethrower) {
+                // Show fuel as ten segments instead of a hundred individual cartridges.
+                currentAmmo = maxAmmo > 0 ? Mathf.CeilToInt(10f * currentAmmo / maxAmmo) : 0;
+                maxAmmo = 10;
+            }
+            if (displayedWeapon == weapon && displayedAmmo == currentAmmo && displayedCapacity == maxAmmo) return;
+            displayedWeapon = weapon;
+            displayedAmmo = currentAmmo;
+            displayedCapacity = maxAmmo;
+
             foreach (Transform child in ammoContainer) {
                 Destroy(child.gameObject);
             }
-
-            int maxAmmo = player.weapons[player.selectedWeapon].maxAmmoCount;
 
             for (int i = 0; i < maxAmmo; i++) {
                 if (i < currentAmmo) {

@@ -3987,9 +3987,9 @@ MonoBehaviour:
   harpoonDescription: The Harpoon Gun fires up to three harpoons at a time. Harpoons may impale enemies, semisolid platforms, or the ground. Harpoons can be picked up to restore ammo, but stay lodged in enemies.
   harpoonSkill: 'Skill: Quickly pulls Jamie to the most recently impaled enemy or semisolid platform. Does not work on ground.'
   harpoonIntro: 'Intro Skill: Instantly retrieves all harpoons and staggers enemies that were impaled.'
-  shotgunDescription: 'The Shotgun fires bursts of scrap in a wide cone, dealing heavy damage at close range. Pellets deal less damage the further they travel. Ammo is restored over time. '
-  shotgunSkill: 'Skill: Instantly fire a shot downwards, dealing damage underneath Jamie and boosting her upwards.'
-  shotgunIntro: 'Intro Skill: After a short delay, fire a mega round that deals intense damage and recoils Jamie backwards.'
+  shotgunDescription: The Flamethrower projects a continuous stream of pixel fire. Hold fire to consume fuel. Targets touching hot flame take damage, and walls block the stream. Fuel regenerates after a short pause.
+  shotgunSkill: 'Skill: Vent a burst of flame downwards and boost Jamie upwards.'
+  shotgunIntro: 'Intro Skill: Refill fuel and release a sustained flame burst, recoiling Jamie backwards.'
   description: {fileID: 467942398185157651}
   skill: {fileID: 639122358439454786}
   intro: {fileID: 1462331216434662797}

@@ -14,12 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: c278ba382575aca498302c203e95024b, type: 3}
   trinketName: Gear
-  description: 'Reduces bullet spread of the shotgun.
+  description: 'Narrows the flamethrower stream.
 
 
-    A rusted, old cog. Its
-    surface has long deteriorated since its time above, but its edges still carry
-    the evidence of a partnership once struck. Two pieces, inextricably bound, ever
-    turning together. Its other half is nowhere to be found, likely lost to the void
-    above. '
+    A rusted, old cog. Its surface has long deteriorated since its time above, but its edges still carry the evidence of a partnership once struck. Two pieces, inextricably bound, ever turning together. Its other half is nowhere to be found, likely lost to the void above. '
   buffPrefab: {fileID: -1707690701271966636, guid: 81e2177ae60381640b8a26eecf7c9c73, type: 3}

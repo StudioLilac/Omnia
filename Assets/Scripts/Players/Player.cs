@@ -84,6 +84,7 @@ namespace Players {
         [SerializeField] internal bool roll;
         [SerializeField] internal bool held;
         [SerializeField] internal bool fire;
+        internal bool fireHeld;
         [SerializeField] internal bool skill;
         [SerializeField] internal bool intro;
         [SerializeField] internal bool grounded;
@@ -361,6 +362,7 @@ namespace Players {
         }
 
         private void DoAttack() {
+            weapons[selectedWeapon].SetTriggerHeld(fireHeld && IsAttackEnabled());
             if (!fire || !IsAttackEnabled()) return;
             fire = false;
             weapons[selectedWeapon].Attack();

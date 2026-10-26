@@ -27,6 +27,7 @@ namespace Players.Mixin {
         }
 
         public void Update() {
+            self.fireHeld = false;
             if (Player.controlsLocked) {
                 self.moving = Vector2.zero;
                 return;
@@ -35,6 +36,7 @@ namespace Players.Mixin {
             if (PauseMenu.IsPaused) return;
 
             var fire = fireAction.action.WasPressedThisFrame();
+            self.fireHeld = fireAction.action.IsPressed();
             var jump = jumpAction.action.WasPressedThisFrame();
             var held = jumpAction.action.IsPressed();
             var skill = skillAction.action.WasPressedThisFrame();
@@ -59,8 +61,11 @@ namespace Players.Mixin {
         }
 
         public void OnDestroy() {
+            self.fireHeld = false;
             InventoryManager.OnInventoryOpened -= StopMoving;
         }
+
+        private void OnDisable() { self.fireHeld = false; }
 
         private Vector2 GetMovingInput() {
             return moveAction.action.ReadValue<Vector2>();
@@ -72,6 +77,7 @@ namespace Players.Mixin {
         }
 
         private void StopMoving() {
+            self.fireHeld = false;
             self.moving = Vector2.zero;
         }
     }

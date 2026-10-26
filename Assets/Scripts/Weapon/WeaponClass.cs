@@ -63,7 +63,9 @@ public abstract class WeaponClass : MonoBehaviour
     public abstract bool UseSkill();
     public abstract void IntroSkill();
 
-    public void SetSpriteActive(bool active) {
+    public virtual void SetTriggerHeld(bool held) { }
+
+    public virtual void SetSpriteActive(bool active) {
         foreach (var sr in GetComponentsInChildren<SpriteRenderer>()) {
             sr.enabled = active;
         }

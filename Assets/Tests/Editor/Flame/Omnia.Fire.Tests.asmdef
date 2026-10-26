@@ -1,0 +1,6 @@
+{
+  "name": "Omnia.Fire.Tests",
+  "references": ["Omnia.Fire.Simulation"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}
