@@ -8,7 +8,7 @@ public static class PreviewFlameRules {
     public static string Run() {
         const int size = 224;
         var sim = new FlameSim(512,size,1);
-        var settings = FlameSimSettings.Default; settings.maxRange = 96; settings.jetSpeed = 5;
+        var settings = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab").GetComponent<FlameEmitter>().Settings(0.05f);
         var palette = AssetDatabase.LoadAssetAtPath<FlamePalette>("Assets/Scripts/Weapon/Flamethrower/Fire.asset");
         var material = AssetDatabase.LoadAssetAtPath<Material>("Assets/Scripts/Weapon/Flamethrower/PixelFlame.mat");
         var obj = new GameObject("World-space particle preview");
@@ -18,6 +18,15 @@ public static class PreviewFlameRules {
         for(int i=0;i<pixels.Length;i++) pixels[i]=new Color32(25,29,39,255);
         var previous = new FlamePose(0,0,0);
         try {
+            var steady = new FlameSim(512,size,1);
+            for(int tick=0;tick<40;tick++) steady.Step(true,previous,previous,settings);
+            int gap=0, longestGap=0;
+            for(int x=0;x<(int)settings.maxRange-16;x++) {
+                bool hot=false;
+                for(int y=-16;y<=16;y++) if(steady.SampleWorld(x+0.5f,y+0.5f)>0.08f) hot=true;
+                gap=hot?0:gap+1; longestGap=System.Math.Max(longestGap,gap);
+            }
+            if(longestGap!=0) throw new System.Exception("Continuous core has a gap of "+longestGap+" pixels");
             for(int frame=0;frame<6;frame++) {
                 for(int tick=0;tick<4;tick++) {
                     int step=frame*4+tick;
@@ -35,7 +44,7 @@ public static class PreviewFlameRules {
             output.SetPixels32(pixels); output.Apply();
             Directory.CreateDirectory("Temp/Flamethrower");
             File.WriteAllBytes("Temp/Flamethrower/world-space-sweep.png",output.EncodeToPNG());
-            return "Temp/Flamethrower/world-space-sweep.png: pulsed jet, 180-degree sweep, then lingering flame.";
+            return "Temp/Flamethrower/world-space-sweep.png: continuous core verified with no gaps through the first 80 pixels; 180-degree sweep, then lingering flame.";
         } finally { Object.DestroyImmediate(obj); Object.DestroyImmediate(output); }
     }
 }

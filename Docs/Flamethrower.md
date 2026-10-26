@@ -6,7 +6,7 @@ The shotgun prefab now uses a fixed particle pool rasterized into a world-aligne
 
 ## Rules
 
-- **Core:** emit a short slug every few ticks. Spawn positions and angles interpolate between the previous/current nozzle poses. New particles inherit a fraction of nozzle velocity, capped to avoid teleport impulses. Core movement is independent, fast and nearly straight, with slight world-down droop. Heat decreases with age; core particles stamp the segment they travelled during the current tick so fast movement does not leave holes within a slug. Gaps between slugs remain visible.
+- **Core:** the project preset emits overlapping core particles every tick for a continuous stream while held. Increasing Pulse Period restores separated slugs. Spawn positions and angles interpolate between the previous/current nozzle poses. New particles inherit a fraction of nozzle velocity, capped to avoid teleport impulses. Core movement is independent, fast and nearly straight, with slight world-down droop. Heat decreases with age; core particles stamp the segment they travelled during the current tick so fast movement does not leave holes within a slug. The six-particle slug spans the five-pixel travel per tick, filling the gaps between consecutive emissions.
 - **Wings:** shed more often downstream, alternating sides using distance travelled and tick phase. Each wing captures its parent's travel direction. It moves slowly forward, then drag along that captured direction pulls it backward; early outward spread and world-up buoyancy give it independent motion. Turning the gun cannot redirect old wings.
 - **Embers:** core breakup creates one to three small, cooling blobs with inherited velocity and world-down gravity. A separate ember cap shares the fixed pool.
 - **Release:** stop spawning immediately. Existing fire keeps travelling and cools faster, disappearing within about one second. Switching weapons or rolling also stops emission without deleting old flame.
@@ -20,7 +20,7 @@ Select `Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab` and edit **Flame Emitter*
 | Max Range | 96 pixels | Preserves the previously requested 3-world-unit reach at 32 PPU. Newly added emitters default to 48 pixels. |
 | Jet Speed | 5 pixels/tick | Core travel speed; newly added emitters default to 2.5. |
 | Animation FPS | 20 | Fixed simulation, raster and damage frequency. Particle velocities/accelerations and lifetimes use ticks, as in the design document. |
-| Pulse Period / Slug Length | 3 / 3 | Ticks between pulses / core particles in a pulse. |
+| Pulse Period / Slug Length | 1 / 6 | Ticks between pulses / core particles in a pulse. |
 | Color Falloff | 0.55 | Exponent of core heat over lifetime: `heat = (1 − age/life)^falloff`. Higher values turn white into fiery colors sooner. |
 | Core Radius / Radial Falloff | 1 / 0.3 | Pixel stamp thickness and cooling from its center to its edge. |
 | Inherit Velocity | 0.3 | Fraction of nozzle movement added to newly emitted particles only. |
@@ -73,4 +73,4 @@ unity command run_script --file AgentScripts/ValidateFlamethrower.cs --entry Val
 
 All simulation and rendering arrays, collision cache, and damage-query buffers are fixed allocations. Damage queries cap candidates at 256 colliders per emitter tick. The pure simulation/raster timing benchmark excludes Unity physics, texture upload, rendering, and enemy callbacks.
 
-Measured in the current Editor, the complete tick (physics, rasterization, palette and texture upload, without enemy callbacks) was about 0.16 ms at the design-document defaults and 0.19 ms at the extended 96-pixel project preset, with zero managed allocations. These are CPU measurements, not GPU frame times.
+Before the continuous-emission retune, measured in the current Editor, the complete tick (physics, rasterization, palette and texture upload, without enemy callbacks) was about 0.16 ms at the design-document defaults and 0.19 ms at the extended 96-pixel project preset, with zero managed allocations. These are CPU measurements, not GPU frame times.

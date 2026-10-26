@@ -177,9 +177,9 @@ MonoBehaviour:
   pixelsPerUnit: 32
   simHz: 20
   maxRange: 96
-  jetSpeed: 5
-  pulsePeriod: 3
-  slugLength: 3
+  jetSpeed: 10
+  pulsePeriod: 1
+  slugLength: 10
   inheritVelocity: 0.3
   maxInheritedSpeed: 24
   coreWidthJitter: 0
