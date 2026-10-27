@@ -63,6 +63,26 @@ public static class ConfigureFlamethrower {
             foreach (var emitter in Object.FindObjectsByType<FlameEmitter>()) Ribbon(emitter);
         return "Connected world-space core ribbon, smooth age/heat interpolation, tapered tip, and wing motion trails enabled.";
     }
+    private static void Eddies(FlameEmitter emitter) {
+        emitter.cellularFlow = true; emitter.flowCellSize = 2;
+        emitter.flowSpeed = 3.5f; emitter.flowVorticity = 1.8f;
+        emitter.flowCooling = 0.022f; emitter.flowBuoyancy = 0.035f;
+        emitter.flowPerturbation = 0.35f; emitter.flowHeat = 0.8f;
+        emitter.flowPressureIterations = 8;
+        emitter.wingLifeMin = 9; emitter.wingLifeMax = 15;
+        emitter.windowSize = 288;
+    }
+    public static string SetEddies() {
+        const string path = "Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab";
+        var root = PrefabUtility.LoadPrefabContents(path);
+        try {
+            Eddies(root.GetComponent<FlameEmitter>());
+            PrefabUtility.SaveAsPrefabAsset(root, path);
+        } finally { PrefabUtility.UnloadPrefabContents(root); }
+        if (Application.isPlaying)
+            foreach (var emitter in Object.FindObjectsByType<FlameEmitter>()) Eddies(emitter);
+        return "World-space cellular heat/velocity flow enabled; existing core beam preserved.";
+    }
     private static string Configure(bool resetRules) {
         const string path = "Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab";
         var root = PrefabUtility.LoadPrefabContents(path);
@@ -75,8 +95,8 @@ public static class ConfigureFlamethrower {
                     var destination = typeof(FlameEmitter).GetField(field.Name);
                     if (destination != null) destination.SetValue(emitter, System.Convert.ChangeType(field.GetValue(defaults), destination.FieldType));
                 }
-                Wispy(emitter); Ribbon(emitter);
-                emitter.simHz = 20; emitter.windowSize = 224; emitter.maxParticles = 512;
+                Wispy(emitter); Ribbon(emitter); Eddies(emitter);
+                emitter.simHz = 20; emitter.windowSize = 256; emitter.maxParticles = 512;
                 emitter.palette = AssetDatabase.LoadAssetAtPath<FlamePalette>("Assets/Scripts/Weapon/Flamethrower/Fire.asset");
                 emitter.flameMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Scripts/Weapon/Flamethrower/PixelFlame.mat");
                 emitter.nozzle = root.transform.Find("Barrel Position");

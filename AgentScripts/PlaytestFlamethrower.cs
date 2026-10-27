@@ -25,6 +25,7 @@ public static class PlaytestFlamethrower {
     private static FlameDamageProbe Target(Vector2 point, float width = 0.4f) {
         var obj=new GameObject("World flame damage probe"); obj.layer=6; obj.transform.position=point;
         obj.AddComponent<BoxCollider2D>().size=new Vector2(width,0.4f);
+        Physics2D.SyncTransforms();
         return obj.AddComponent<FlameDamageProbe>();
     }
     private static async Task Ticks(FlameEmitter emitter,int count) {

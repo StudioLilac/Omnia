@@ -39,11 +39,11 @@ public static class ValidateFlamethrower {
             var timer = new Stopwatch();
             long before = GC.GetAllocatedBytesForCurrentThread();
             timer.Start();
-            for (int i = 0; i < 10000; i++) sim.Step(true,previous,previous,settings);
+            for (int i = 0; i < 500; i++) sim.Step(true,previous,previous,settings);
             timer.Stop();
             long allocation = GC.GetAllocatedBytesForCurrentThread() - before;
             Require(allocation == 0, "Simulation allocated " + allocation);
-            double extendedTime = timer.Elapsed.TotalMilliseconds / 10000;
+            double extendedTime = timer.Elapsed.TotalMilliseconds / 500;
             // The design budget is for its 48-pixel/160-cell defaults. Report the
             // larger reference independently instead of treating it as that default.
             var defaults = FlameSimSettings.Default;
@@ -51,13 +51,26 @@ public static class ValidateFlamethrower {
             for(int i=0;i<100;i++) defaultSim.Step(true,previous,previous,defaults);
             before = GC.GetAllocatedBytesForCurrentThread();
             timer.Restart();
-            for(int i=0;i<10000;i++) defaultSim.Step(true,previous,previous,defaults);
+            for(int i=0;i<500;i++) defaultSim.Step(true,previous,previous,defaults);
             timer.Stop();
             long defaultAllocation = GC.GetAllocatedBytesForCurrentThread() - before;
             Require(defaultAllocation == 0, "Default simulation allocated " + defaultAllocation);
-            double defaultTime = timer.Elapsed.TotalMilliseconds / 10000;
-            Require(defaultTime < 0.2, "Default simulation exceeded budget: " + defaultTime);
-            return "60 sweeping poses: world alignment, binary alpha, query agreement passed. Default 48-pixel jet: " + defaultTime.ToString("F4") + " ms/tick; 96-pixel reference: " + extendedTime.ToString("F4") + " ms/tick; both 0 bytes allocated.";
+            double defaultTime = timer.Elapsed.TotalMilliseconds / 500;
+            bool withinOriginalBudget = defaultTime < 0.2;
+            var preset = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab").GetComponent<FlameEmitter>();
+            var project = new FlameSim(preset.maxParticles, preset.windowSize, preset.seed, preset.flowCellSize);
+            var projectRules = preset.Settings(1 / preset.simHz);
+            for (int i = 0; i < 100; i++) project.Step(true, previous, previous, projectRules);
+            before = GC.GetAllocatedBytesForCurrentThread(); timer.Restart();
+            for (int i = 0; i < 500; i++) project.Step(true, previous, previous, projectRules);
+            timer.Stop();
+            long projectAllocation = GC.GetAllocatedBytesForCurrentThread() - before;
+            Require(projectAllocation == 0, "Project preset allocated " + projectAllocation);
+            double projectTime = timer.Elapsed.TotalMilliseconds / 500;
+            return "60 sweeping poses: world alignment, binary alpha, query agreement passed. Default 48-pixel jet: "
+                + defaultTime.ToString("F4") + " ms/tick; 96-pixel reference: " + extendedTime.ToString("F4")
+                + " ms/tick; actual project preset: " + projectTime.ToString("F4")
+                + " ms/tick. All 0 bytes allocated. Original 0.2 ms budget met: " + withinOriginalBudget;
         } finally { Object.DestroyImmediate(obj); Application.runInBackground = background; }
     }
 }

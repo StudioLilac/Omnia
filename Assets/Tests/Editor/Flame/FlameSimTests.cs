@@ -6,6 +6,7 @@ public class FlameSimTests {
     private static FlamePose Pose(float x = 0, float y = 0, float angle = 0) => new FlamePose(x, y, angle);
     private static FlameSimSettings Quiet() {
         var settings = FlameSimSettings.Default;
+        settings.cellularFlow = false;
         settings.coreJitterChance = settings.shedChance = settings.releaseCooling = 0;
         settings.maxEmbers = 0;
         return settings;
@@ -40,7 +41,7 @@ public class FlameSimTests {
     [Test] public void TurningAndMovingNozzleNeverReaimExistingParticles() {
         var a = new FlameSim(); var b = new FlameSim();
         var settings = FlameSimSettings.Default;
-        settings.shedChance = 1; settings.wingLifeMin = settings.wingLifeMax = 20;
+        settings.cellularFlow = false; settings.shedChance = 1; settings.wingLifeMin = settings.wingLifeMax = 20;
         settings.releaseCooling = 0;
         for (int i = 0; i < 20; i++) { a.Step(true, Pose(), Pose(), settings); b.Step(true, Pose(), Pose(), settings); }
         bool hasWing = false;
@@ -135,7 +136,7 @@ public class FlameSimTests {
 
     [Test] public void WingsEventuallyMoveBackwardAlongTheirOwnParentDirection() {
         var sim = new FlameSim(); var settings = FlameSimSettings.Default;
-        settings.shedChance = 1; settings.backDrag = 2; settings.wingLifeMin = settings.wingLifeMax = 20;
+        settings.cellularFlow = false; settings.shedChance = 1; settings.backDrag = 2; settings.wingLifeMin = settings.wingLifeMax = 20;
         for (int i = 0; i < 40; i++) sim.Step(true, Pose(), Pose(), settings);
         bool backward = false;
         for (int i = 0; i < sim.Capacity; i++) {
@@ -147,7 +148,7 @@ public class FlameSimTests {
 
     [Test] public void GravityAndBuoyancyUseWorldUpAndDown() {
         var sim = new FlameSim(); var settings = FlameSimSettings.Default;
-        settings.coreDroop = 0.1f; settings.shedChance = 1; settings.backDrag = 0;
+        settings.cellularFlow = false; settings.coreDroop = 0.1f; settings.shedChance = 1; settings.backDrag = 0;
         settings.wingForward = settings.wingSpread = 0; settings.wingLift = 0.2f; settings.liftAccel = 0.1f;
         settings.wingLifeMin = settings.wingLifeMax = 20;
         var left = Pose(0, 0, (float)Math.PI);

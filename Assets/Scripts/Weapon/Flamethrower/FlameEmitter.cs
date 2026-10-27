@@ -6,7 +6,7 @@ namespace Omnia.Fire {
     [DisallowMultipleComponent]
     public sealed class FlameEmitter : MonoBehaviour, IFlameCollision {
         [Header("World-space Raster")]
-        [Tooltip("Expanded at initialization if necessary to fit twice Max Range plus a 32-pixel margin.")]
+        [Tooltip("Expanded at initialization if necessary to fit twice Max Range plus a margin for the heat flow.")]
         [Min(32)] public int windowSize = 160;
         [Min(1)] public int maxParticles = 512;
         [Min(1)] public float pixelsPerUnit = 32;
@@ -30,7 +30,19 @@ namespace Omnia.Fire {
         [Tooltip("Exponent of core heat over its lifetime. Higher values turn white into fiery colors sooner.")]
         [Range(0.1f, 3)] public float colorFalloff = 0.55f;
         [Range(0, 1)] public float radialFalloff = 0.3f;
-        [Header("Wings (relative to their own parent jet)")]
+        [Header("Cellular Heat Flow")]
+        [Tooltip("Advect heat through a persistent world-space velocity grid. The jet's shear generates eddies.")]
+        public bool cellularFlow = true;
+        [Tooltip("Velocity/pressure cell width in game pixels. Heat and damage remain one cell per game pixel. Set before Play.")]
+        [Range(1, 4)] public int flowCellSize = 2;
+        [Min(0)] public float flowSpeed = 3.5f;
+        [Range(0, 2)] public float flowVorticity = 1.8f;
+        [Min(0)] public float flowCooling = 0.022f;
+        public float flowBuoyancy = 0.035f;
+        [Range(0, 1)] public float flowPerturbation = 0.35f;
+        [Range(0, 1)] public float flowHeat = 0.8f;
+        [Range(2, 24)] public int flowPressureIterations = 8;
+        [Header("Legacy Wings (Cellular Flow disabled)")]
         [Range(0, 1)] public float shedChance = 0.25f;
         [Min(0)] public float flapWaveNumber = 0.35f;
         [Min(0)] public float flapFreq = 1.2f;
@@ -93,8 +105,9 @@ namespace Omnia.Fire {
 
         private void Awake() {
             pixelsPerUnit = Mathf.Max(1, pixelsPerUnit);
-            int size = Mathf.Max(32, windowSize, maxRange * 2 + 32);
-            Sim = new FlameSim(Mathf.Max(1, maxParticles), size, seed);
+            int margin = cellularFlow ? 80 : 32;
+            int size = Mathf.Max(32, windowSize, maxRange * 2 + margin);
+            Sim = new FlameSim(Mathf.Max(1, maxParticles), size, seed, flowCellSize);
             var output = new GameObject("World-space Fire");
             // Deliberately detached: hiding, moving or rotating the gun cannot move its fire.
             SceneManager.MoveGameObjectToScene(output, gameObject.scene);
@@ -118,7 +131,10 @@ namespace Omnia.Fire {
             radialFalloff = radialFalloff, colorFalloff = colorFalloff,
             releaseCooling = releaseCooling, stepSeconds = seconds,
             coreRibbon = coreRibbon, ribbonSmoothness = ribbonSmoothness, ribbonWidthScale = ribbonWidthScale,
-            ribbonTipTaper = ribbonTipTaper, wingTrail = wingTrail
+            ribbonTipTaper = ribbonTipTaper, wingTrail = wingTrail,
+            cellularFlow = cellularFlow, flowSpeed = flowSpeed, flowVorticity = flowVorticity,
+            flowCooling = flowCooling, flowBuoyancy = flowBuoyancy, flowPerturbation = Mathf.Clamp01(flowPerturbation * spread),
+            flowHeat = flowHeat, flowPressureIterations = flowPressureIterations
         };
 
         private void AdvanceSimulation(float elapsed) {

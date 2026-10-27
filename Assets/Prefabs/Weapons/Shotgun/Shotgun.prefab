@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b573b4a5f9334cc2983cf01d9ee36c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Omnia.Fire.FlameEmitter
-  windowSize: 224
+  windowSize: 288
   maxParticles: 512
   pixelsPerUnit: 32
   simHz: 20
@@ -192,6 +192,15 @@ MonoBehaviour:
   coreRadius: 1
   colorFalloff: 0.55
   radialFalloff: 0.3
+  cellularFlow: 1
+  flowCellSize: 2
+  flowSpeed: 3.5
+  flowVorticity: 1.8
+  flowCooling: 0.022
+  flowBuoyancy: 0.035
+  flowPerturbation: 0.35
+  flowHeat: 0.8
+  flowPressureIterations: 8
   shedChance: 0.55
   flapWaveNumber: 0.22
   flapFreq: 0.7

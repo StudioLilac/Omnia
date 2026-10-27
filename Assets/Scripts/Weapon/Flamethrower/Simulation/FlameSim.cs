@@ -38,6 +38,9 @@ namespace Omnia.Fire {
         public float coreRadius, wingRadius, emberRadius, radialFalloff, colorFalloff, releaseCooling, stepSeconds;
         public bool coreRibbon;
         public float ribbonSmoothness, ribbonWidthScale, ribbonTipTaper, wingTrail;
+        public bool cellularFlow;
+        public float flowSpeed, flowVorticity, flowCooling, flowBuoyancy, flowPerturbation, flowHeat;
+        public int flowPressureIterations;
         public static FlameSimSettings Default => new FlameSimSettings {
             maxRange = 48, jetSpeed = 2.5f, inheritVelocity = 0.3f, maxInheritedSpeed = 24,
             pulsePeriod = 3, slugLength = 3, coreWidthJitter = 0, coreJitterChance = 0.1f, coreDroop = 0.004f,
@@ -47,7 +50,10 @@ namespace Omnia.Fire {
             emberGravity = 0.06f, emberHeat = 0.75f, maxEmbers = 64, emberLifeMin = 3, emberLifeMax = 6,
             coreRadius = 1, wingRadius = 1, emberRadius = 0.75f, radialFalloff = 0.3f,
             colorFalloff = 0.55f, releaseCooling = 1.5f, stepSeconds = 0.05f,
-            coreRibbon = true, ribbonSmoothness = 0.85f, ribbonWidthScale = 1.75f, ribbonTipTaper = 0.2f, wingTrail = 1
+            coreRibbon = true, ribbonSmoothness = 0.85f, ribbonWidthScale = 1.75f, ribbonTipTaper = 0.2f, wingTrail = 1,
+            cellularFlow = true, flowSpeed = 3.5f, flowVorticity = 1.8f,
+            flowCooling = 0.022f, flowBuoyancy = 0.035f, flowPerturbation = 0.35f,
+            flowHeat = 0.8f, flowPressureIterations = 8
         };
     }
 
@@ -75,6 +81,13 @@ namespace Omnia.Fire {
         private bool rasterFiring;
         private uint random;
         private int freeCount, pulseCountdown;
+        private readonly FlameFlow flow;
+        private readonly FlameVector[] sourceVelocity;
+        private bool stampingCore;
+        private FlameVector stampVelocity;
+        private float injectionSpeed;
+        private int flowTick;
+        public FlameFlow Flow => flow;
         public int Capacity => particles.Length;
         public int ParticleCount { get; private set; }
         public int EmberCount { get; private set; }
@@ -87,13 +100,15 @@ namespace Omnia.Fire {
         public float CellHeat(int index) => heat[index];
         public FlameParticle ParticleAt(int index) => particles[index];
 
-        public FlameSim(int capacity = 512, int windowSize = 160, uint seed = 1) {
+        public FlameSim(int capacity = 512, int windowSize = 160, uint seed = 1, int flowCellSize = 2) {
             if (capacity < 1 || windowSize < 1) throw new ArgumentOutOfRangeException();
             particles = new FlameParticle[capacity];
             free = new int[capacity];
             WindowSize = windowSize;
             heat = new float[windowSize * windowSize];
             occupied = new int[heat.Length];
+            flow = new FlameFlow(windowSize, seed, flowCellSize);
+            sourceVelocity = new FlameVector[heat.Length];
             cohortPositions = new FlameVector[capacity];
             cohortHeat = new float[capacity]; cohortDistance = new float[capacity];
             cohortAges = new int[capacity]; cohortCounts = new int[capacity]; cohortOrder = new int[capacity];
@@ -111,6 +126,8 @@ namespace Omnia.Fire {
             ParticleCount = EmberCount = OccupiedCount = StepIndex = pulseCountdown = 0;
             random = initialSeed;
             rasterFiring = false; ribbonCount = 0;
+            flow.Clear();
+            flowTick = 0;
         }
 
         private uint RandomBits() {
@@ -187,6 +204,7 @@ namespace Omnia.Fire {
         }
 
         private void Shed(FlameParticle parent, FlameSimSettings settings) {
+            if (settings.cellularFlow) return;
             float distance = Clamp01(parent.dist / parent.maxDistance);
             float probability = Clamp01(settings.shedChance) * distance * distance * (3 - 2 * distance);
             if (freeCount == 0 || Random01() >= probability) return;
@@ -270,20 +288,31 @@ namespace Omnia.Fire {
                     maxX = Math.Max(maxX, particle.previousPos.x); maxY = Math.Max(maxY, particle.previousPos.y);
                 }
             }
-            float centerX = ParticleCount == 0 ? fallback.x : (minX + maxX) * 0.5f;
-            float centerY = ParticleCount == 0 ? fallback.y : (minY + maxY) * 0.5f;
+            bool hasBounds = ParticleCount > 0;
+            if (settings.cellularFlow && flow.HasHeat) {
+                minX = Math.Min(minX, flow.MinWorldX); maxX = Math.Max(maxX, flow.MaxWorldX);
+                minY = Math.Min(minY, flow.MinWorldY); maxY = Math.Max(maxY, flow.MaxWorldY);
+                hasBounds = true;
+            }
+            float centerX = hasBounds ? (minX + maxX) * 0.5f : fallback.x;
+            float centerY = hasBounds ? (minY + maxY) * 0.5f : fallback.y;
             if (rasterFiring && settings.coreRibbon && ParticleCount > 0) {
                 centerX = (Math.Min(minX, rasterPose.position.x) + Math.Max(maxX, rasterPose.position.x)) * 0.5f;
                 centerY = (Math.Min(minY, rasterPose.position.y) + Math.Max(maxY, rasterPose.position.y)) * 0.5f;
             }
             OriginX = (int)Math.Floor(centerX - WindowSize * 0.5f);
             OriginY = (int)Math.Floor(centerY - WindowSize * 0.5f);
+            Array.Clear(sourceVelocity, 0, sourceVelocity.Length);
+            stampingCore = true; injectionSpeed = settings.flowSpeed;
+            stampVelocity = new FlameVector((float)Math.Cos(rasterPose.angle), (float)Math.Sin(rasterPose.angle)) * injectionSpeed;
             if (settings.coreRibbon) RasterizeCoreRibbon(settings, collision);
             for (int i = 0; i < Capacity; i++) {
                 var particle = particles[i];
                 if (particle.kind == FlameParticleKind.None) continue;
                 if (settings.coreRibbon && particle.kind == FlameParticleKind.Core) continue;
                 float value = Heat(particle, settings);
+                stampingCore = particle.kind == FlameParticleKind.Core;
+                stampVelocity = particle.vel.Normalized * injectionSpeed;
                 float radius = particle.kind == FlameParticleKind.Core ? settings.coreRadius
                     : particle.kind == FlameParticleKind.Wing ? settings.wingRadius : settings.emberRadius;
                 if (particle.kind == FlameParticleKind.Core) {
@@ -295,6 +324,19 @@ namespace Omnia.Fire {
                     StampSegment(start, particle.pos, radius * 0.5f, radius, value * 0.4f, value, settings.radialFalloff, collision);
                 } else Stamp(particle.pos, radius, value, settings.radialFalloff, collision);
             }
+            stampingCore = false;
+            if (settings.cellularFlow) {
+                if (flowTick != StepIndex) {
+                    flow.Step(OriginX, OriginY, heat, sourceVelocity, settings, rasterFiring, StepIndex, collision);
+                    flowTick = StepIndex;
+                } else flow.Recenter(OriginX, OriginY);
+                for (int i = 0; i < heat.Length; i++) {
+                    float value = flow.CellHeat(i);
+                    if (value <= heat[i]) continue;
+                    if (heat[i] == 0) occupied[OccupiedCount++] = i;
+                    heat[i] = value;
+                }
+            } else if (flow.HasHeat) flow.Clear();
             if (collision != null) {
                 for (int i = 0; i < OccupiedCount; i++) {
                     int cell = occupied[i];
@@ -315,6 +357,7 @@ namespace Omnia.Fire {
             for (int i = 0; i < Capacity; i++) {
                 var p = particles[i];
                 if (p.kind != FlameParticleKind.Core) continue;
+                if (!rasterFiring) stampVelocity = p.vel.Normalized * injectionSpeed;
                 int group = 0;
                 while (group < cohorts && cohortAges[group] != p.age) group++;
                 if (group == cohorts) {
@@ -358,6 +401,7 @@ namespace Omnia.Fire {
                 if (ribbonAges[i + 1] - ribbonAges[i] > allowedAgeGap
                     || (ribbonPoints[i + 1] - ribbonPoints[i]).Length > linkLimit) continue;
                 FlameVector a = ribbonPoints[i], b = ribbonPoints[i + 1];
+                stampVelocity = (b - a).Normalized * injectionSpeed;
                 FlameVector before = i == 0 ? a + (a - b) : ribbonPoints[i - 1];
                 FlameVector after = i + 2 >= ribbonCount ? b + (b - a) : ribbonPoints[i + 2];
                 float smooth = Clamp01(settings.ribbonSmoothness);
@@ -399,6 +443,7 @@ namespace Omnia.Fire {
         private void StampSegment(FlameVector from, FlameVector to, float fromRadius, float toRadius,
             float fromHeat, float toHeat, float falloff, IFlameCollision collision, bool includeStart = true, bool pathChecked = false) {
             FlameVector delta = to - from;
+            if (stampingCore && delta.Length > 0.0001f) stampVelocity = delta.Normalized * injectionSpeed;
             int count = Math.Max(1, (int)Math.Ceiling(Math.Max(Math.Abs(delta.x), Math.Abs(delta.y))));
             FlameVector last = from;
             for (int i = includeStart ? 0 : 1; i <= count; i++) {
@@ -430,6 +475,7 @@ namespace Omnia.Fire {
                     && collision.HitsSolid(position, new FlameVector(OriginX + x + 0.5f, OriginY + y + 0.5f))) continue;
                 if (heat[index] == 0) occupied[OccupiedCount++] = index;
                 heat[index] = sample;
+                if (stampingCore) sourceVelocity[index] = stampVelocity;
             }
         }
 
