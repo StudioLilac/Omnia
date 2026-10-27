@@ -1,6 +1,6 @@
 # World-space flamethrower
 
-The fire opens from the barrel into a broad hot jet, then breaks into cellular flame farther downstream. A connected world-space carrier supplies heat and momentum to a persistent lattice in `FlameFlow.cs`. Its directly rendered center fades before the end of the range, leaving the evolving heat field to define the tip. Coherent hot/cool pockets now travel with the emitted material across the broad core, with a twelve-color ramp giving orange, gold, yellow, cream and occasional white highlights.
+The fire opens from the barrel into a broad hot jet, then breaks into cellular flame farther downstream. A connected world-space carrier supplies heat and momentum to a persistent lattice in `FlameFlow.cs`. Its directly rendered center fades before the end of the range, leaving the evolving heat field to define the tip. Coherent hot/cool pockets now travel with the emitted material across the broad core, with four broad color bands: saturated red-orange, orange, golden yellow and pale yellow highlights. The discrete cartoon palette emphasizes the shapes of the hot/cool pockets.
 
 ## How the fire develops
 
@@ -49,7 +49,7 @@ Edit **Flame Emitter** on `Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab`.
 | Damage Threshold / Core Heat Threshold | 0.35 / 0.85 | Minimum damaging heat / threshold distinguishing core damage from cooler burn damage. |
 | Core / Wing Damage Multiplier | 1 / 0.6 | Heat-weighted damage scaling. Cellular wisps use the cooler multiplier. |
 | Release Cooling | 1.5 heat/second | Additional cooling after emission stops. |
-| Palette | Fire.asset (12 colors) | Swap for BlueFire.asset or another **Omnia > Flame Palette** asset. |
+| Palette | Fire.asset (4 opaque bands) | Swap for BlueFire.asset or another **Omnia > Flame Palette** asset. |
 
 The **Legacy Wings** particle parameters are retained for comparison when Cellular Flow is disabled. They do not control the new lattice. Embers remain short-lived world-space particles at core breakup. Velocities, flow cooling and lifetimes are tick-based: increasing Animation FPS to 40 doubles temporal motion and cooling relative to 20 FPS while preserving the 96-pixel core range. Damage remains scaled by tick duration.
 
@@ -118,3 +118,5 @@ The simulation improvement is about 18×. Native stage timings were source prepa
 All 39 flame tests pass, including sustained rotations at 0.2, 0.6 and 1.2 radians per tick with bounded particle counts, visible lingering heat, zero allocations and complete release cleanup. CopyableScene live checks also pass for sweeping, player movement, old-trail/hidden-weapon damage, fuel behavior and one-pixel wall blocking. Live rotating checks pass for idle/resume, catch-up limits and texture/damage-pixel agreement.
 
 Reproduce the simulation stress test with `unity command run_script --file AgentScripts/ProfileFlameSpin.cs --entry ProfileFlameSpin.Run --args '[0.6,0]'`. Mode 1 isolates the temperature-varied core without fluid or legacy wings; mode 2 also disables temperature variation. The profiler reports source, velocity and heat stages separately. In Play mode, run `ValidateFlameOptimizations.Run` with arguments `[0.6]` for rotating full ticks and actual physics walls; its default argument of zero retains the stationary benchmark.
+
+Cartoon palette preview: `Temp/Flamethrower/cartoon-palette-comparison.png` shows the previous twelve-entry ramp on the left and four opaque bands on the right at identical simulation settings. Regenerate with `AgentScripts/PreviewCartoonFire.cs`, entry `PreviewCartoonFire.Run`.

@@ -3,13 +3,11 @@ using UnityEngine;
 namespace Omnia.Fire {
     [CreateAssetMenu(menuName = "Omnia/Flame Palette")]
     public sealed class FlamePalette : ScriptableObject {
+        // Four broad, saturated bands give the flame a cartoon silhouette.
         public Color32[] colors = {
-            new Color32(0, 0, 0, 0), new Color32(80, 6, 5, 255),
-            new Color32(106, 12, 10, 255), new Color32(160, 20, 10, 255),
-            new Color32(213, 30, 12, 255), new Color32(244, 63, 12, 255),
-            new Color32(255, 101, 16, 255), new Color32(255, 143, 24, 255),
-            new Color32(255, 183, 36, 255), new Color32(255, 217, 64, 255),
-            new Color32(255, 241, 142, 255), new Color32(255, 255, 222, 255)
+            new Color32(0, 0, 0, 0), new Color32(222, 46, 35, 255),
+            new Color32(255, 116, 30, 255), new Color32(255, 204, 40, 255),
+            new Color32(255, 244, 176, 255)
         };
 
         public Color32 Evaluate(float heat) {
