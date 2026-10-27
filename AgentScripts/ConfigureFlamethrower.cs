@@ -83,6 +83,60 @@ public static class ConfigureFlamethrower {
             foreach (var emitter in Object.FindObjectsByType<FlameEmitter>()) Eddies(emitter);
         return "World-space cellular heat/velocity flow enabled; existing core beam preserved.";
     }
+    private static void BarrelPlume(FlameEmitter emitter) {
+        emitter.simHz = 40;
+        emitter.coreRadius = 2.5f; emitter.ribbonWidthScale = 2.4f;
+        emitter.coreNozzleScale = 0.18f; emitter.coreBloomPixels = 14;
+        emitter.coreFadeStart = 0.35f; emitter.coreFadeEnd = 0.85f;
+        emitter.radialFalloff = 0.65f; emitter.colorFalloff = 0.8f;
+        emitter.flowJetStability = 0.8f;
+        emitter.flowCooling = 0.032f; emitter.flowHeat = 0.85f;
+        emitter.flowPressureIterations = 6;
+        emitter.emberLifeMin = 2; emitter.emberLifeMax = 4;
+        emitter.emberHeat = 0.55f; emitter.emberRadius = 0.55f; emitter.maxEmbers = 32;
+    }
+    public static string SetBarrelPlume() {
+        const string path = "Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab";
+        var root = PrefabUtility.LoadPrefabContents(path);
+        try {
+            BarrelPlume(root.GetComponent<FlameEmitter>());
+            PrefabUtility.SaveAsPrefabAsset(root, path);
+        } finally { PrefabUtility.UnloadPrefabContents(root); }
+        if (Application.isPlaying)
+            foreach (var emitter in Object.FindObjectsByType<FlameEmitter>()) BarrelPlume(emitter);
+        return "40 FPS barrel plume: narrow nozzle opening into a wider hot jet, smooth core handing off to cellular fire, 50–100 ms embers.";
+    }
+    public static string SetWidePlume() {
+        const string path = "Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab";
+        var root = PrefabUtility.LoadPrefabContents(path);
+        try {
+            var emitter = root.GetComponent<FlameEmitter>();
+            emitter.coreRadius = 2.5f; emitter.coreNozzleScale = 0.18f;
+            PrefabUtility.SaveAsPrefabAsset(root, path);
+        } finally { PrefabUtility.UnloadPrefabContents(root); }
+        if (Application.isPlaying)
+            foreach (var emitter in Object.FindObjectsByType<FlameEmitter>()) {
+                emitter.coreRadius = 2.5f; emitter.coreNozzleScale = 0.18f;
+            }
+        return "Core body widened by 67%, preserving the nozzle opening, 40 FPS and other tuning.";
+    }
+    public static string SetUnlimitedRisingFire() {
+        const string path = "Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab";
+        var root = PrefabUtility.LoadPrefabContents(path);
+        try {
+            root.GetComponent<Flamethrower>().useFuel = false;
+            var emitter = root.GetComponent<FlameEmitter>();
+            emitter.flowUpperBias = 0.8f; emitter.flowBuoyancy = 0.12f;
+            PrefabUtility.SaveAsPrefabAsset(root, path);
+        } finally { PrefabUtility.UnloadPrefabContents(root); }
+        if (Application.isPlaying) {
+            foreach (var weapon in Object.FindObjectsByType<Flamethrower>()) weapon.useFuel = false;
+            foreach (var emitter in Object.FindObjectsByType<FlameEmitter>()) {
+                emitter.flowUpperBias = 0.8f; emitter.flowBuoyancy = 0.12f;
+            }
+        }
+        return "Fuel disabled; buoyant upper eddies amplified and underside circulation reduced in world space.";
+    }
     private static string Configure(bool resetRules) {
         const string path = "Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab";
         var root = PrefabUtility.LoadPrefabContents(path);

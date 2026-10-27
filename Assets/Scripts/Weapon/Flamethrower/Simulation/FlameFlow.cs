@@ -141,7 +141,8 @@ namespace Omnia.Fire {
                 float h = sourceHeat[i]; var velocity = sourceVelocity[i];
                 if (h > 0 && (velocity.x != 0 || velocity.y != 0)) {
                     float speed = Math.Max(0.001f, settings.flowSpeed);
-                    float disturbance = Noise((originX + x) / 4, (originY + y) / 4, tick / 3) * settings.flowPerturbation;
+                    float disturbance = Noise((originX + x) / 4, (originY + y) / 4, tick / 3) * settings.flowPerturbation
+                        * (1 - Clamp(settings.flowJetStability, 0, 1) * h);
                     float blend = 0.45f * h;
                     u[i] += (velocity.x - velocity.y / speed * disturbance - u[i]) * blend;
                     v[i] += (velocity.y + velocity.x / speed * disturbance - v[i]) * blend;
@@ -175,7 +176,14 @@ namespace Omnia.Fire {
                     float nx = Math.Abs(curl[i + 1]) - Math.Abs(curl[i - 1]);
                     float ny = Math.Abs(curl[i + size]) - Math.Abs(curl[i - size]);
                     float inverse = 1f / (float)Math.Sqrt(nx * nx + ny * ny + 0.0001f);
-                    float force = Math.Min(2, Math.Max(0, settings.flowVorticity)) * curl[i] * dt;
+                    // Temperature decreases upward across a plume's upper boundary,
+                    // and downward underneath it. Use that local world-up gradient,
+                    // not aim direction or a stamped shape, to favor the upper rolls.
+                    float below = heat[i - size], above = heat[i + size];
+                    float upperEdge = (below - above) / (below + above + 0.02f);
+                    float circulationGain = 1 + Clamp(settings.flowUpperBias, 0, 1) * upperEdge;
+                    float force = Math.Min(2, Math.Max(0, settings.flowVorticity)) * curl[i] * dt
+                        * (1 - Clamp(settings.flowJetStability, 0, 1) * Clamp(sourceHeat[i], 0, 1)) * circulationGain;
                     u[i] = Clamp(u[i] + ny * inverse * force, -6, 6);
                     v[i] = Clamp(v[i] - nx * inverse * force, -6, 6);
                 }

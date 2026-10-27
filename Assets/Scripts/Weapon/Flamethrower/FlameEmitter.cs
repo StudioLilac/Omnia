@@ -10,7 +10,7 @@ namespace Omnia.Fire {
         [Min(32)] public int windowSize = 160;
         [Min(1)] public int maxParticles = 512;
         [Min(1)] public float pixelsPerUnit = 32;
-        [InspectorName("Animation FPS"), Min(1)] public float simHz = 20;
+        [InspectorName("Animation FPS"), Min(1)] public float simHz = 40;
         [Header("Core Stream (pixels per tick)")]
         [Tooltip("Rasterize a connected curve through the stream instead of individual particle streaks.")]
         public bool coreRibbon = true;
@@ -30,6 +30,12 @@ namespace Omnia.Fire {
         [Tooltip("Exponent of core heat over its lifetime. Higher values turn white into fiery colors sooner.")]
         [Range(0.1f, 3)] public float colorFalloff = 0.55f;
         [Range(0, 1)] public float radialFalloff = 0.3f;
+        [Header("Barrel Plume")]
+        [Range(0.1f, 1)] public float coreNozzleScale = 0.3f;
+        [Min(0)] public float coreBloomPixels = 14;
+        [Tooltip("Range fractions over which the smooth core gives way to the cellular fire. Heat still feeds the flow.")]
+        [Range(0, 1)] public float coreFadeStart = 0.35f;
+        [Range(0, 1)] public float coreFadeEnd = 0.85f;
         [Header("Cellular Heat Flow")]
         [Tooltip("Advect heat through a persistent world-space velocity grid. The jet's shear generates eddies.")]
         public bool cellularFlow = true;
@@ -38,9 +44,13 @@ namespace Omnia.Fire {
         [Min(0)] public float flowSpeed = 3.5f;
         [Range(0, 2)] public float flowVorticity = 1.8f;
         [Min(0)] public float flowCooling = 0.022f;
-        public float flowBuoyancy = 0.035f;
+        public float flowBuoyancy = 0.12f;
+        [Tooltip("Amplify circulation on upward-facing heat edges and suppress it underneath, in world space.")]
+        [Range(0, 1)] public float flowUpperBias = 0.8f;
         [Range(0, 1)] public float flowPerturbation = 0.35f;
         [Range(0, 1)] public float flowHeat = 0.8f;
+        [Tooltip("Stabilize the hottest injected jet before turbulence develops downstream.")]
+        [Range(0, 1)] public float flowJetStability = 0.8f;
         [Range(2, 24)] public int flowPressureIterations = 8;
         [Header("Legacy Wings (Cellular Flow disabled)")]
         [Range(0, 1)] public float shedChance = 0.25f;
@@ -132,8 +142,11 @@ namespace Omnia.Fire {
             releaseCooling = releaseCooling, stepSeconds = seconds,
             coreRibbon = coreRibbon, ribbonSmoothness = ribbonSmoothness, ribbonWidthScale = ribbonWidthScale,
             ribbonTipTaper = ribbonTipTaper, wingTrail = wingTrail,
+            coreNozzleScale = coreNozzleScale, coreBloomPixels = coreBloomPixels,
+            coreFadeStart = coreFadeStart, coreFadeEnd = coreFadeEnd,
+            flowJetStability = flowJetStability,
             cellularFlow = cellularFlow, flowSpeed = flowSpeed, flowVorticity = flowVorticity,
-            flowCooling = flowCooling, flowBuoyancy = flowBuoyancy, flowPerturbation = Mathf.Clamp01(flowPerturbation * spread),
+            flowCooling = flowCooling, flowBuoyancy = flowBuoyancy, flowUpperBias = flowUpperBias, flowPerturbation = Mathf.Clamp01(flowPerturbation * spread),
             flowHeat = flowHeat, flowPressureIterations = flowPressureIterations
         };
 

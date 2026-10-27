@@ -80,8 +80,23 @@ public static class PlaytestFlamethrower {
         player.enabled=false; Field(player,"invulnerable",true);
         var rb=player.GetComponent<Rigidbody2D>(); if(rb!=null) rb.simulated=false;
         Field(player,"facing",Vector2.right);
+        weapon.SetSpriteActive(true);
+        int originalCapacity = weapon.maxAmmoCount;
+        weapon.maxAmmoCount = 1; weapon.CurrentAmmo = 0; weapon.useFuel = false;
+        weapon.SetTriggerHeld(true);
+        await Ticks(weapon.Emitter, Mathf.CeilToInt(weapon.Emitter.simHz * 0.6f));
+        Require(weapon.Emitter.IsFiring && weapon.CurrentAmmo == 1, "Unlimited fire stopped or drained fuel");
+        weapon.useFuel = true;
+        await Ticks(weapon.Emitter, Mathf.CeilToInt(weapon.Emitter.simHz * 0.3f));
+        Require(!weapon.Emitter.IsFiring && weapon.CurrentAmmo == 0, "Optional fuel restriction no longer works");
+        weapon.useFuel = false;
+        await Ticks(weapon.Emitter, 2);
+        Require(weapon.Emitter.IsFiring && weapon.CurrentAmmo == 1, "Disabling fuel did not resume an empty gun");
+        weapon.SetTriggerHeld(false); weapon.maxAmmoCount = originalCapacity;
         weapon.SetSpriteActive(true); weapon.CurrentAmmo=100;
         var emitter=weapon.Emitter; emitter.Clear(); weapon.SetTriggerHeld(true);
+        // Allow Update to consume the trigger before counting LateUpdate sim ticks.
+        await Frames(2);
         await Ticks(emitter,3);
         int tracked=Core(emitter.Sim);
         var initial=emitter.Sim.ParticleAt(tracked);
@@ -89,8 +104,9 @@ public static class PlaytestFlamethrower {
         var oldTrail=Target(new Vector2(ahead.x,ahead.y),0.65f);
         var outside=Target(emitter.Origin+Vector2.down*2);
         int sweepStart=emitter.Sim.StepIndex, trajectoryChecks=0;
-        while(emitter.Sim.StepIndex-sweepStart<10) {
-            float angle=Mathf.PI*Mathf.Min(1,(emitter.Sim.StepIndex-sweepStart+1)/10f);
+        int sweepTicks=Mathf.RoundToInt(emitter.simHz * 0.5f);
+        while(emitter.Sim.StepIndex-sweepStart<sweepTicks) {
+            float angle=Mathf.PI*Mathf.Min(1,(emitter.Sim.StepIndex-sweepStart+1)/(float)sweepTicks);
             Field(player,"facing",new Vector2(Mathf.Cos(angle),Mathf.Sin(angle)));
             await Ticks(emitter,1);
             var oldCore=emitter.Sim.ParticleAt(tracked);
@@ -148,6 +164,6 @@ public static class PlaytestFlamethrower {
         float trailDamage=oldTrail.Received, lingerDamage=lingering.Received;
         Object.Destroy(oldTrail.gameObject); Object.Destroy(outside.gameObject); Object.Destroy(lingering.gameObject);
         Object.Destroy(near.gameObject); Object.Destroy(beyond.gameObject); Object.Destroy(wall);
-        return "CopyableScene: 180-degree sweep preserves old particle trajectories; player translation does not drag fire; old-trail damage="+trailDamage.ToString("F2")+", after-swap lingering damage="+lingerDamage.ToString("F2")+"; outside damage=0; release clears within 1.1 s; one-pixel wall blocks particles, pixels and damage. Capture: Temp/Flamethrower/copyable-sweep.png";
+        return "CopyableScene: unlimited fire works from empty and stays full; optional fuel toggle depletes and stops; 180-degree sweep preserves old particle trajectories; player translation does not drag fire; old-trail damage="+trailDamage.ToString("F2")+", after-swap lingering damage="+lingerDamage.ToString("F2")+"; outside damage=0; release clears within 1.1 s; one-pixel wall blocks particles, pixels and damage. Capture: Temp/Flamethrower/copyable-sweep.png";
     }
 }

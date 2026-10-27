@@ -287,4 +287,52 @@ public class FlameSimTests {
         for (int i = 0; i < a.WindowSize * a.WindowSize; i++) Assert.AreEqual(a.CellHeat(i), b.CellHeat(i));
     }
 
+    private static FlameSimSettings BarrelPlume(bool flow) {
+        var s = Quiet(); s.cellularFlow = flow;
+        s.maxRange = 96; s.jetSpeed = 10; s.slugLength = 10; s.pulsePeriod = 1;
+        s.coreRadius = 1.5f; s.ribbonWidthScale = 2.4f;
+        s.coreNozzleScale = 0.3f; s.coreBloomPixels = 14;
+        s.coreFadeStart = 0.35f; s.coreFadeEnd = 0.85f;
+        s.radialFalloff = 0.65f; s.colorFalloff = 0.8f;
+        s.flowJetStability = 0.8f; s.flowHeat = 0.85f; s.flowCooling = 0.032f;
+        s.flowPressureIterations = 6; s.stepSeconds = 1f / 40;
+        return s;
+    }
+    private static int ColumnWidth(FlameSim sim, float x) {
+        int width = 0;
+        for (int y = -12; y <= 12; y++) if (sim.SampleWorld(x, y + 0.5f) > 0.08f) width++;
+        return width;
+    }
+    [Test] public void BarrelPlumeOpensFromANarrowNozzleIntoAWiderHotBody() {
+        var sim = new FlameSim(); var s = BarrelPlume(false);
+        for (int i = 0; i < 15; i++) sim.Step(true, default, default, s);
+        int mouth = ColumnWidth(sim, 0.5f), body = ColumnWidth(sim, 18.5f);
+        Assert.Greater(mouth, 0, "The flame must connect to the barrel");
+        Assert.GreaterOrEqual(body, 6);
+        Assert.GreaterOrEqual(body - mouth, 3, "The jet must open into a broad body after leaving the nozzle");
+        Assert.Greater(sim.SampleWorld(18.5f, 0.5f), 0.7f);
+        Assert.Less(sim.SampleWorld(18.5f, 3.5f), sim.SampleWorld(18.5f, 0.5f), "Cooler edges should surround the hot interior");
+    }
+    [Test] public void FadingTheRigidCoreStillFeedsHeatIntoTheCellularTip() {
+        var core = new FlameSim(); var flow = new FlameSim();
+        var direct = BarrelPlume(false); var cellular = BarrelPlume(true);
+        for (int i = 0; i < 30; i++) { core.Step(true, default, default, direct); flow.Step(true, default, default, cellular); }
+        int tip = 0;
+        for (int x = 85; x < 105; x++) for (int y = -20; y <= 20; y++) {
+            Assert.Less(core.SampleWorld(x + 0.5f, y + 0.5f), 0.08f, "The end must not retain a rigid beam");
+            if (flow.SampleWorld(x + 0.5f, y + 0.5f) > 0.08f) tip++;
+        }
+        Assert.Greater(tip, 10, "Cellular fire must survive beyond the directly rendered core");
+    }
+    [Test] public void ShortTipEmbersExtinguishWithinPointOneSecondsAtFortyHz() {
+        var sim = new FlameSim(); var s = Quiet();
+        s.maxRange = 4; s.jetSpeed = 4; s.slugLength = 1; s.pulsePeriod = 1000;
+        s.maxEmbers = 32; s.emberLifeMin = 2; s.emberLifeMax = 4;
+        s.emberHeat = 0.55f; s.emberRadius = 0.55f; s.stepSeconds = 1f / 40;
+        sim.Step(true, default, default, s);
+        Assert.Greater(sim.EmberCount, 0);
+        for (int tick = 0; tick < 4; tick++) sim.Step(false, default, default, s);
+        Assert.AreEqual(0, sim.EmberCount); Assert.AreEqual(0, sim.OccupiedCount);
+    }
+
 }

@@ -152,6 +152,7 @@ MonoBehaviour:
   damage: 70
   attackCooldown: 0
   maxAmmoCount: 100
+  useFuel: 0
   reloadTime: 1.2
   fuelPerSecond: 12
   refillInterval: 0.08
@@ -175,10 +176,10 @@ MonoBehaviour:
   windowSize: 288
   maxParticles: 512
   pixelsPerUnit: 32
-  simHz: 20
+  simHz: 40
   coreRibbon: 1
   ribbonSmoothness: 0.85
-  ribbonWidthScale: 1.75
+  ribbonWidthScale: 2.4
   ribbonTipTaper: 0.2
   maxRange: 96
   jetSpeed: 10
@@ -189,18 +190,24 @@ MonoBehaviour:
   coreWidthJitter: 0
   coreJitterChance: 0.1
   coreDroop: 0.004
-  coreRadius: 1
-  colorFalloff: 0.55
-  radialFalloff: 0.3
+  coreRadius: 2.5
+  colorFalloff: 0.8
+  radialFalloff: 0.65
+  coreNozzleScale: 0.18
+  coreBloomPixels: 14
+  coreFadeStart: 0.35
+  coreFadeEnd: 0.85
   cellularFlow: 1
   flowCellSize: 2
   flowSpeed: 3.5
   flowVorticity: 1.8
-  flowCooling: 0.022
-  flowBuoyancy: 0.035
+  flowCooling: 0.032
+  flowBuoyancy: 0.12
+  flowUpperBias: 0.8
   flowPerturbation: 0.35
-  flowHeat: 0.8
-  flowPressureIterations: 8
+  flowHeat: 0.85
+  flowJetStability: 0.8
+  flowPressureIterations: 6
   shedChance: 0.55
   flapWaveNumber: 0.22
   flapFreq: 0.7
@@ -218,11 +225,11 @@ MonoBehaviour:
   wingTrail: 1
   spread: 1
   emberGravity: 0.06
-  maxEmbers: 64
-  emberLifeMin: 3
-  emberLifeMax: 6
-  emberHeat: 0.75
-  emberRadius: 0.75
+  maxEmbers: 32
+  emberLifeMin: 2
+  emberLifeMax: 4
+  emberHeat: 0.55
+  emberRadius: 0.55
   cutoff: 0.08
   damageThreshold: 0.35
   coreHeatThreshold: 0.85

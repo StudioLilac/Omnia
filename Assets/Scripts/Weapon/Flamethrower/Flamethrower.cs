@@ -7,6 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(FlameEmitter))]
 public class Flamethrower : WeaponClass {
     [Header("Flamethrower")]
+    [Tooltip("Enable to restore fuel consumption. Disabled while tuning the fire.")]
+    public bool useFuel;
     [SerializeField] public float reloadTime = 1.2f;
     [SerializeField, Min(0.01f)] private float fuelPerSecond = 12;
     [SerializeField, Min(0.01f)] private float refillInterval = 0.08f;
@@ -75,10 +77,13 @@ public class Flamethrower : WeaponClass {
         if (weaponSprite != null) weaponSprite.flipY = flip;
         if (barrelPosition != null) barrelPosition.transform.localPosition = new Vector3(barrelOffset.x, flip ? -barrelOffset.y : barrelOffset.y, barrelOffset.z);
         burstTimer = Mathf.Max(0, burstTimer - Time.deltaTime);
-        bool firing = selected && (burstTimer > 0 || triggerHeld && CurrentAmmo > 0);
+        bool firing = selected && (burstTimer > 0 || triggerHeld && (!useFuel || CurrentAmmo > 0));
         Emitter.IsFiring = firing;
         Emitter.spread = Mathf.Max(0, Mathf.RoundToInt(defaultSpread * Mathf.Max(0, blastAngle) / 35f));
-        if (firing) {
+        if (!useFuel) {
+            CurrentAmmo = maxAmmoCount;
+            fuelSpent = refillTimer = idleTime = 0;
+        } else if (firing) {
             idleTime = refillTimer = 0;
             if (triggerHeld && burstTimer <= 0) {
                 fuelSpent += Time.deltaTime * fuelPerSecond;

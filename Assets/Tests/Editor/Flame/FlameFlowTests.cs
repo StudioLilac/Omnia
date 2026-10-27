@@ -111,4 +111,32 @@ public class FlameFlowTests {
             Assert.AreEqual(cells[i], sim.SampleWorld(ox + i % size + 0.5f, oy + i / size + 0.5f));
     }
 
+    [TestCase(0f)]
+    [TestCase(3.1415927f)]
+    public void UpperEddiesFavorWorldUpWhenAimingEitherDirection(float angle) {
+        var s = Jet(); s.coreDroop = 0;
+        s.coreRadius = 2.5f; s.ribbonWidthScale = 2.4f;
+        s.coreNozzleScale = 0.18f; s.coreBloomPixels = 14;
+        s.coreFadeStart = 0.35f; s.coreFadeEnd = 0.85f;
+        s.radialFalloff = 0.65f; s.colorFalloff = 0.8f;
+        s.flowHeat = 0.85f; s.flowCooling = 0.032f; s.flowJetStability = 0.8f;
+        s.flowUpperBias = 0.8f; s.flowBuoyancy = 0.12f; s.flowPressureIterations = 6;
+        var sim = new FlameSim(512, 288, 31); var pose = new FlamePose(0,0,angle);
+        double upper = 0, lower = 0;
+        for (int t = 0; t < 100; t++) {
+            sim.Step(true, pose, pose, s);
+            if (t < 40) continue;
+            for (int j = 0; j < sim.OccupiedCount; j++) {
+                int cell = sim.OccupiedIndex(j); float heat = sim.CellHeat(cell);
+                if (heat < 0.08f) continue;
+                float y = sim.OriginY + cell / sim.WindowSize + 0.5f;
+                // Exclude the broad core; measure the extent/heat of the outer wisps.
+                if (y > 8) upper += heat * (y - 8);
+                if (y < -8) lower += heat * (-y - 8);
+            }
+        }
+        Assert.Greater(upper, 100, "Upper wisps must actually develop");
+        Assert.Greater(upper, lower * 2, "The upper plume must dominate even when facing left");
+    }
+
 }

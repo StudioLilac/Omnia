@@ -46,19 +46,21 @@ public static class PreviewFlameEddies {
     public static string Animate() {
         const int window = 288, width = 256, height = 160, zoom = 3;
         var preset = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab").GetComponent<FlameEmitter>();
-        var settings = preset.Settings(0.05f);
+        float fps = preset.simHz;
+        var settings = preset.Settings(1 / fps);
         var sim = new FlameSim(512, window, preset.seed, preset.flowCellSize);
         var obj = EditorUtility.CreateGameObjectWithHideFlags("Cellular flame preview", HideFlags.HideAndDontSave);
         var renderer = obj.AddComponent<FlameRenderer>(); renderer.Initialize(window, 32, null, preset.flameMaterial);
         var output = new Texture2D(width * zoom, height * zoom, TextureFormat.RGBA32, false);
         var pixels = new Color32[width * height * zoom * zoom];
         var pose = new FlamePose();
-        string folder = "Temp/Flamethrower/cellular-frames"; Directory.CreateDirectory(folder);
+        string folder = "Temp/Flamethrower/barrel-plume-frames"; Directory.CreateDirectory(folder);
         try {
-            for (int tick = 0; tick < 30; tick++) sim.Step(true, pose, pose, settings);
-            for (int frame = 0; frame < 100; frame++) {
-                var next = new FlamePose(0, 0, frame >= 40 && frame < 60 ? (frame - 40) * Mathf.PI * 2 / 19 : 0);
-                sim.Step(frame < 80, pose, next, settings); pose = next;
+            for (int tick = 0; tick < Mathf.CeilToInt(fps); tick++) sim.Step(true, pose, pose, settings);
+            for (int frame = 0; frame < Mathf.RoundToInt(fps * 5); frame++) {
+                float seconds = frame / fps;
+                var next = new FlamePose(0, 0, seconds >= 2 && seconds < 3 ? (seconds - 2) * Mathf.PI * 2 : 0);
+                sim.Step(seconds < 4, pose, next, settings); pose = next;
                 renderer.Draw(sim, preset.palette, preset.cutoff, preset.ditherEdges);
                 for (int i = 0; i < pixels.Length; i++) pixels[i] = new Color32(25, 29, 39, 255);
                 var colors = renderer.Display.sprite.texture.GetPixels32();
@@ -72,7 +74,7 @@ public static class PreviewFlameEddies {
                 output.SetPixels32(pixels); output.Apply(false);
                 File.WriteAllBytes(folder + "/" + frame.ToString("D3") + ".png", output.EncodeToPNG());
             }
-            return "100 frames at 20 Hz: steady jet, fast full turn, steady jet, release. " + folder;
+            return fps + " FPS: steady jet, fast full turn, steady jet, release. " + folder;
         } finally { Object.DestroyImmediate(output); Object.DestroyImmediate(obj); }
     }
 
