@@ -176,37 +176,37 @@ MonoBehaviour:
   windowSize: 288
   maxParticles: 512
   pixelsPerUnit: 32
-  simHz: 40
+  simHz: 24
   coreRibbon: 1
   ribbonSmoothness: 0.85
-  ribbonWidthScale: 2.4
+  ribbonWidthScale: 4
   ribbonTipTaper: 0.2
-  maxRange: 96
-  jetSpeed: 10
+  maxRange: 128
+  jetSpeed: 8
   pulsePeriod: 1
-  slugLength: 10
+  slugLength: 1
   inheritVelocity: 0.3
   maxInheritedSpeed: 24
-  coreWidthJitter: 0
+  coreWidthJitter: 1
   coreJitterChance: 0.1
   coreDroop: 0.004
   coreRadius: 2.5
   colorFalloff: 0.8
   radialFalloff: 0.65
-  coreNozzleScale: 0.18
+  coreNozzleScale: 0.1
   coreBloomPixels: 14
   coreFadeStart: 0.35
   coreFadeEnd: 0.85
-  coreHeatVariation: 0.5
+  coreHeatVariation: 1
   coreHeatPatchLength: 10
   coreHeatPatchWidth: 3
   cellularFlow: 1
   flowCellSize: 2
-  flowSpeed: 3.5
-  flowVorticity: 1.8
+  flowSpeed: 6
+  flowVorticity: 2
   flowCooling: 0.032
   flowBuoyancy: 0.12
-  flowUpperBias: 0.8
+  flowUpperBias: 1
   flowPerturbation: 0.35
   flowHeat: 0.85
   flowJetStability: 0.8
@@ -228,7 +228,7 @@ MonoBehaviour:
   wingTrail: 1
   spread: 1
   emberGravity: 0.06
-  maxEmbers: 32
+  maxEmbers: 0
   emberLifeMin: 2
   emberLifeMax: 4
   emberHeat: 0.55
