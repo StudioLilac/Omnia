@@ -39,6 +39,7 @@ namespace Omnia.Fire {
         public bool coreRibbon;
         public float ribbonSmoothness, ribbonWidthScale, ribbonTipTaper, wingTrail;
         public float coreNozzleScale, coreBloomPixels, coreFadeStart, coreFadeEnd;
+        public float coreHeatVariation, coreHeatPatchLength, coreHeatPatchWidth;
         public bool cellularFlow;
         public float flowSpeed, flowVorticity, flowCooling, flowBuoyancy, flowPerturbation, flowHeat, flowJetStability, flowUpperBias;
         public int flowPressureIterations;
@@ -53,6 +54,7 @@ namespace Omnia.Fire {
             colorFalloff = 0.55f, releaseCooling = 1.5f, stepSeconds = 0.05f,
             coreRibbon = true, ribbonSmoothness = 0.85f, ribbonWidthScale = 1.75f, ribbonTipTaper = 0.2f, wingTrail = 1,
             coreNozzleScale = 1, coreFadeStart = 1, coreFadeEnd = 1,
+            coreHeatPatchLength = 10, coreHeatPatchWidth = 3,
             cellularFlow = true, flowSpeed = 3.5f, flowVorticity = 1.8f,
             flowCooling = 0.022f, flowBuoyancy = 0.035f, flowPerturbation = 0.35f,
             flowHeat = 0.8f, flowPressureIterations = 8
@@ -88,7 +90,8 @@ namespace Omnia.Fire {
         private readonly float[] sourceHeat;
         private bool stampingCore;
         private FlameVector stampVelocity;
-        private float injectionSpeed, stampDirect;
+        private float injectionSpeed, stampDirect, stampMaterial;
+        private float thermalVariation, thermalLength, thermalWidth, thermalSpeed;
         private int flowTick;
         public FlameFlow Flow => flow;
         public int Capacity => particles.Length;
@@ -310,6 +313,10 @@ namespace Omnia.Fire {
             Array.Clear(sourceVelocity, 0, sourceVelocity.Length);
             Array.Clear(sourceHeat, 0, sourceHeat.Length); stampDirect = 1;
             stampingCore = true; injectionSpeed = settings.flowSpeed;
+            thermalVariation = Clamp01(settings.coreHeatVariation);
+            thermalLength = Math.Max(1, settings.coreHeatPatchLength);
+            thermalWidth = Math.Max(1, settings.coreHeatPatchWidth);
+            thermalSpeed = Math.Max(0.1f, settings.jetSpeed);
             stampVelocity = new FlameVector((float)Math.Cos(rasterPose.angle), (float)Math.Sin(rasterPose.angle)) * injectionSpeed;
             if (settings.coreRibbon) RasterizeCoreRibbon(settings, collision);
             for (int i = 0; i < Capacity; i++) {
@@ -318,6 +325,7 @@ namespace Omnia.Fire {
                 if (settings.coreRibbon && particle.kind == FlameParticleKind.Core) continue;
                 float value = Heat(particle, settings);
                 stampingCore = particle.kind == FlameParticleKind.Core;
+                stampMaterial = StepIndex - particle.age;
                 stampVelocity = particle.vel.Normalized * injectionSpeed;
                 float radius = particle.kind == FlameParticleKind.Core ? settings.coreRadius
                     : particle.kind == FlameParticleKind.Wing ? settings.wingRadius : settings.emberRadius;
@@ -417,6 +425,7 @@ namespace Omnia.Fire {
             }
             if (ribbonCount == 1) {
                 stampDirect = ribbonDirect[0];
+                stampMaterial = StepIndex - Math.Max(0, ribbonAges[0]);
                 Stamp(ribbonPoints[0], ribbonRadius[0], ribbonHeat[0], settings.radialFalloff, collision);
             }
             float linkLimit = Math.Max(1, settings.maxRange) * 2 + Math.Max(0, settings.maxInheritedSpeed);
@@ -447,8 +456,10 @@ namespace Omnia.Fire {
                 float radiusDelta = ribbonRadius[i + 1] - ribbonRadius[i];
                 FlameVector last = a;
                 float lastValue = ribbonHeat[i], lastRadius = ribbonRadius[i], lastDirect = ribbonDirect[i];
+                float ageA = Math.Max(0, ribbonAges[i]), ageB = Math.Max(0, ribbonAges[i + 1]);
+                float lastMaterial = StepIndex - ageA;
                 if (collision != null && collision.HitsSolid(a, a)) continue;
-                stampDirect = ribbonDirect[i];
+                stampDirect = ribbonDirect[i]; stampMaterial = lastMaterial;
                 Stamp(a, ribbonRadius[i], ribbonHeat[i], settings.radialFalloff, collision);
                 for (int j = 1; j <= samples; j++) {
                     float t = j * inverseSamples;
@@ -461,15 +472,16 @@ namespace Omnia.Fire {
                     // Flatten the curve in short spans, then rasterize every intervening
                     // pixel. This avoids expensive cubic evaluation for duplicate pixels.
                     float direct = ribbonDirect[i] + (ribbonDirect[i + 1] - ribbonDirect[i]) * t;
-                    StampSegment(last, point, lastRadius, radius, lastValue, value, settings.radialFalloff, collision, false, true, lastDirect, direct);
+                    float material = StepIndex - (ageA + (ageB - ageA) * t);
+                    StampSegment(last, point, lastRadius, radius, lastValue, value, settings.radialFalloff, collision, false, true, lastDirect, direct, lastMaterial, material);
                     last = point;
-                    lastValue = value; lastRadius = radius; lastDirect = direct;
+                    lastValue = value; lastRadius = radius; lastDirect = direct; lastMaterial = material;
                 }
             }
         }
 
         private void StampSegment(FlameVector from, FlameVector to, float fromRadius, float toRadius,
-            float fromHeat, float toHeat, float falloff, IFlameCollision collision, bool includeStart = true, bool pathChecked = false, float fromDirect = 1, float toDirect = 1) {
+            float fromHeat, float toHeat, float falloff, IFlameCollision collision, bool includeStart = true, bool pathChecked = false, float fromDirect = 1, float toDirect = 1, float fromMaterial = 0, float toMaterial = 0) {
             FlameVector delta = to - from;
             if (stampingCore && delta.Length > 0.0001f) stampVelocity = delta.Normalized * injectionSpeed;
             int count = Math.Max(1, (int)Math.Ceiling(Math.Max(Math.Abs(delta.x), Math.Abs(delta.y))));
@@ -478,16 +490,36 @@ namespace Omnia.Fire {
                 float t = (float)i / count;
                 FlameVector point = from + delta * t;
                 if (!pathChecked && collision != null && collision.HitsSolid(last, point)) break;
-                if (stampingCore) stampDirect = fromDirect + (toDirect - fromDirect) * t;
+                if (stampingCore) {
+                    stampDirect = fromDirect + (toDirect - fromDirect) * t;
+                    stampMaterial = fromMaterial + (toMaterial - fromMaterial) * t;
+                }
                 Stamp(point, fromRadius + (toRadius - fromRadius) * t, fromHeat + (toHeat - fromHeat) * t, falloff, collision);
                 last = point;
             }
+        }
+
+        private float ThermalHash(int x, int y) {
+            uint h;
+            unchecked {
+                h = (uint)x * 73856093u ^ (uint)y * 19349663u ^ initialSeed;
+                h ^= h >> 13; h *= 1274126177u; h ^= h >> 16;
+            }
+            return (h & 0xffffff) * (1f / 16777216f);
+        }
+        private float ThermalNoise(float x, float y) {
+            int ix = (int)Math.Floor(x), iy = (int)Math.Floor(y);
+            float fx = Smooth01(x - ix), fy = Smooth01(y - iy);
+            float a = ThermalHash(ix, iy), b = ThermalHash(ix + 1, iy);
+            float c = ThermalHash(ix, iy + 1), d = ThermalHash(ix + 1, iy + 1);
+            return (a + (b - a) * fx) * (1 - fy) + (c + (d - c) * fx) * fy;
         }
 
         private void Stamp(FlameVector position, float radius, float value, float falloff, IFlameCollision collision) {
             int cx = (int)Math.Floor(position.x) - OriginX, cy = (int)Math.Floor(position.y) - OriginY;
             radius = Math.Max(0, Math.Min(8, radius));
             float squared = radius * radius + 0.25f;
+            FlameVector forward = stampingCore && thermalVariation > 0 ? stampVelocity.Normalized : default;
             // The disk's actual integer footprint is smaller than ceil(radius).
             // In particular, subpixel wisps occupy one cell, not a 3x3 search.
             int extent = (int)radius;
@@ -497,6 +529,15 @@ namespace Omnia.Fire {
                 int distance = dx * dx + dy * dy;
                 if (x < 0 || y < 0 || x >= WindowSize || y >= WindowSize || distance > squared) continue;
                 float sample = value * Math.Max(0, 1 - Math.Max(0, falloff) * distance / squared);
+                if (stampingCore && thermalVariation > 0) {
+                    float ox = OriginX + x + 0.5f - position.x, oy = OriginY + y + 0.5f - position.y;
+                    // Emission time is a material coordinate: hot/cool pockets travel
+                    // with the jet rather than flickering as independent screen noise.
+                    float along = stampMaterial * thermalSpeed - ox * forward.x - oy * forward.y;
+                    float across = -ox * forward.y + oy * forward.x;
+                    float coolPocket = 1 - ThermalNoise(along / thermalLength, across / thermalWidth);
+                    sample *= 1 - thermalVariation * coolPocket * coolPocket;
+                }
                 int index = y * WindowSize + x;
                 if (sample <= heat[index] && (!stampingCore || sample <= sourceHeat[index])) continue;
                 // A thick stamp must not bleed across a one-pixel wall either.

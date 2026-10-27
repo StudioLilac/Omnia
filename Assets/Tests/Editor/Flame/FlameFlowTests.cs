@@ -91,6 +91,7 @@ public class FlameFlowTests {
     }
     [Test] public void SteadyCellularTicksAllocateNoManagedMemory() {
         var sim = new FlameSim(); var s = Jet();
+        s.coreHeatVariation = 0.5f;
         for (int t = 0; t < 40; t++) sim.Step(true, default, default, s);
         long before = GC.GetAllocatedBytesForCurrentThread();
         for (int t = 0; t < 50; t++) sim.Step(true, default, default, s);

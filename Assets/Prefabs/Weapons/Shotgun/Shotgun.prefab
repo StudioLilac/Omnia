@@ -197,6 +197,9 @@ MonoBehaviour:
   coreBloomPixels: 14
   coreFadeStart: 0.35
   coreFadeEnd: 0.85
+  coreHeatVariation: 0.5
+  coreHeatPatchLength: 10
+  coreHeatPatchWidth: 3
   cellularFlow: 1
   flowCellSize: 2
   flowSpeed: 3.5

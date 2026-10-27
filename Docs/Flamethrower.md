@@ -1,10 +1,10 @@
 # World-space flamethrower
 
-The fire opens from the barrel into a broad hot jet, then breaks into cellular flame farther downstream. A connected world-space carrier supplies heat and momentum to a persistent lattice in `FlameFlow.cs`. Its directly rendered center fades before the end of the range, leaving the evolving heat field to define the tip.
+The fire opens from the barrel into a broad hot jet, then breaks into cellular flame farther downstream. A connected world-space carrier supplies heat and momentum to a persistent lattice in `FlameFlow.cs`. Its directly rendered center fades before the end of the range, leaving the evolving heat field to define the tip. Coherent hot/cool pockets now travel with the emitted material across the broad core, with a twelve-color ramp giving orange, gold, yellow, cream and occasional white highlights.
 
 ## How the fire develops
 
-1. `FlameSim` advances the world-space core particles and rasterizes their connected ribbon. Its width grows from a narrow nozzle to a broad body over Core Bloom Pixels. Heat and the ribbon's local forward velocity feed the lattice independently of the directly rendered core fading out.
+1. `FlameSim` advances the world-space core particles and rasterizes their connected ribbon. Its width grows from a narrow nozzle to a broad body over Core Bloom Pixels. Emission-age and cross-stream coordinates sample smooth seeded temperature patches. Their pattern travels with the material instead of changing randomly per screen pixel. This temperature variation modulates both the direct core heat and the heat supplied to the flow. Heat and the ribbon's local forward velocity feed the lattice independently of the directly rendered core fading out.
 2. The lattice mixes that momentum into the surrounding slow air. Small seeded disturbances break perfect symmetry. Flow Jet Stability reduces disturbances and vorticity amplification in the hottest injected cells so the near-nozzle body stays coherent before the downstream rolls develop.
 3. Each cell advects its velocity from neighboring cells. World-up buoyancy acts on hot cells.
 4. Neighbor differences measure curl. Vorticity confinement restores rotational energy lost to numerical diffusion at pixel resolution. Pressure projection redistributes velocity to reduce compression and create entrainment around the jet. Flow Upper Bias uses the local vertical heat gradient to strengthen circulation on upward-facing edges and damp it underneath; it stays tied to world up when aiming left or sweeping.
@@ -28,6 +28,8 @@ Edit **Flame Emitter** on `Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab`.
 | Core Radius / Radial Falloff | 2.5 / 0.65 | About 11–13 pixels across the broad body, with cooler orange edges around the hot interior. |
 | Core Nozzle Scale / Bloom Pixels | 0.18 / 14 | Width at the barrel relative to the body / distance over which the jet opens up. |
 | Core Fade Start / End | 0.35 / 0.85 | Fractions of Max Range over which the rigid center gives way to the cellular field. Heat/momentum still feed the lattice throughout the carrier. Equal endpoints disable this handoff. |
+| Core Heat Variation | 0.5 | Strength of cooler pockets inside the hot body. Zero restores the uniform center. Hot pockets retain white/cream highlights; cooler ones show yellow/orange. |
+| Core Heat Patch Length / Width | 10 / 3 pixels | Coherent temperature patch size along and across emitted material. |
 | Cellular Flow | on | Persistent neighbor-based heat/velocity simulation; off restores legacy wing particles for comparison. |
 | Flow Cell Size | 2 pixels | Velocity/pressure resolution. Heat and damage always retain one cell per game pixel. Set before Play; 1 enables the full-resolution reference solver. |
 | Flow Speed | 3.5 pixels/tick | Momentum fed into the surrounding heat lattice. Independent of the fast core's propagation speed. |
@@ -47,7 +49,7 @@ Edit **Flame Emitter** on `Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab`.
 | Damage Threshold / Core Heat Threshold | 0.35 / 0.85 | Minimum damaging heat / threshold distinguishing core damage from cooler burn damage. |
 | Core / Wing Damage Multiplier | 1 / 0.6 | Heat-weighted damage scaling. Cellular wisps use the cooler multiplier. |
 | Release Cooling | 1.5 heat/second | Additional cooling after emission stops. |
-| Palette | Fire.asset | Swap for BlueFire.asset or another **Omnia > Flame Palette** asset. |
+| Palette | Fire.asset (12 colors) | Swap for BlueFire.asset or another **Omnia > Flame Palette** asset. |
 
 The **Legacy Wings** particle parameters are retained for comparison when Cellular Flow is disabled. They do not control the new lattice. Embers remain short-lived world-space particles at core breakup. Velocities, flow cooling and lifetimes are tick-based: increasing Animation FPS to 40 doubles temporal motion and cooling relative to 20 FPS while preserving the 96-pixel core range. Damage remains scaled by tick duration.
 
@@ -61,16 +63,17 @@ Core motion and ribbon links use swept collisions. The flow builds a solid-cell 
 
 ## Verification and previews
 
-- `FlameSimTests`: nozzle-to-body expansion, cooler core edges, cellular heat beyond the faded direct core, fast ember cleanup; seeded repeatability; existing-particle independence from nozzle changes; core continuity during fast turns; curved-ribbon collision; range and color controls; caps; release cleanup; world gravity; retained legacy wings.
+- `FlameSimTests`: temperature variation along and across the center; material-following temperature after aim changes; nozzle-to-body expansion, cooler core edges, cellular heat beyond the faded direct core, fast ember cleanup; seeded repeatability; existing-particle independence from nozzle changes; core continuity during fast turns; curved-ribbon collision; range and color controls; caps; release cleanup; world gravity; retained legacy wings.
 - `FlameFlowTests`: backward-moving hot cells and both signs of curl without wing particles; nozzle-independent lingering heat/velocity; world preservation when recentering; one-pixel wall transport; clear/reset; allocation checks; upper-plume dominance while aiming right and left.
 - `AgentScripts/PreviewFlameEddies.cs`, entry `Run`: legacy backward points on the left, cellular flow on the right, at three successive times. Entry `Animate`: five seconds at the preset Animation FPS of a steady jet, fast full turn, steady jet and release, saved under `Temp/Flamethrower/barrel-plume-frames`.
 - `AgentScripts/PreviewBarrelPlume.cs`: previous thin 20 FPS core on the left, broad 40 FPS barrel plume on the right in `Temp/Flamethrower/barrel-plume-comparison.png`.
 - `AgentScripts/PreviewRisingFire.cs`: previous balanced plume on the left, stronger upper eddies and a restrained underside on the right, in `Temp/Flamethrower/rising-fire-comparison.png`.
+- `AgentScripts/PreviewTemperatureFire.cs`: previous uniform center/six-color ramp on the left, thermal pockets/twelve-color ramp on the right, in `Temp/Flamethrower/temperature-comparison.png`.
 - `AgentScripts/PlaytestFlamethrower.cs`: unlimited fire from an empty tank, sustained fire with a one-unit tank, optional fuel depletion and restart; CopyableScene Play-mode checks for a fast sweep, player movement, old-trail and hidden-weapon damage, release, and a one-pixel physics wall.
 - `AgentScripts/ValidateFlamethrower.cs`: pixel alignment, binary alpha, query agreement, allocation and timing measurements. Timings exclude physics, texture upload, enemy callbacks and GPU time.
 
 This lattice costs more than the former curve stamps. Measure its timing separately from the older ribbon-only benchmark; the original 0.2 ms simulation budget is not assumed to hold for the pressure/heat solver.
 
-Performance remains above the original 0.2 ms budget. The wider 40 FPS preset measured 8.90 ms per simulation tick in the Editor with zero managed allocations (prior 20 FPS preset: 9.84 ms/tick). The higher tick rate increases total CPU work per second despite the slightly cheaper individual tick. All 30 flame tests passed, including world-up plume dominance for left and right aim. CopyableScene live checks passed for unlimited fire from empty, sustained firing, the optional fuel toggle, sweeping, lingering damage, release and walls. Timings exclude physics, texture upload, enemy callbacks and GPU work.
+Performance remains above the original 0.2 ms budget. The temperature-varied 40 FPS preset measured 11.25 ms per simulation tick in the Editor with zero managed allocations (previous broad-core preset: 8.90 ms/tick). The higher tick rate increases total CPU work per second despite the slightly cheaper individual tick. All 32 flame tests passed, including material-carried temperature pockets, variation across the center, zero allocations with core variation enabled, and world-up plume dominance for left and right aim. CopyableScene live checks passed for unlimited fire from empty, sustained firing, the optional fuel toggle, sweeping, lingering damage, release and walls. Timings exclude physics, texture upload, enemy callbacks and GPU work.
 
-Animated preview: `Temp/Flamethrower/rising-fire.gif` (steady jet, full turn, steady jet, release at 40 FPS).
+Animated preview: `Temp/Flamethrower/temperature-fire.gif` (steady jet, full turn, steady jet, release at 40 FPS).

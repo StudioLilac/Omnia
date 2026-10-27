@@ -137,6 +137,24 @@ public static class ConfigureFlamethrower {
         }
         return "Fuel disabled; buoyant upper eddies amplified and underside circulation reduced in world space.";
     }
+    public static string SetTemperaturePockets() {
+        const string path = "Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab";
+        var root = PrefabUtility.LoadPrefabContents(path);
+        try {
+            var emitter = root.GetComponent<FlameEmitter>();
+            emitter.coreHeatVariation = 0.5f; emitter.coreHeatPatchLength = 10; emitter.coreHeatPatchWidth = 3;
+            PrefabUtility.SaveAsPrefabAsset(root, path);
+        } finally { PrefabUtility.UnloadPrefabContents(root); }
+        var palette = AssetDatabase.LoadAssetAtPath<FlamePalette>("Assets/Scripts/Weapon/Flamethrower/Fire.asset");
+        var defaults = ScriptableObject.CreateInstance<FlamePalette>();
+        try { palette.colors = defaults.colors; EditorUtility.SetDirty(palette); AssetDatabase.SaveAssetIfDirty(palette); }
+        finally { Object.DestroyImmediate(defaults); }
+        if (Application.isPlaying)
+            foreach (var emitter in Object.FindObjectsByType<FlameEmitter>()) {
+                emitter.coreHeatVariation = 0.5f; emitter.coreHeatPatchLength = 10; emitter.coreHeatPatchWidth = 3;
+            }
+        return "Advected core temperature pockets enabled with a twelve-color fire ramp.";
+    }
     private static string Configure(bool resetRules) {
         const string path = "Assets/Prefabs/Weapons/Shotgun/Shotgun.prefab";
         var root = PrefabUtility.LoadPrefabContents(path);

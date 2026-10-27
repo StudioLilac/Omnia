@@ -36,6 +36,11 @@ namespace Omnia.Fire {
         [Tooltip("Range fractions over which the smooth core gives way to the cellular fire. Heat still feeds the flow.")]
         [Range(0, 1)] public float coreFadeStart = 0.35f;
         [Range(0, 1)] public float coreFadeEnd = 0.85f;
+        [Header("Core Temperature Pockets")]
+        [Tooltip("Heat variation carried by emitted material. Zero restores a uniform core.")]
+        [Range(0, 1)] public float coreHeatVariation = 0.5f;
+        [Min(1)] public float coreHeatPatchLength = 10;
+        [Min(1)] public float coreHeatPatchWidth = 3;
         [Header("Cellular Heat Flow")]
         [Tooltip("Advect heat through a persistent world-space velocity grid. The jet's shear generates eddies.")]
         public bool cellularFlow = true;
@@ -144,6 +149,7 @@ namespace Omnia.Fire {
             ribbonTipTaper = ribbonTipTaper, wingTrail = wingTrail,
             coreNozzleScale = coreNozzleScale, coreBloomPixels = coreBloomPixels,
             coreFadeStart = coreFadeStart, coreFadeEnd = coreFadeEnd,
+            coreHeatVariation = coreHeatVariation, coreHeatPatchLength = coreHeatPatchLength, coreHeatPatchWidth = coreHeatPatchWidth,
             flowJetStability = flowJetStability,
             cellularFlow = cellularFlow, flowSpeed = flowSpeed, flowVorticity = flowVorticity,
             flowCooling = flowCooling, flowBuoyancy = flowBuoyancy, flowUpperBias = flowUpperBias, flowPerturbation = Mathf.Clamp01(flowPerturbation * spread),

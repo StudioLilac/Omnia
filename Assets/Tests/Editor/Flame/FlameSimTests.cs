@@ -335,4 +335,48 @@ public class FlameSimTests {
         Assert.AreEqual(0, sim.EmberCount); Assert.AreEqual(0, sim.OccupiedCount);
     }
 
+    [Test] public void CoreTemperaturePocketsVaryAlongAndAcrossTheHotBody() {
+        var plain = BarrelPlume(false); plain.coreDroop = 0;
+        plain.coreRadius = 2.5f; plain.coreNozzleScale = 0.18f;
+        var varied = plain; varied.coreHeatVariation = 0.5f;
+        varied.coreHeatPatchLength = 10; varied.coreHeatPatchWidth = 3;
+        var a = new FlameSim(); var b = new FlameSim();
+        for (int t = 0; t < 16; t++) { a.Step(true, default, default, plain); b.Step(true, default, default, varied); }
+        int coolPockets = 0;
+        float minAcross = 1, maxAcross = 0;
+        for (int x = 6; x < 32; x++) for (int y = -3; y <= 3; y++) {
+            float uniform = a.SampleWorld(x + 0.5f, y + 0.5f), heat = b.SampleWorld(x + 0.5f, y + 0.5f);
+            Assert.That(heat, Is.InRange(0, uniform + 0.000001f));
+            if (uniform < 0.35f) continue;
+            if (heat < uniform - 0.05f) coolPockets++;
+            if (x == 20) { minAcross = Math.Min(minAcross, heat / uniform); maxAcross = Math.Max(maxAcross, heat / uniform); }
+        }
+        Assert.Greater(coolPockets, 20, "The center must contain cooler patches, not one flat white bar");
+        Assert.Greater(maxAcross - minAcross, 0.04f, "Variation must cross the body rather than form whole-width bands");
+    }
+    [Test] public void TemperaturePatternTravelsWithEmittedMaterialAfterAimChanges() {
+        var plain = Quiet(); plain.coreRibbon = false; plain.coreDroop = 0;
+        plain.maxRange = 1000; plain.jetSpeed = 2; plain.slugLength = 1;
+        plain.coreRadius = 3; plain.pulsePeriod = 1000;
+        var varied = plain; varied.coreHeatVariation = 0.5f;
+        varied.coreHeatPatchLength = 10; varied.coreHeatPatchWidth = 3;
+        var a = new FlameSim(); var b = new FlameSim();
+        a.Step(true, default, default, plain); b.Step(true, default, default, varied);
+        var position = b.ParticleAt(0).pos;
+        var ratios = new float[9]; int index = 0;
+        for (int y = -1; y <= 1; y++) for (int x = -1; x <= 1; x++)
+            ratios[index++] = b.SampleWorld(position.x + x + 0.5f, position.y + y + 0.5f)
+                / a.SampleWorld(position.x + x + 0.5f, position.y + y + 0.5f);
+        for (int t = 0; t < 5; t++) {
+            a.Step(false, default, default, plain);
+            b.Step(false, default, new FlamePose(600, -400, 3), varied);
+            position = b.ParticleAt(0).pos; index = 0;
+            for (int y = -1; y <= 1; y++) for (int x = -1; x <= 1; x++) {
+                float ratio = b.SampleWorld(position.x + x + 0.5f, position.y + y + 0.5f)
+                    / a.SampleWorld(position.x + x + 0.5f, position.y + y + 0.5f);
+                Assert.AreEqual(ratios[index++], ratio, 0.00001f, "Color pockets should travel with the material, not re-randomize per frame");
+            }
+        }
+    }
+
 }
