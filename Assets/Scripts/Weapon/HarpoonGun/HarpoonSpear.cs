@@ -169,11 +169,13 @@ public class HarpoonSpear : MonoBehaviour {
 
         TaggedEnemies.Add(enemy);
 
-        if (enemy.WeightType == EnemyWeightType.Light) {
-            SkewerLightEnemy(enemy);
-            return;
-        } else if (enemy.WeightType == EnemyWeightType.Heavy) {
-            StunHeavyEnemy(enemy);
+        switch(enemy.WeightType) {
+            case EnemyWeightType.Light:
+                SkewerLightEnemy(enemy);
+                return;
+            case EnemyWeightType.Heavy:
+                StunHeavyEnemy(enemy);
+                break;
         }
 
         DoDamage(enemy);

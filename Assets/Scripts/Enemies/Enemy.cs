@@ -27,6 +27,7 @@ namespace Enemies {
         [SerializeField] internal float knockbackForce = 10f;
         [SerializeField] internal float knockbackAngle = 45f;
         [SerializeField] internal float staggerDurationS = 1f;
+        [SerializeField] internal GameObject stunEffect;
 
         protected IBehaviour behaviour;
         public IBehaviour prevBehaviour { get; protected set; }

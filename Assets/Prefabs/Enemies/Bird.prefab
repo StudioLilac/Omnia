@@ -169,7 +169,7 @@ MonoBehaviour:
   knockbackForce: 10
   knockbackAngle: 0
   staggerDurationS: 0
-  stunIdleNormalizedTime: 0
+  stunEffect: {fileID: 2820606287624141991}
   detectionRadius: 10
   fuse: 5
   triggerDistance: 1

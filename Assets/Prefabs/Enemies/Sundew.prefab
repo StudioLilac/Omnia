@@ -482,7 +482,7 @@ MonoBehaviour:
   knockbackForce: 8
   knockbackAngle: 45
   staggerDurationS: 1
-  stunIdleNormalizedTime: 0
+  stunEffect: {fileID: 9184371171822434598}
   windup: 1
   reload: 1
   spread: 0.05

@@ -35,14 +35,12 @@ namespace Enemies.Armadillo {
         [SerializeField] internal GameObject deathExplosion;
         [SerializeField] internal ParticleSystem dirtParticles;
 
-        private Transform stunEffect;
         private float stunEffectHeadX;
 
 #nullable enable
         internal Player? aggrodPlayer;
         public void Awake() {
-            stunEffect = animator.transform.Find("StunEffect");
-            if (stunEffect) stunEffectHeadX = Mathf.Abs(stunEffect.localPosition.x);
+            if (stunEffect) stunEffectHeadX = Mathf.Abs(stunEffect.transform.localPosition.x);
             UseBehaviour(new Move(this));
         }
 
@@ -55,9 +53,9 @@ namespace Enemies.Armadillo {
         }
 
         private void drawStunEffect() {
-            var position = stunEffect.localPosition;
+            var position = stunEffect.transform.localPosition;
             position.x = sprite.flipX ? stunEffectHeadX : -stunEffectHeadX;
-            stunEffect.localPosition = position;
+            stunEffect.transform.localPosition = position;
         }
 
         internal override void OnStunned() {

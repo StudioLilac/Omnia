@@ -2734,7 +2734,7 @@ MonoBehaviour:
   knockbackForce: 10
   knockbackAngle: 45
   staggerDurationS: 0
-  stunIdleNormalizedTime: 0
+  stunEffect: {fileID: 8406930116676227835}
   maxShieldHealth: 0
   sprite: {fileID: 9202038865644320477}
   animator: {fileID: 6149703548532306918}
