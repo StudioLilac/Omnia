@@ -28,8 +28,8 @@ try {
     objects.Add(stone); objects.Add(dirt);
     foreach (var terrain in new[] { stone, dirt }) {
         for (int i = 0; i < 16; i++) {
-            terrain.visualTiles[i] = UnityEngine.ScriptableObject.CreateInstance<UnityEngine.Tilemaps.Tile>();
-            objects.Add(terrain.visualTiles[i]);
+            terrain.tileSets[0].tiles[i] = UnityEngine.ScriptableObject.CreateInstance<UnityEngine.Tilemaps.Tile>();
+            objects.Add(terrain.tileSets[0].tiles[i]);
         }
     }
     var positions = new[] {
@@ -43,7 +43,7 @@ try {
             var map = visual.GetComponentsInChildren<UnityEngine.Tilemaps.Tilemap>()
                 .FirstOrDefault(m => m.name == terrain.name);
             var actual = map == null ? null : map.GetTile(UnityEngine.Vector3Int.zero);
-            var expected = mask == 0 ? null : terrain.visualTiles[frameByMask[mask]];
+            var expected = mask == 0 ? null : terrain.GetVisualTile(frameByMask[mask], UnityEngine.Vector3Int.zero);
             Check(actual == expected, terrain.name + " has wrong tile for mask " + mask);
             if (map != null) {
                 Check(map.transform.localPosition == UnityEngine.Vector3.zero, "Layer offset changed");
@@ -71,6 +71,7 @@ try {
     foreach (var map in visual.GetComponentsInChildren<UnityEngine.Tilemaps.Tilemap>())
         Check(map.GetUsedTilesCount() == 0, "Stale artwork after erase");
     // Undo/redo must restore both the data identity and all derived layers.
+    UnityEditor.Undo.IncrementCurrentGroup();
     UnityEditor.Undo.RegisterCompleteObjectUndo(data, "Verify dual grid terrain");
     data.SetTile(UnityEngine.Vector3Int.zero, stone);
     UnityEditor.Undo.FlushUndoRecordObjects();
@@ -81,6 +82,7 @@ try {
     Check(data.GetTile(UnityEngine.Vector3Int.zero) == stone, "Redo data");
     VerifyCell(2, 0);
     UnityEditor.Undo.ClearUndo(data);
+    UnityEditor.Undo.IncrementCurrentGroup();
     // A second owner cannot share the first owner's generated layers.
     var otherRoot = new UnityEngine.GameObject("Second grid", typeof(UnityEngine.Grid));
     otherRoot.transform.SetParent(root.transform, false);
@@ -100,12 +102,12 @@ try {
         UnityEngine.ScriptableObject.CreateInstance<DualGridTerrainTile>() };
     objects.Add(four[2]); objects.Add(four[3]);
     four[2].name = "Sand"; four[3].name = "Snow";
-    four[2].visualTiles = stone.visualTiles;
-    four[3].visualTiles = dirt.visualTiles;
+    four[2].tileSets[0].tiles = stone.tileSets[0].tiles;
+    four[3].tileSets[0].tiles = dirt.tileSets[0].tiles;
     for (int i = 0; i < 4; i++) data.SetTile(positions[i], four[i]);
     for (int i = 0; i < 4; i++) {
         var layer = visual.GetComponentsInChildren<UnityEngine.Tilemaps.Tilemap>().Single(m => m.name == four[i].name);
-        Check(layer.GetTile(UnityEngine.Vector3Int.zero) == four[i].visualTiles[frameByMask[1 << i]], "Four-material corner");
+        Check(layer.GetTile(UnityEngine.Vector3Int.zero) == four[i].GetVisualTile(frameByMask[1 << i], UnityEngine.Vector3Int.zero), "Four-material corner");
     }
     grid.RebuildAll();
     Check(visual.GetComponentsInChildren<UnityEngine.Tilemaps.Tilemap>().Length == 5, "Rebuild duplicated layers");
@@ -116,6 +118,82 @@ try {
     data.SetTile(positions[0], ordinary);
     data.SetTile(positions[1], stone);
     VerifyCell(2, 0);
+    // Sparse alternatives: every available tile has equal weight; absent slots retain the base.
+    var baseSet = stone.tileSets[0];
+    var variant1 = new DualGridTerrainTile.TileSet();
+    var variant2 = new DualGridTerrainTile.TileSet();
+    foreach (var set in new[] { variant1, variant2 }) {
+        set.tiles[6] = UnityEngine.ScriptableObject.CreateInstance<UnityEngine.Tilemaps.Tile>();
+        objects.Add(set.tiles[6]);
+    }
+    stone.tileSets = new[] { baseSet, variant1, variant2 };
+    var buckets = new int[3];
+    var randomState = UnityEngine.Random.state;
+    for (int y = -64; y < 64; y++) {
+        for (int x = -64; x < 64; x++) {
+            var p = new UnityEngine.Vector3Int(x, y, 0);
+            var chosen = stone.GetVisualTile(6, p);
+            Check(chosen == stone.GetVisualTile(6, p), "Variation changed at the same position");
+            int index = chosen == baseSet.tiles[6] ? 0 : chosen == variant1.tiles[6] ? 1 : chosen == variant2.tiles[6] ? 2 : -1;
+            Check(index >= 0, "Invalid alternative");
+            buckets[index]++;
+            Check(stone.GetVisualTile(15, p) == baseSet.tiles[15], "Sparse slot did not use base");
+        }
+    }
+    Check(UnityEngine.Random.state.Equals(randomState), "Variation consumed gameplay Random");
+    foreach (var count in buckets)
+        Check(count > 4900 && count < 6000, "Three-way variation distribution: " + string.Join(",", buckets));
+    // A missing entry is skipped, not counted as another chance of selecting the base.
+    var alternative = variant2.tiles[6];
+    variant2.tiles[6] = null;
+    int alternativeCount = 0;
+    for (int x = -4096; x < 4096; x++) {
+        if (stone.GetVisualTile(6, new UnityEngine.Vector3Int(x, 17, 0)) == variant1.tiles[6]) alternativeCount++;
+    }
+    Check(alternativeCount > 3800 && alternativeCount < 4400, "Sparse alternatives were not uniform");
+    variant2.tiles[6] = alternative;
+    // Changing the seed reshuffles choices; blank base cells remain blank in every set.
+    int changed = 0;
+    for (int x = 0; x < 256; x++) {
+        var p = new UnityEngine.Vector3Int(x, -7, 0);
+        stone.variationSeed = 0;
+        var before = stone.GetVisualTile(6, p);
+        stone.variationSeed = 123;
+        if (stone.GetVisualTile(6, p) != before) changed++;
+    }
+    Check(changed > 100, "Seed did not reshuffle variations");
+    baseSet.tiles[12] = null;
+    variant1.tiles[12] = variant1.tiles[6];
+    Check(stone.GetVisualTile(12, UnityEngine.Vector3Int.zero) == null, "Blank base slot gained artwork");
+    Check(stone.GetVisualTile(-1, UnityEngine.Vector3Int.zero) == null, "Invalid slot");
+    Check(stone.GetVisualTile(16, UnityEngine.Vector3Int.zero) == null, "Invalid slot");
+    // Rendering uses the same choices on incremental refresh, full rebuild, and undo.
+    data.ClearAllTiles();
+    for (int y = -4; y <= 4; y++)
+        for (int x = -4; x <= 4; x++) data.SetTile(new UnityEngine.Vector3Int(x,y,0), stone);
+    var stoneMap = visual.GetComponentsInChildren<UnityEngine.Tilemaps.Tilemap>().Single(m => m.name == stone.name);
+    var beforeRebuild = stoneMap.GetTilesBlock(stoneMap.cellBounds);
+    var beforeBounds = stoneMap.cellBounds;
+    grid.RebuildAll();
+    Check(beforeRebuild.SequenceEqual(stoneMap.GetTilesBlock(beforeBounds)), "Rebuild reshuffled variation");
+    for (int y = -3; y <= 3; y++)
+        for (int x = -3; x <= 3; x++) {
+            var p = new UnityEngine.Vector3Int(x,y,0);
+            Check(stoneMap.GetTile(p) == stone.GetVisualTile(6, p), "Renderer did not select variation");
+        }
+    stone.tileSets = new[] { baseSet, null, new DualGridTerrainTile.TileSet { tiles = null } };
+    Check(stone.GetVisualTile(6, UnityEngine.Vector3Int.zero) == baseSet.tiles[6], "Malformed optional sets broke fallback");
+    // Unity serializes cleared legacy arrays as [], so repeated deserialization must be harmless.
+    var legacyField = typeof(DualGridTerrainTile).GetField("legacyVisualTiles", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+    var migrated = UnityEngine.ScriptableObject.CreateInstance<DualGridTerrainTile>();
+    objects.Add(migrated);
+    legacyField.SetValue(migrated, baseSet.tiles);
+    migrated.OnAfterDeserialize();
+    Check(migrated.tileSets[0].tiles == baseSet.tiles, "Single-set migration lost artwork");
+    migrated.tileSets = new[] { baseSet, variant1, variant2 };
+    legacyField.SetValue(migrated, new UnityEngine.Tilemaps.TileBase[0]);
+    migrated.OnAfterDeserialize();
+    Check(migrated.tileSets.Length == 3 && migrated.tileSets[1] == variant1, "Reload discarded variation sets");
     return "PASS: 81 mixed-terrain arrangements, incremental/rebuild parity, replacement, erasure, collision, sorting, undo/redo, multiple grids; " + checks + " assertions.";
 } finally {
     UnityEditor.SceneManagement.EditorSceneManager.ClosePreviewScene(scene);

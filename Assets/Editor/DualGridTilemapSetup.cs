@@ -9,8 +9,8 @@ public static class DualGridTilemapSetup
     private const string RootName = "Dual Grid";
     private const string TileFolder = "Assets/Tiles/DualGrid";
     private const string PlaceholderTexturePath = "Assets/Sprites/Tiles/Data Tiles/DataPlaceholder.png";
-    private const string PlaceholderTilePath = TileFolder + "/ExampleTerrain.asset";
-    private const string ExampleTileFolder = "Assets/Tiles/LushCaves/Example";
+    private const string PlaceholderTilePath = TileFolder + "/Stone.asset";
+    private const string ExampleTileFolder = "Assets/Tiles/LushCaves/Example/Stone";
 
     [MenuItem("Tools/Setup Dual Grid")]
     public static void SetupDualGrid()
@@ -140,7 +140,7 @@ public static class DualGridTilemapSetup
         if (tile == null)
         {
             tile = ScriptableObject.CreateInstance<DualGridTerrainTile>();
-            tile.visualTiles = LoadTilesInSheetOrder();
+            tile.tileSets[0].tiles = LoadTilesInSheetOrder();
             AssetDatabase.CreateAsset(tile, PlaceholderTilePath);
         }
         tile.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(PlaceholderTexturePath);

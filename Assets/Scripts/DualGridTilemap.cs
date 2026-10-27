@@ -96,13 +96,13 @@ public class DualGridTilemap : MonoBehaviour
     private void DrawTerrain(DualGridTerrainTile terrain, Vector3Int position,
         TileBase tl, TileBase tr, TileBase bl, TileBase br)
     {
-        if (terrain == null || terrain.visualTiles == null || terrain.visualTiles.Length != 16)
+        if (terrain == null)
             return;
 
         var mask = (tl == terrain ? 1 : 0) | (tr == terrain ? 2 : 0)
             | (bl == terrain ? 4 : 0) | (br == terrain ? 8 : 0);
         if (mask != 0)
-            GetLayer(terrain).SetTile(position, terrain.visualTiles[FrameByMask[mask]]);
+            GetLayer(terrain).SetTile(position, terrain.GetVisualTile(FrameByMask[mask], position));
     }
 
     private Tilemap GetLayer(DualGridTerrainTile terrain)

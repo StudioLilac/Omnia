@@ -1,16 +1,29 @@
 # Dual-grid terrain
 
 Paint the **Data** tilemap with `DualGridTerrainTile` assets. Each asset is one
-terrain type and contains its own 16 visual tiles. The **Dual Grid** component
+terrain type and contains its own collection of 16-tile sets. The **Dual Grid** component
 only needs Data and Visual references.
 
 1. In the Project window, use **Create > Tiles > Dual Grid Terrain** (or duplicate
-   `ExampleTerrain.asset`). Give the asset a material name such as Stone or Dirt.
+   `Stone.asset` or `Dirt.asset`). Give the asset a material name such as Stone or Dirt.
 2. Set its Sprite to a recognizable placeholder image for painting.
-3. Assign its **Visual Tiles** in 4x4 sheet order: left to right, top to bottom.
+3. Assign the first entry in **Tile Sets** (the base set) in 4x4 sheet order:
+   left to right, top to bottom.
    Keep all 16 slots, including empty sheet slots. This uses the same SpriteCook
    layout as the original renderer; slot 12 is blank in the example artwork.
-4. Add the representative asset to a Tile Palette and paint it onto Data.
+4. Add the representative asset to a Tile Palette and paint it onto Data. Existing/Example representative tiles are found under `Assets/Tiles/RepresentativeTiles`.
+
+Add more entries to **Tile Sets** for variations. Fill only the matching slots
+that have alternative artwork; the remaining slots can stay null. Each drawn
+cell chooses uniformly among its base tile and the non-null alternatives for
+that slot. Null entries are skipped, so one available alternative gets a 50/50
+chance with the base, and two get a one-third chance each. A blank base slot
+always stays blank. The first set defines the terrain's shape.
+
+Choices use the visual cell position and **Variation Seed**, so repainting,
+rebuilds, undo/redo, scene reloads and player builds preserve the same pattern.
+Change the seed to reshuffle a terrain. This does not consume Unity's gameplay
+random state. Existing single-set assets automatically become base-only sets.
 
 Cells connect only when they contain the **same representative asset**. Stone
 and Dirt calculate their edges independently, treating each other as empty.
@@ -42,4 +55,5 @@ unity command eval_file --file Tests/DualGridVerification.cs --format json
 
 This runs in a temporary preview scene and checks all 81 four-corner arrangements
 of empty/Stone/Dirt, incremental updates versus full rebuilds, replacement,
-erasure, collision, sorting, undo/redo and independent grids.
+erasure, collision, sorting, undo/redo and independent grids, plus sparse
+variation fallback, distribution, seed changes, stable rebuilds and asset migration.
