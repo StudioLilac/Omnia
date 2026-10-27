@@ -1,12 +1,14 @@
 using UnityEngine;
 
 namespace Utils {
+    // Tags persistent singleton objects non-generically.
+    public interface IPersistentSingleton { }
     /**
      * A singleton game object that persists across scene changes. This object
      * destroys itself if another object with the same component type is found.
      * Upon reference, this object creates itself if it does not already exist.
      */
-    public abstract class PersistentSingleton<T> : MonoBehaviour where T : Component {
+    public abstract class PersistentSingleton<T> : MonoBehaviour, IPersistentSingleton where T : Component {
         private static T _singleton;
         public static T Instance => _singleton;
 

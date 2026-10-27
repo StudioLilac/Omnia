@@ -14,6 +14,8 @@ namespace Players.Mixin {
         [SerializeField] private InputActionReference jumpAction;   // Button
         [SerializeField] private InputActionReference rollAction;   // Button
         [SerializeField] private InputActionReference introAction;  // Button (held)
+#nullable enable
+        private InventoryManager? InventoryManager => this.InjectOptional<InventoryManager>();
 
         private float jt;
         private float ft;
@@ -31,7 +33,7 @@ namespace Players.Mixin {
                 self.moving = Vector2.zero;
                 return;
             }
-            if (DialogueManager.Instance?.IsInDialogue() == true || InventoryManager.Instance?.IsInventoryOpen == true) return;
+            if (DialogueManager.Instance?.IsInDialogue() == true || InventoryManager?.IsInventoryOpen == true) return;
             if (PauseMenu.IsPaused) return;
 
             var fire = fireAction.action.WasPressedThisFrame();
