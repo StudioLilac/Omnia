@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -6,152 +8,103 @@ using UnityEngine.Tilemaps;
 
 public static class DualGridTilemapSetup
 {
-    private const string RootName = "Dual Grid";
-    private const string TileFolder = "Assets/Tiles/DualGrid";
-    private const string PlaceholderTexturePath = "Assets/Sprites/Tiles/Data Tiles/DataPlaceholder.png";
-    private const string PlaceholderTilePath = TileFolder + "/Stone.asset";
-    private const string ExampleTileFolder = "Assets/Tiles/LushCaves/Example/Stone";
-
     [MenuItem("Tools/Setup Dual Grid")]
     public static void SetupDualGrid()
     {
-        var root = GameObject.Find(RootName);
-        if (root == null)
-            root = new GameObject(RootName);
+        try
+        {
+            var settings = Selection.activeObject as DualGridSetupSettings;
+            if (settings == null)
+            {
+                var candidates = AssetDatabase.FindAssets($"t:{nameof(DualGridSetupSettings)}");
+                if (candidates.Length != 1)
+                    throw new InvalidOperationException("Create one Tiles > Dual Grid Setup Settings asset, "
+                        + "or select the settings asset to use when several exist.");
+                settings = AssetDatabase.LoadAssetAtPath<DualGridSetupSettings>(
+                    AssetDatabase.GUIDToAssetPath(candidates[0]));
+            }
 
-        var grid = root.GetComponent<Grid>();
-        if (grid == null)
-            grid = root.AddComponent<Grid>();
+            var selected = Selection.activeGameObject;
+            var target = selected == null ? null : selected.GetComponentInParent<DualGridTilemap>(true);
+            var scene = target == null ? SceneManager.GetActiveScene() : target.gameObject.scene;
+            var dualGrid = SetupDualGrid(scene, settings.terrain, target);
+            EditorSceneManager.SaveScene(scene);
+            Debug.Log($"Dual Grid setup complete. Paint the data tilemap with {settings.terrain.name}.", dualGrid);
+        }
+        catch (InvalidOperationException exception)
+        {
+            Debug.LogError(exception.Message);
+        }
+    }
 
-        var data = GetOrCreateTilemap(root.transform, "Data");
-        var visual = GetOrCreateTilemap(root.transform, "Visual");
+    // Scene and asset identity come from references; names below are only initial display labels.
+    public static DualGridTilemap SetupDualGrid(Scene scene, DualGridTerrainTile terrain,
+        DualGridTilemap target = null)
+    {
+        if (terrain == null)
+            throw new InvalidOperationException("Assign a terrain asset in Dual Grid Setup Settings before running setup.");
+        if (!scene.IsValid() || !scene.isLoaded)
+            throw new InvalidOperationException("Open a scene before running Dual Grid setup.");
+        if (target != null && target.gameObject.scene != scene)
+            throw new InvalidOperationException("The selected grid must belong to the scene being configured.");
+
+        if (target == null)
+        {
+            var candidates = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<DualGridTilemap>(true)).ToArray();
+            if (candidates.Length > 1)
+                throw new InvalidOperationException("This scene has several dual grids. Select the grid to configure.");
+            target = candidates.SingleOrDefault();
+        }
+        if (target != null && target.data != null && target.data == target.visual)
+            throw new InvalidOperationException("Data and Visual must reference different tilemaps.");
+
+        if (target == null)
+        {
+            var root = new GameObject("Dual Grid", typeof(Grid));
+            SceneManager.MoveGameObjectToScene(root, scene);
+            target = root.AddComponent<DualGridTilemap>();
+        }
+
+        var grid = GetOrAdd<Grid>(target.gameObject);
+        var data = target.data != null ? target.data : CreateTilemap(target.transform, "Data");
+        var visual = target.visual != null ? target.visual : CreateTilemap(target.transform, "Visual");
         data.transform.localPosition = Vector3.zero;
         visual.transform.localPosition = new Vector3(-grid.cellSize.x * 0.5f, -grid.cellSize.y * 0.5f, 0f);
-
-        var dataRenderer = data.GetComponent<TilemapRenderer>();
-        dataRenderer.sortingOrder = -1;
-        var visualRenderer = visual.GetComponent<TilemapRenderer>();
-        visualRenderer.sortingOrder = 0;
+        GetOrAdd<TilemapRenderer>(data.gameObject).sortingOrder = -1;
+        GetOrAdd<TilemapRenderer>(visual.gameObject).sortingOrder = 0;
 
         var tilemapCollider = GetOrAdd<TilemapCollider2D>(data.gameObject);
         tilemapCollider.compositeOperation = Collider2D.CompositeOperation.Merge;
         GetOrAdd<CompositeCollider2D>(data.gameObject);
-        var body = GetOrAdd<Rigidbody2D>(data.gameObject);
-        body.bodyType = RigidbodyType2D.Static;
+        GetOrAdd<Rigidbody2D>(data.gameObject).bodyType = RigidbodyType2D.Static;
 
-        var dualGrid = GetOrAdd<DualGridTilemap>(root);
-        dualGrid.data = data;
-        dualGrid.visual = visual;
-        var terrain = CreateOrUpdatePlaceholderTile();
-        // Previously every ordinary tile represented the same occupied material.
+        target.data = data;
+        target.visual = visual;
+        // Upgrade ordinary painted tiles using the explicitly configured terrain.
         var paintedTiles = new TileBase[data.GetUsedTilesCount()];
         data.GetUsedTilesNonAlloc(paintedTiles);
         foreach (var paintedTile in paintedTiles)
             if (!(paintedTile is DualGridTerrainTile)) data.SwapTile(paintedTile, terrain);
-        dualGrid.RebuildAll();
+        target.RebuildAll();
 
-        EditorUtility.SetDirty(root);
         EditorUtility.SetDirty(data);
         EditorUtility.SetDirty(visual);
-        EditorUtility.SetDirty(dualGrid);
-        EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
-        EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-        Debug.Log("Dual Grid setup complete. Paint Data with " + PlaceholderTilePath
-            + ". Create more types with Create > Tiles > Dual Grid Terrain.");
+        EditorUtility.SetDirty(target);
+        EditorSceneManager.MarkSceneDirty(scene);
+        return target;
     }
 
-    private static Tilemap GetOrCreateTilemap(Transform parent, string childName)
+    private static Tilemap CreateTilemap(Transform parent, string displayName)
     {
-        var child = parent.Find(childName);
-        if (child == null)
-        {
-            var childObject = new GameObject(childName, typeof(Tilemap), typeof(TilemapRenderer));
-            childObject.transform.SetParent(parent, false);
-            return childObject.GetComponent<Tilemap>();
-        }
-
-        var tilemap = child.GetComponent<Tilemap>();
-        if (tilemap == null)
-            tilemap = child.gameObject.AddComponent<Tilemap>();
-        if (child.GetComponent<TilemapRenderer>() == null)
-            child.gameObject.AddComponent<TilemapRenderer>();
-        return tilemap;
+        var child = new GameObject(displayName, typeof(Tilemap), typeof(TilemapRenderer));
+        child.transform.SetParent(parent, false);
+        return child.GetComponent<Tilemap>();
     }
 
     private static T GetOrAdd<T>(GameObject gameObject) where T : Component
     {
         var component = gameObject.GetComponent<T>();
         return component == null ? gameObject.AddComponent<T>() : component;
-    }
-
-    private static TileBase[] LoadTilesInSheetOrder()
-    {
-        var result = new TileBase[16];
-        foreach (var guid in AssetDatabase.FindAssets("t:Tile", new[] { ExampleTileFolder }))
-        {
-            var path = AssetDatabase.GUIDToAssetPath(guid);
-            var tile = AssetDatabase.LoadAssetAtPath<Tile>(path);
-            if (tile == null || tile.sprite == null)
-                continue;
-
-            var rect = tile.sprite.rect;
-            var column = Mathf.RoundToInt(rect.x / rect.width);
-            var rowFromBottom = Mathf.RoundToInt(rect.y / rect.height);
-            var sheetSlot = column + (3 - rowFromBottom) * 4;
-            if (sheetSlot >= 0 && sheetSlot < result.Length)
-                result[sheetSlot] = tile;
-        }
-
-        if (result[12] != null)
-            Debug.LogWarning("Expected ExamplePalette sheet slot 12 to be blank, but found a tile there.");
-        for (var i = 0; i < result.Length; i++)
-        {
-            if (i != 12 && result[i] == null)
-                Debug.LogWarning($"Missing ExamplePalette tile for sheet slot {i}.");
-        }
-        return result;
-    }
-
-    private static DualGridTerrainTile CreateOrUpdatePlaceholderTile()
-    {
-        EnsureFolder("Assets/Tiles", "DualGrid");
-        if (AssetDatabase.LoadAssetAtPath<Texture2D>(PlaceholderTexturePath) == null)
-        {
-            var texture = new Texture2D(16, 16, TextureFormat.RGBA32, false);
-            var pixels = new Color[16 * 16];
-            for (var i = 0; i < pixels.Length; i++) pixels[i] = new Color(1f, 0f, 1f, 0.32f);
-            texture.SetPixels(pixels);
-            texture.Apply();
-            System.IO.File.WriteAllBytes(PlaceholderTexturePath, texture.EncodeToPNG());
-            Object.DestroyImmediate(texture);
-            AssetDatabase.ImportAsset(PlaceholderTexturePath, ImportAssetOptions.ForceUpdate);
-        }
-
-        var importer = (TextureImporter)AssetImporter.GetAtPath(PlaceholderTexturePath);
-        importer.textureType = TextureImporterType.Sprite;
-        importer.spritePixelsPerUnit = 16;
-        importer.filterMode = FilterMode.Point;
-        importer.textureCompression = TextureImporterCompression.Uncompressed;
-        importer.SaveAndReimport();
-
-        var tile = AssetDatabase.LoadAssetAtPath<DualGridTerrainTile>(PlaceholderTilePath);
-        if (tile == null)
-        {
-            tile = ScriptableObject.CreateInstance<DualGridTerrainTile>();
-            tile.tileSets[0].tiles = LoadTilesInSheetOrder();
-            AssetDatabase.CreateAsset(tile, PlaceholderTilePath);
-        }
-        tile.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(PlaceholderTexturePath);
-        tile.colliderType = Tile.ColliderType.Grid;
-        EditorUtility.SetDirty(tile);
-        return tile;
-    }
-
-    private static void EnsureFolder(string parent, string child)
-    {
-        if (!AssetDatabase.IsValidFolder(parent + "/" + child))
-            AssetDatabase.CreateFolder(parent, child);
     }
 }

@@ -43,17 +43,30 @@ values draw above lower ones, relative to Visual's sorting order. Give terrain
 types distinct orders when a particular overlap order is required. Artwork
 transparency still controls which underlying pixels are visible.
 
-**Tools > Setup Dual Grid** sets up the example terrain. When upgrading an old
-Data tilemap, it replaces ordinary painted tiles with the example representative,
-preserving their occupied cells. Existing terrain representatives are preserved.
+**Tools > Setup Dual Grid** uses the terrain reference in the **Dual Grid Setup
+Settings** asset. Edit that asset to choose a different terrain, or create one via
+**Create > Tiles > Dual Grid Setup Settings**. The terrain supplies its authored
+sprite and artwork; setup does not generate or overwrite terrain assets. Unity
+references survive moves and renames of the settings, terrain and artwork.
+
+Setup reuses the scene's `DualGridTilemap` component and its Data/Visual references,
+including inactive or renamed objects. With several grids, select the grid (or a
+child) first. With several settings assets, select the settings to use. A new grid
+is created only when the scene has none. Object names are initial display labels,
+not identifiers. When upgrading an old Data tilemap, setup replaces ordinary
+painted tiles with the configured representative, preserving occupied cells and
+existing terrain representatives.
 
 Regression check (requires a connected Unity Editor):
 
 ```powershell
 unity command eval_file --file Tests/DualGridVerification.cs --format json
+unity command eval_file --file Tests/DualGridSetupVerification.cs --format json
 ```
 
 This runs in a temporary preview scene and checks all 81 four-corner arrangements
 of empty/Stone/Dirt, incremental updates versus full rebuilds, replacement,
 erasure, collision, sorting, undo/redo and independent grids, plus sparse
 variation fallback, distribution, seed changes, stable rebuilds and asset migration.
+The setup check also covers renamed and inactive objects, repeat setup, terrain
+conversion, ambiguous grid selection, scene isolation and default asset references.
