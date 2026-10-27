@@ -141,11 +141,11 @@ public static class PlaytestFlamethrower {
         Require(emitter.Sim.ParticleCount==liveCount,"Weapon swap cleared lingering fire");
         await Ticks(emitter,3);
         Require(lingering.Received>0,"Hiding the weapon disabled damage from lingering fire");
-        await Ticks(emitter,22);
+        await Task.Delay(1100); // Extinguished emitters intentionally stop ticking.
         Require(emitter.Sim.ParticleCount==0 && emitter.Renderer.VisibleCount==0,"Release left particles or pixels behind");
 
         weapon.SetSpriteActive(true); weapon.CurrentAmmo=100; Field(player,"facing",Vector2.right);
-        await Frames(2); emitter.Clear(); await Ticks(emitter,1);
+        await Frames(2); emitter.Clear(); await Frames(2);
         Vector2 origin=emitter.Origin;
         var wall=new GameObject("One-pixel flame test wall"); wall.layer=3;
         wall.transform.position=origin+Vector2.right*0.75f;

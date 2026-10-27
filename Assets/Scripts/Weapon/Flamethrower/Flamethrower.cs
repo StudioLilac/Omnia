@@ -109,17 +109,26 @@ public class Flamethrower : WeaponClass {
         Player character = player.GetComponent<Player>();
         var filter = new ContactFilter2D { useTriggers = true };
         filter.SetLayerMask(hittableLayerMask);
-        int count = Physics2D.OverlapBox(Emitter.RasterCenter, Emitter.Size, 0, filter, candidates);
-        int targetCount = 0;
         var renderer = Emitter.Renderer;
+        if (!renderer.DamageBounds(Emitter.damageThreshold, out var damageBounds, out var damageCells)) return;
+        int count = Physics2D.OverlapBox(damageBounds.center, damageBounds.size, 0, filter, candidates);
+        int targetCount = 0;
         for (int c = 0; c < count; c++) {
             var collider = candidates[c];
             Enemy enemy = collider.GetComponentInParent<Enemy>();
             if (enemy == null) continue;
             float intensity = 0;
             var bounds = collider.bounds;
-            for (int i = 0; i < renderer.VisibleCount; i++) {
-                int pixel = renderer.VisibleIndex(i);
+            var cells = renderer.IntersectPixels(bounds, damageCells);
+            if (cells.right < cells.left || cells.top < cells.bottom) continue;
+            int area = (cells.right - cells.left + 1) * (cells.top - cells.bottom + 1);
+            // Small enemies inspect their own rectangle; very large colliders use
+            // the sparse visible list instead of walking mostly empty pixels.
+            bool useRectangle = area < renderer.VisibleCount;
+            int samples = useRectangle ? area : renderer.VisibleCount;
+            int width = cells.right - cells.left + 1;
+            for (int i = 0; i < samples; i++) {
+                int pixel = useRectangle ? renderer.CellIndex(cells.left + i % width, cells.bottom + i / width) : renderer.VisibleIndex(i);
                 float heat = renderer.PixelHeat(pixel);
                 if (heat <= Emitter.damageThreshold) continue;
                 float weighted = heat * (Emitter.IsCoreHeat(heat) ? Emitter.coreDamageMultiplier : Emitter.wingDamageMultiplier);

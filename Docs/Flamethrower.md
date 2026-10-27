@@ -59,7 +59,7 @@ The detached sprite has zero rotation and an integer world-pixel origin. Its poi
 
 Core motion and ribbon links use swept collisions. The flow builds a solid-cell mask each tick. Transport checks every crossed cell, including thin-wall crossings, and interpolation excludes solid cells. Thick core stamps also check their offsets against walls. Solid cells are removed from the final raster.
 
-`FlameEmitter.SampleHeat(worldPos)` returns displayed heat, including dithering. Damage candidates come from the world raster rectangle and are checked against opaque pixel centers. Multiple colliders on one enemy yield one weighted hit per tick. Lingering fire can damage after turning, weapon switching, or rolling. `Clear()` resets particles, heat, velocity and seeded state.
+`FlameEmitter.SampleHeat(worldPos)` returns displayed heat, including dithering. Damage candidates come from the world rectangle enclosing damaging pixels and are checked against opaque pixel centers. Multiple colliders on one enemy yield one weighted hit per tick. Lingering fire can damage after turning, weapon switching, or rolling. `Clear()` resets particles, heat, velocity and seeded state.
 
 ## Verification and previews
 
@@ -74,6 +74,47 @@ Core motion and ribbon links use swept collisions. The flow builds a solid-cell 
 
 This lattice costs more than the former curve stamps. Measure its timing separately from the older ribbon-only benchmark; the original 0.2 ms simulation budget is not assumed to hold for the pressure/heat solver.
 
-Performance remains above the original 0.2 ms budget. The temperature-varied 40 FPS preset measured 11.25 ms per simulation tick in the Editor with zero managed allocations (previous broad-core preset: 8.90 ms/tick). The higher tick rate increases total CPU work per second despite the slightly cheaper individual tick. All 32 flame tests passed, including material-carried temperature pockets, variation across the center, zero allocations with core variation enabled, and world-up plume dominance for left and right aim. CopyableScene live checks passed for unlimited fire from empty, sustained firing, the optional fuel toggle, sweeping, lingering damage, release and walls. Timings exclude physics, texture upload, enemy callbacks and GPU work.
+Performance remains above the original 0.2 ms budget. A same-session Editor run of `ValidateFlamethrower.Run` before and after the CPU optimizations measured:
+
+| Simulation workload | Before (ms/tick) | After (ms/tick) |
+| --- | --- | --- |
+| Default 48-pixel jet | 5.7520 | 5.3755 |
+| 96-pixel reference | 9.1491 | 8.2531 |
+| Actual temperature-varied 40 Hz prefab | 11.2418 | 9.5970 |
+
+The actual prefab's simulation is about 15% faster, reducing its CPU demand from roughly 450 to 384 ms per second at 40 Hz. These rows exclude physics, texture upload, enemy callbacks and GPU execution. They use the validation script's fixed pose and should not be compared directly to the different poses in the live benchmark.
+
+`ValidateFlameOptimizations.Run` in Play mode measured 8.6210 ms per full steady tick and 9.8042 ms with a one-pixel physics wall. Those ticks include simulation, physics queries, raster/palette work and texture upload, but exclude enemy callbacks and GPU execution. An idle advance measured 0.0004 ms. All measured simulation and full-tick paths allocated zero managed memory.
+
+The simulation now tracks source and heat bounds, clears only written portions of scratch buffers, copies only written regions when recentering, and avoids shifting fine velocity that will be reconstructed from the coarse solver. Core stamps reject samples that cannot improve heat before computing thermal noise. The per-tick collision cache also stores individual cell occupancy, shared by fine/coarse/final-raster checks. Damage broadphase uses damaging-pixel bounds and each collider scans the smaller of its overlapping pixel rectangle and the visible-pixel list.
+
+Extinguished emitters stop simulation and texture uploads while keeping the nozzle pose current. During catch-up, visibility and damage still update per tick, with one texture upload after the last tick. Catch-up is capped at four ticks per frame; excess elapsed time after a stall is discarded, including the associated simulation/damage time, to avoid an unbounded backlog.
+
+The managed optimization pass passed all 36 flame tests, including bounded-versus-full source scans through movement, release, teleport and reset at velocity cell sizes 1–4. Before the native-kernel conversion, the steady, sweeping and one-pixel-wall raster checksums matched the original solver. CopyableScene live checks passed for unlimited fire from empty, optional fuel depletion/restart, sweeping, player movement, old-trail and hidden-weapon damage, extinction and walls. Additional live checks passed for idle/resume, the four-tick catch-up cap and texture/query agreement after deferred upload.
+
+Reproduce the original simulation timing with `AgentScripts/ValidateFlamethrower.cs`, entry `ValidateFlamethrower.Run`. Use `AgentScripts/ValidateFlameOptimizations.cs`, entry `ValidateFlameOptimizations.Run`, in Play mode for full ticks and runtime assertions. `AgentScripts/BenchmarkFlameOptimizations.cs`, entry `BenchmarkFlameOptimizations.Run`, takes a scenario argument (0: steady, 1: sweep, 2: synthetic wall, 3: empty) and reports simulation time, allocations and a raster checksum. Its wall uses an in-memory collision implementation rather than Unity physics.
 
 Animated preview: `Temp/Flamethrower/temperature-fire.gif` (steady jet, full turn, steady jet, release at 40 FPS).
+
+
+## Rapid rotation and native kernels
+
+Sustained rotation at 0.6 radians per tick (about 3.8 full turns per second at 40 Hz) exposed a much larger cost than the earlier slow sweep. The particle pool stayed bounded at 111 particles, while lingering heat occupied roughly 19,200 cells inside a roughly 30,000-cell rectangle. Before the fix, the same-session Editor benchmark measured 115.7143 ms per simulation tick: source preparation/recentering 4.213 ms, velocity/pressure plus upsampling 60.702 ms, and fine heat transport/bounds 27.728 ms. The rest was core/ribbon rasterization and output merging. Disabling the fluid solver still cost 22.9615 ms for the stretched, temperature-varied core ribbon.
+
+`FlameKernels.cs` now runs velocity advection, vorticity confinement, pressure projection, fine heat transport, coarse-to-fine velocity sampling, and stamp temperature calculation through Burst direct calls. Each call pins the existing managed buffers for its duration; no pointers are retained or work scheduled after unpinning. Kernel argument structs use blittable fields. Physics queries and gameplay callbacks stay on the managed path. Heat bounds are accumulated during transport instead of scanning the output a second time. The simulation assembly references the already installed Burst package and enables unsafe code for these short pinning scopes.
+
+Kernels use strict float mode and warm up during simulation construction. Burst must be enabled to obtain the native timings. Native arithmetic can introduce small rounding differences from the prior managed backend, which can evolve into different turbulent cell patterns over time; comparisons across the two backends are not bitwise guarantees. Seeded repeatability within the current backend, thermal pockets, world-space motion, damage/pixel agreement and thin-wall behavior remain covered by tests. Particle caps, lifetimes, grid resolution, pressure iterations and simulation frequency are unchanged.
+
+At the same 0.6-radian/tick workload:
+
+| Workload | Before | Native kernels |
+| --- | --- | --- |
+| Simulation only | 115.7143 ms/tick | 6.4580 ms/tick |
+| Full rotating tick, including physics setup and texture upload | — | 8.2706 ms/tick |
+| Full rotating tick against a one-pixel physics wall | — | 16.6643 ms/tick |
+
+The simulation improvement is about 18×. Native stage timings were source preparation 1.005 ms, velocity/pressure plus upsampling 2.627 ms, and heat transport/bounds 0.746 ms. All measured paths allocated zero managed memory. Full-tick measurements exclude enemy callbacks and GPU execution time.
+
+All 39 flame tests pass, including sustained rotations at 0.2, 0.6 and 1.2 radians per tick with bounded particle counts, visible lingering heat, zero allocations and complete release cleanup. CopyableScene live checks also pass for sweeping, player movement, old-trail/hidden-weapon damage, fuel behavior and one-pixel wall blocking. Live rotating checks pass for idle/resume, catch-up limits and texture/damage-pixel agreement.
+
+Reproduce the simulation stress test with `unity command run_script --file AgentScripts/ProfileFlameSpin.cs --entry ProfileFlameSpin.Run --args '[0.6,0]'`. Mode 1 isolates the temperature-varied core without fluid or legacy wings; mode 2 also disables temperature variation. The profiler reports source, velocity and heat stages separately. In Play mode, run `ValidateFlameOptimizations.Run` with arguments `[0.6]` for rotating full ticks and actual physics walls; its default argument of zero retains the stationary benchmark.

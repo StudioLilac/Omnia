@@ -140,4 +140,81 @@ public class FlameFlowTests {
         Assert.Greater(upper, lower * 2, "The upper plume must dominate even when facing left");
     }
 
+    [TestCase(1)]
+    [TestCase(2)]
+    [TestCase(3)]
+    [TestCase(4)]
+    public void BoundedSourcesMatchFullScanAcrossRecenterReleaseAndReset(int cellSize) {
+        const int side = 48;
+        var bounded = new FlameFlow(side, 19, cellSize);
+        var reference = new FlameFlow(side, 19, cellSize);
+        var heat = new float[side * side];
+        var velocity = new FlameVector[heat.Length];
+        var settings = Jet();
+        for (int tick = 0; tick < 50; tick++) {
+            if (tick == 30) { bounded.Clear(); reference.Clear(); }
+            Array.Clear(heat, 0, heat.Length); Array.Clear(velocity, 0, velocity.Length);
+            int ox = tick < 30 ? -20 + tick / 3 : 80 - tick / 2;
+            int oy = -24 - tick / 4;
+            var sources = FlameBounds.Empty;
+            bool firing = tick < 15 || tick >= 30 && tick < 37;
+            if (firing) {
+                int x = 12 + tick % 7, y = 19;
+                heat[y * side + x] = 1;
+                velocity[y * side + x] = new FlameVector(3, 1);
+                sources.Include(x, y);
+            }
+            bounded.Step(ox, oy, heat, velocity, settings, firing, tick, null, sources);
+            reference.Step(ox, oy, heat, velocity, settings, firing, tick, null);
+            Assert.AreEqual(reference.HasHeat, bounded.HasHeat);
+            for (int i = 0; i < heat.Length; i++) {
+                Assert.AreEqual(reference.CellHeat(i), bounded.CellHeat(i), "Heat at tick " + tick + ", cell " + i);
+                Assert.AreEqual(reference.CellVelocity(i).x, bounded.CellVelocity(i).x);
+                Assert.AreEqual(reference.CellVelocity(i).y, bounded.CellVelocity(i).y);
+            }
+        }
+    }
+
+    [TestCase(0.2f)]
+    [TestCase(0.6f)]
+    [TestCase(1.2f)]
+    public void SustainedFastSpinAllocatesNothingAndRetainsFireUntilRelease(float radiansPerTick) {
+        var settings = Jet(); settings.coreRadius = 2.5f; settings.ribbonWidthScale = 2.4f;
+        settings.coreNozzleScale = 0.18f; settings.coreBloomPixels = 14;
+        settings.coreFadeStart = 0.35f; settings.coreFadeEnd = 0.85f;
+        settings.coreHeatVariation = 0.5f; settings.flowCooling = 0.032f;
+        settings.flowJetStability = 0.8f; settings.flowPressureIterations = 6;
+        var sim = new FlameSim(512, 288, 31); var previous = new FlamePose();
+        for (int tick = 0; tick < 40; tick++) {
+            var pose = new FlamePose(0, 0, tick * radiansPerTick);
+            sim.Step(true, previous, pose, settings); previous = pose;
+        }
+        long before = GC.GetAllocatedBytesForCurrentThread();
+        int peakParticles = 0;
+        for (int tick = 40; tick < 160; tick++) {
+            var pose = new FlamePose(0, 0, tick * radiansPerTick);
+            sim.Step(true, previous, pose, settings); previous = pose;
+            peakParticles = Math.Max(peakParticles, sim.ParticleCount);
+        }
+        long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+        Assert.AreEqual(0, allocated);
+        Assert.LessOrEqual(peakParticles, sim.Capacity);
+        Assert.IsTrue(sim.Flow.HasHeat);
+        int hot = 0;
+        for (int cell = 0; cell < sim.WindowSize * sim.WindowSize; cell++) {
+            float heat = sim.CellHeat(cell);
+            Assert.That(heat, Is.InRange(0, 1));
+            if (heat > 0.08f) hot++;
+        }
+        Assert.Greater(hot, 100, "Spinning must retain the old fire rather than clearing it for speed");
+        var away = new FlamePose(900, -800, -2);
+        sim.Step(false, previous, away, settings);
+        Assert.IsTrue(sim.Flow.HasHeat, "Stopping emission must preserve lingering heat");
+        Assert.Less(Math.Abs(sim.OriginX), 300);
+        Assert.Less(Math.Abs(sim.OriginY), 300);
+        for (int tick = 0; tick < 100; tick++) sim.Step(false, away, away, settings);
+        Assert.AreEqual(0, sim.ParticleCount); Assert.IsFalse(sim.Flow.HasHeat);
+        Assert.AreEqual(0, sim.OccupiedCount);
+    }
+
 }

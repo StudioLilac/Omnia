@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Omnia.Fire {
     // Persistent Eulerian heat + velocity lattice. All updates use neighboring cells;
@@ -25,9 +27,16 @@ namespace Omnia.Fire {
         private float[] heat, u, v, nextHeat, nextU, nextV;
         private readonly float[] curl, divergence, transported;
         private float[] pressure, pressureNext;
+        // Track writes by array identity because transport and pressure swap buffers.
+        // Registration happens once; ticks do not allocate dictionary entries.
+        private readonly Dictionary<float[], FlameBounds> written = new Dictionary<float[], FlameBounds>(11);
         private readonly bool[] solid;
         private bool hasSolids;
         private int originX, originY, left, right, bottom, top;
+        public bool ProfileTiming { get; set; }
+        public long SourceTicks { get; private set; }
+        public long VelocityTicks { get; private set; }
+        public long HeatTicks { get; private set; }
         public bool HasHeat { get; private set; }
         public int MinWorldX { get; private set; }
         public int MaxWorldX { get; private set; }
@@ -37,6 +46,7 @@ namespace Omnia.Fire {
         public FlameVector CellVelocity(int cell) => new FlameVector(u[cell], v[cell]);
 
         public FlameFlow(int windowSize, uint randomSeed, int velocityResolution = 2) {
+            FlameKernels.WarmUp();
             size = windowSize; seed = randomSeed;
             velocityCellSize = Math.Max(1, Math.Min(4, velocityResolution));
             if (velocityCellSize > 1 && size >= 16) {
@@ -52,9 +62,11 @@ namespace Omnia.Fire {
             curl = new float[n]; divergence = new float[n];
             pressure = new float[n]; pressureNext = new float[n]; transported = new float[n];
             solid = new bool[n];
+            foreach (var field in new[] { heat, u, v, nextHeat, nextU, nextV, curl, divergence, pressure, pressureNext, transported })
+                written.Add(field, FlameBounds.Empty);
         }
         public void Clear() {
-            Array.Clear(heat, 0, heat.Length); Array.Clear(u, 0, u.Length); Array.Clear(v, 0, v.Length);
+            ClearField(heat); ClearField(u); ClearField(v);
             HasHeat = false;
             coarse?.Clear();
         }
@@ -68,57 +80,57 @@ namespace Omnia.Fire {
             }
             return (h & 65535) / 32767.5f - 1;
         }
-        internal void Recenter(int x, int y) {
+        private FlameBounds ActiveBounds => new FlameBounds { left = left, right = right, bottom = bottom, top = top };
+        private void MarkField(float[] field, FlameBounds bounds) {
+            if (bounds.right < bounds.left || bounds.top < bounds.bottom) return;
+            var prior = written[field];
+            prior.Include(bounds.left, bounds.bottom); prior.Include(bounds.right, bounds.top);
+            written[field] = prior;
+        }
+        private void ClearField(float[] field) {
+            var bounds = written[field];
+            for (int y = bounds.bottom; y <= bounds.top; y++)
+                Array.Clear(field, y * size + bounds.left, bounds.right - bounds.left + 1);
+            written[field] = FlameBounds.Empty;
+        }
+        private void ShiftField(float[] source, float[] destination, int dx, int dy) {
+            ClearField(destination);
+            var bounds = written[source];
+            if (bounds.right < bounds.left || bounds.top < bounds.bottom) return;
+            bounds.left = Math.Max(0, bounds.left - dx); bounds.right = Math.Min(size - 1, bounds.right - dx);
+            bounds.bottom = Math.Max(0, bounds.bottom - dy); bounds.top = Math.Min(size - 1, bounds.top - dy);
+            if (bounds.right < bounds.left || bounds.top < bounds.bottom) return;
+            for (int row = bounds.bottom; row <= bounds.top; row++)
+                Array.Copy(source, (row + dy) * size + bounds.left + dx, destination, row * size + bounds.left, bounds.right - bounds.left + 1);
+            MarkField(destination, bounds);
+        }
+        internal void Recenter(int x, int y, bool shiftVelocity = true) {
             int dx = x - originX, dy = y - originY;
             if (dx == 0 && dy == 0) return;
-            Array.Clear(nextHeat, 0, nextHeat.Length); Array.Clear(nextU, 0, nextU.Length); Array.Clear(nextV, 0, nextV.Length);
-            for (int row = Math.Max(0, -dy); row < Math.Min(size, size - dy); row++) {
-                int start = Math.Max(0, -dx), length = Math.Min(size, size - dx) - start;
-                if (length <= 0) continue;
-                int from = (row + dy) * size + start + dx, to = row * size + start;
-                Array.Copy(heat, from, nextHeat, to, length);
-                Array.Copy(u, from, nextU, to, length); Array.Copy(v, from, nextV, to, length);
+            ShiftField(heat, nextHeat, dx, dy); Swap(ref heat, ref nextHeat);
+            // StepCoarse reconstructs fine velocity immediately after recentering.
+            if (shiftVelocity) {
+                ShiftField(u, nextU, dx, dy); ShiftField(v, nextV, dx, dy);
+                Swap(ref u, ref nextU); Swap(ref v, ref nextV);
             }
-            Swap(ref heat, ref nextHeat); Swap(ref u, ref nextU); Swap(ref v, ref nextV);
             originX = x; originY = y;
         }
-        private float Sample(float[] field, float x, float y) {
-            x = Clamp(x, 0, size - 1.001f); y = Clamp(y, 0, size - 1.001f);
-            int ix = (int)x, iy = (int)y, a = iy * size + ix;
-            float fx = x - ix, fy = y - iy;
-            if (!hasSolids)
-                return (field[a] + (field[a + 1] - field[a]) * fx) * (1 - fy)
-                    + (field[a + size] + (field[a + size + 1] - field[a + size]) * fx) * fy;
-            float aa = solid[a] ? 0 : field[a], ab = solid[a + 1] ? 0 : field[a + 1];
-            float ba = solid[a + size] ? 0 : field[a + size], bb = solid[a + size + 1] ? 0 : field[a + size + 1];
-            return (aa + (ab - aa) * fx) * (1 - fy) + (ba + (bb - ba) * fx) * fy;
-        }
-        // Check every crossed grid cell, including subpixel-wall crossings. This is
-        // also used by the corrected heat transport, so it cannot reconstruct past walls.
-        private bool Blocked(float x, float y, float tx, float ty) {
-            if (!hasSolids) return tx < 0 || ty < 0 || tx >= size - 1 || ty >= size - 1;
-            int n = Math.Max(1, (int)Math.Ceiling(Math.Max(Math.Abs(tx - x), Math.Abs(ty - y)) * 2));
-            for (int k = 0; k <= n; k++) {
-                float t = (float)k / n;
-                int ix = (int)Math.Floor(x + (tx - x) * t + 0.5f), iy = (int)Math.Floor(y + (ty - y) * t + 0.5f);
-                if (ix < 0 || iy < 0 || ix >= size || iy >= size || solid[iy * size + ix]) return true;
-            }
-            return false;
-        }
         public void Step(int worldX, int worldY, float[] sourceHeat, FlameVector[] sourceVelocity,
-            FlameSimSettings settings, bool firing, int tick, IFlameCollision collision) {
+            FlameSimSettings settings, bool firing, int tick, IFlameCollision collision, FlameBounds? sourceBounds = null) {
+            SourceTicks = VelocityTicks = HeatTicks = 0;
             if (coarse != null) {
-                StepCoarse(worldX, worldY, sourceHeat, sourceVelocity, settings, firing, tick, collision);
+                StepCoarse(worldX, worldY, sourceHeat, sourceVelocity, settings, firing, tick, collision, sourceBounds);
                 return;
             }
-            StepFine(worldX, worldY, sourceHeat, sourceVelocity, settings, firing, tick, collision);
+            StepFine(worldX, worldY, sourceHeat, sourceVelocity, settings, firing, tick, collision, sourceBounds);
         }
         private void StepFine(int worldX, int worldY, float[] sourceHeat, FlameVector[] sourceVelocity,
-            FlameSimSettings settings, bool firing, int tick, IFlameCollision collision) {
+            FlameSimSettings settings, bool firing, int tick, IFlameCollision collision, FlameBounds? sourceBounds = null) {
             Recenter(worldX, worldY);
             if (size < 4) { Clear(); return; }
             left = bottom = size; right = top = -1;
-            for (int y = 1; y < size - 1; y++) for (int x = 1; x < size - 1; x++) {
+            var search = SearchBounds(sourceBounds);
+            for (int y = search.bottom; y <= search.top; y++) for (int x = search.left; x <= search.right; x++) {
                 int i = y * size + x;
                 if (heat[i] < 0.015f && sourceHeat[i] <= 0) continue;
                 left = Math.Min(left, x); right = Math.Max(right, x); bottom = Math.Min(bottom, y); top = Math.Max(top, y);
@@ -133,6 +145,7 @@ namespace Omnia.Fire {
                     bool blocked = collision.CellSolid(originX + x, originY + y);
                     solid[y * size + x] = blocked; hasSolids |= blocked;
                 }
+            MarkField(heat, ActiveBounds); MarkField(u, ActiveBounds); MarkField(v, ActiveBounds);
             // The beam is a heat/momentum boundary condition. Small seeded disturbances
             // break perfect symmetry; the neighbor solver, not that noise, determines the rolls.
             for (int y = bottom; y <= top; y++) for (int x = left; x <= right; x++) {
@@ -152,96 +165,77 @@ namespace Omnia.Fire {
             const int substeps = 2;
             const float dt = 1f / substeps;
             for (int sub = 0; sub < substeps; sub++) {
-                Array.Clear(nextU, 0, nextU.Length); Array.Clear(nextV, 0, nextV.Length);
-                // Semi-Lagrangian velocity transport with mild viscosity/damping.
-                for (int y = bottom; y <= top; y++) for (int x = left; x <= right; x++) {
-                    int i = y * size + x;
-                    if (solid[i]) { nextU[i] = nextV[i] = 0; continue; }
-                    float tx = x - u[i] * dt, ty = y - v[i] * dt;
-                    bool blocked = Blocked(x, y, tx, ty);
-                    nextU[i] = blocked ? 0 : Sample(u, tx, ty) * 0.995f;
-                    nextV[i] = blocked ? 0 : Sample(v, tx, ty) * 0.995f + heat[i] * settings.flowBuoyancy * dt;
-                }
+                ClearField(nextU); ClearField(nextV);
+                MarkField(nextU, ActiveBounds); MarkField(nextV, ActiveBounds);
+                AdvectVelocity(settings, dt);
                 Swap(ref u, ref nextU); Swap(ref v, ref nextV);
                 // Curl is generated by the fast jet bordering slow air. Confinement
                 // restores rotational energy otherwise lost to coarse-grid advection.
-                Array.Clear(curl, 0, curl.Length);
-                for (int y = bottom; y <= top; y++) for (int x = left; x <= right; x++) {
-                    int i = y * size + x;
-                    curl[i] = solid[i] ? 0 : 0.5f * (v[i + 1] - v[i - 1] - u[i + size] + u[i - size]);
-                }
-                for (int y = bottom; y <= top; y++) for (int x = left; x <= right; x++) {
-                    int i = y * size + x;
-                    if (solid[i]) continue;
-                    float nx = Math.Abs(curl[i + 1]) - Math.Abs(curl[i - 1]);
-                    float ny = Math.Abs(curl[i + size]) - Math.Abs(curl[i - size]);
-                    float inverse = 1f / (float)Math.Sqrt(nx * nx + ny * ny + 0.0001f);
-                    // Temperature decreases upward across a plume's upper boundary,
-                    // and downward underneath it. Use that local world-up gradient,
-                    // not aim direction or a stamped shape, to favor the upper rolls.
-                    float below = heat[i - size], above = heat[i + size];
-                    float upperEdge = (below - above) / (below + above + 0.02f);
-                    float circulationGain = 1 + Clamp(settings.flowUpperBias, 0, 1) * upperEdge;
-                    float force = Math.Min(2, Math.Max(0, settings.flowVorticity)) * curl[i] * dt
-                        * (1 - Clamp(settings.flowJetStability, 0, 1) * Clamp(sourceHeat[i], 0, 1)) * circulationGain;
-                    u[i] = Clamp(u[i] + ny * inverse * force, -6, 6);
-                    v[i] = Clamp(v[i] - nx * inverse * force, -6, 6);
-                }
+                ClearField(curl); MarkField(curl, ActiveBounds);
+                ConfineVelocity(sourceHeat, settings, dt);
                 Project(Math.Max(2, Math.Min(24, settings.flowPressureIterations)));
                 TransportHeat(settings, firing, dt);
             }
-            UpdateBounds();
         }
-        private void TransportHeat(FlameSimSettings settings, bool firing, float dt) {
-                // Corrected heat advection preserves narrow hot filaments instead of
-                // repeatedly blurring them into a soft expanding blob.
-                Array.Clear(transported, 0, transported.Length);
-                Array.Clear(nextHeat, 0, nextHeat.Length);
-                for (int y = bottom; y <= top; y++) for (int x = left; x <= right; x++) {
-                    int i = y * size + x;
-                    float tx = x - u[i] * dt, ty = y - v[i] * dt;
-                    transported[i] = solid[i] || Blocked(x, y, tx, ty) ? 0 : Sample(heat, tx, ty);
-                }
-                float cooling = Math.Max(0, settings.flowCooling)
-                    + (firing ? 0 : Math.Max(0, settings.releaseCooling * settings.stepSeconds));
-                for (int y = bottom; y <= top; y++) for (int x = left; x <= right; x++) {
-                    int i = y * size + x;
-                    if (solid[i] || transported[i] <= 0) { nextHeat[i] = 0; continue; }
-                    float tx = Clamp(x - u[i] * dt, 0, size - 1.001f), ty = Clamp(y - v[i] * dt, 0, size - 1.001f);
-                    int a = (int)ty * size + (int)tx;
-                    float lo = Math.Min(Math.Min(heat[a], heat[a + 1]), Math.Min(heat[a + size], heat[a + size + 1]));
-                    float hi = Math.Max(Math.Max(heat[a], heat[a + 1]), Math.Max(heat[a + size], heat[a + size + 1]));
-                    float reverse = Sample(transported, x + u[i] * dt, y + v[i] * dt);
-                    float corrected = Clamp(transported[i] + 0.5f * (heat[i] - reverse), lo, hi) - cooling * dt;
-                    nextHeat[i] = corrected < 0.015f ? 0 : Math.Min(1, corrected);
-                }
-                Swap(ref heat, ref nextHeat);
-        }
-        private void UpdateBounds() {
-            HasHeat = false;
-            MinWorldX = MinWorldY = int.MaxValue; MaxWorldX = MaxWorldY = int.MinValue;
-            for (int y = bottom; y <= top; y++) for (int x = left; x <= right; x++) {
-                int i = y * size + x;
-                if (heat[i] <= 0) continue;
-                HasHeat = true;
-                MinWorldX = Math.Min(MinWorldX, originX + x); MaxWorldX = Math.Max(MaxWorldX, originX + x);
-                MinWorldY = Math.Min(MinWorldY, originY + y); MaxWorldY = Math.Max(MaxWorldY, originY + y);
+        private unsafe FlameKernels.Grid Grid() => new FlameKernels.Grid {
+            size = size, originX = originX, originY = originY,
+            left = left, right = right, bottom = bottom, top = top, hasSolids = hasSolids ? 1 : 0
+        };
+        private unsafe void AdvectVelocity(FlameSimSettings settings, float dt) {
+            fixed (float* h = heat, a = u, b = v, na = nextU, nb = nextV)
+            fixed (bool* mask = solid) {
+                var grid = Grid(); grid.heat = h; grid.u = a; grid.v = b;
+                grid.nextU = na; grid.nextV = nb; grid.solid = mask;
+                var rules = new FlameKernels.FlowSettings(settings);
+                FlameKernels.Velocity(ref grid, in rules, dt);
             }
         }
+        private unsafe void ConfineVelocity(float[] sourceHeat, FlameSimSettings settings, float dt) {
+            fixed (float* h = heat, a = u, b = v, c = curl, source = sourceHeat)
+            fixed (bool* mask = solid) {
+                var grid = Grid(); grid.heat = h; grid.u = a; grid.v = b; grid.curl = c; grid.solid = mask;
+                var rules = new FlameKernels.FlowSettings(settings);
+                FlameKernels.Confinement(ref grid, source, in rules, dt);
+            }
+        }
+        private unsafe void TransportHeat(FlameSimSettings settings, bool firing, float dt) {
+            ClearField(transported); ClearField(nextHeat);
+            MarkField(transported, ActiveBounds); MarkField(nextHeat, ActiveBounds);
+            var bounds = FlameBounds.Empty;
+            fixed (float* h = heat, a = u, b = v, next = nextHeat, temp = transported)
+            fixed (bool* mask = solid) {
+                var grid = Grid(); grid.heat = h; grid.u = a; grid.v = b;
+                grid.nextHeat = next; grid.transported = temp; grid.solid = mask;
+                var rules = new FlameKernels.FlowSettings(settings);
+                FlameKernels.Heat(ref grid, in rules, firing ? 1 : 0, dt, ref bounds);
+            }
+            Swap(ref heat, ref nextHeat);
+            HasHeat = bounds.right >= bounds.left;
+            MinWorldX = HasHeat ? originX + bounds.left : int.MaxValue;
+            MaxWorldX = HasHeat ? originX + bounds.right : int.MinValue;
+            MinWorldY = HasHeat ? originY + bounds.bottom : int.MaxValue;
+            MaxWorldY = HasHeat ? originY + bounds.top : int.MinValue;
+        }
         private void StepCoarse(int worldX, int worldY, float[] sourceHeat, FlameVector[] sourceVelocity,
-            FlameSimSettings settings, bool firing, int tick, IFlameCollision collision) {
-            Recenter(worldX, worldY);
+            FlameSimSettings settings, bool firing, int tick, IFlameCollision collision, FlameBounds? sourceBounds = null) {
+            long started = ProfileTiming ? Stopwatch.GetTimestamp() : 0;
+            Recenter(worldX, worldY, false);
             int scale = velocityCellSize;
             int cx = FloorDivide(worldX, scale), cy = FloorDivide(worldY, scale);
             Array.Clear(coarseSourceHeat, 0, coarseSourceHeat.Length);
             Array.Clear(coarseSourceWeight, 0, coarseSourceWeight.Length);
             Array.Clear(coarseSourceVelocity, 0, coarseSourceVelocity.Length);
             left = bottom = size; right = top = -1;
-            for (int y = 1; y < size - 1; y++) for (int x = 1; x < size - 1; x++) {
+            var coarseBounds = FlameBounds.Empty;
+            var search = SearchBounds(sourceBounds);
+            MarkField(heat, search);
+            for (int y = search.bottom; y <= search.top; y++) for (int x = search.left; x <= search.right; x++) {
                 int i = y * size + x;
                 float h = sourceHeat[i]; var velocity = sourceVelocity[i];
                 if (h > 0 && (velocity.x != 0 || velocity.y != 0)) {
-                    int cell = (FloorDivide(worldY + y, scale) - cy) * coarse.size + FloorDivide(worldX + x, scale) - cx;
+                    int sourceX = FloorDivide(worldX + x, scale) - cx, sourceY = FloorDivide(worldY + y, scale) - cy;
+                    int cell = sourceY * coarse.size + sourceX;
+                    coarseBounds.Include(sourceX, sourceY);
                     coarseSourceHeat[cell] = Math.Max(coarseSourceHeat[cell], h);
                     coarseSourceVelocity[cell] = coarseSourceVelocity[cell] + velocity * h;
                     coarseSourceWeight[cell] += h;
@@ -252,53 +246,61 @@ namespace Omnia.Fire {
             }
             for (int i = 0; i < coarseSourceHeat.Length; i++)
                 if (coarseSourceWeight[i] > 0) coarseSourceVelocity[i] = coarseSourceVelocity[i] * (1f / (scale * coarseSourceWeight[i]));
+            long velocityStarted = ProfileTiming ? Stopwatch.GetTimestamp() : 0;
+            SourceTicks = velocityStarted - started;
             var rules = settings;
             rules.flowSpeed /= scale; rules.flowBuoyancy /= scale; rules.flowPerturbation /= scale;
             coarseCollision.source = collision;
-            coarse.StepFine(cx, cy, coarseSourceHeat, coarseSourceVelocity, rules, firing, tick, collision == null ? null : coarseCollision);
+            coarse.StepFine(cx, cy, coarseSourceHeat, coarseSourceVelocity, rules, firing, tick, collision == null ? null : coarseCollision, coarseBounds);
             if (right < left) { Clear(); return; }
             left = Math.Max(1, left - 16); right = Math.Min(size - 2, right + 16);
             bottom = Math.Max(1, bottom - 16); top = Math.Min(size - 2, top + 16);
             Array.Clear(solid, 0, solid.Length); hasSolids = false;
-            Array.Clear(u, 0, u.Length); Array.Clear(v, 0, v.Length);
+            ClearField(u); ClearField(v);
+            var velocityBounds = new FlameBounds { left = left - 1, right = right + 1, bottom = bottom - 1, top = top + 1 };
+            MarkField(u, velocityBounds); MarkField(v, velocityBounds);
             for (int y = bottom - 1; y <= top + 1; y++) for (int x = left - 1; x <= right + 1; x++) {
                 int i = y * size + x;
                 bool blocked = collision != null && collision.CellSolid(worldX + x, worldY + y);
                 solid[i] = blocked; hasSolids |= blocked;
-                if (blocked) { heat[i] = 0; continue; }
-                float sx = (worldX + x + 0.5f) / scale - cx - 0.5f;
-                float sy = (worldY + y + 0.5f) / scale - cy - 0.5f;
-                u[i] = coarse.Sample(coarse.u, sx, sy) * scale;
-                v[i] = coarse.Sample(coarse.v, sx, sy) * scale;
             }
+            UpsampleVelocity(scale);
+            long heatStarted = ProfileTiming ? Stopwatch.GetTimestamp() : 0;
+            VelocityTicks = heatStarted - velocityStarted;
             TransportHeat(settings, firing, 1);
-            UpdateBounds();
+            HeatTicks = ProfileTiming ? Stopwatch.GetTimestamp() - heatStarted : 0;
         }
-        private void Project(int iterations) {
-            Array.Clear(pressure, 0, pressure.Length); Array.Clear(pressureNext, 0, pressureNext.Length);
-            for (int y = bottom; y <= top; y++) for (int x = left; x <= right; x++) {
-                int i = y * size + x;
-                divergence[i] = solid[i] ? 0 : -0.5f * ((solid[i + 1] ? 0 : u[i + 1]) - (solid[i - 1] ? 0 : u[i - 1])
-                    + (solid[i + size] ? 0 : v[i + size]) - (solid[i - size] ? 0 : v[i - size]));
+        private FlameBounds SearchBounds(FlameBounds? sources) {
+            if (!sources.HasValue) return new FlameBounds { left = 1, bottom = 1, right = size - 2, top = size - 2 };
+            var bounds = sources.Value;
+            if (HasHeat) {
+                bounds.Include(MinWorldX - originX, MinWorldY - originY);
+                bounds.Include(MaxWorldX - originX, MaxWorldY - originY);
             }
-            for (int pass = 0; pass < iterations; pass++) {
-                for (int y = bottom; y <= top; y++) for (int x = left; x <= right; x++) {
-                    int i = y * size + x;
-                    if (solid[i]) continue;
-                    pressureNext[i] = (divergence[i] + (solid[i - 1] ? pressure[i] : pressure[i - 1])
-                        + (solid[i + 1] ? pressure[i] : pressure[i + 1]) + (solid[i - size] ? pressure[i] : pressure[i - size])
-                        + (solid[i + size] ? pressure[i] : pressure[i + size])) * 0.25f;
-                }
-                Swap(ref pressure, ref pressureNext);
+            bounds.left = Math.Max(1, bounds.left); bounds.right = Math.Min(size - 2, bounds.right);
+            bounds.bottom = Math.Max(1, bounds.bottom); bounds.top = Math.Min(size - 2, bounds.top);
+            return bounds;
+        }
+
+        private unsafe void UpsampleVelocity(int scale) {
+            fixed (float* h = heat, a = u, b = v, ca = coarse.u, cb = coarse.v)
+            fixed (bool* mask = solid, coarseMask = coarse.solid) {
+                var grid = Grid(); grid.heat = h; grid.u = a; grid.v = b; grid.solid = mask;
+                var coarseGrid = coarse.Grid(); coarseGrid.u = ca; coarseGrid.v = cb; coarseGrid.solid = coarseMask;
+                FlameKernels.Upsample(ref grid, ref coarseGrid, scale);
             }
-            for (int y = bottom; y <= top; y++) for (int x = left; x <= right; x++) {
-                int i = y * size + x;
-                if (solid[i]) continue;
-                u[i] -= 0.5f * ((solid[i + 1] ? pressure[i] : pressure[i + 1]) - (solid[i - 1] ? pressure[i] : pressure[i - 1]));
-                v[i] -= 0.5f * ((solid[i + size] ? pressure[i] : pressure[i + size]) - (solid[i - size] ? pressure[i] : pressure[i - size]));
-                if (solid[i - 1] && u[i] < 0 || solid[i + 1] && u[i] > 0) u[i] = 0;
-                if (solid[i - size] && v[i] < 0 || solid[i + size] && v[i] > 0) v[i] = 0;
+        }
+        private unsafe void Project(int iterations) {
+            ClearField(pressure); ClearField(pressureNext);
+            MarkField(pressure, ActiveBounds); MarkField(pressureNext, ActiveBounds);
+            MarkField(divergence, ActiveBounds);
+            fixed (float* a = u, b = v, p = pressure, pn = pressureNext, d = divergence)
+            fixed (bool* mask = solid) {
+                var grid = Grid(); grid.u = a; grid.v = b; grid.pressure = p;
+                grid.pressureNext = pn; grid.divergence = d; grid.solid = mask;
+                FlameKernels.Project(ref grid, iterations);
             }
+            if ((iterations & 1) != 0) Swap(ref pressure, ref pressureNext);
         }
     }
 }

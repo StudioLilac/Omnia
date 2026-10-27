@@ -68,6 +68,16 @@ namespace Omnia.Fire {
         bool CellSolid(int worldX, int worldY);
     }
 
+    // Inclusive local cell bounds. Empty regions have right < left.
+    public struct FlameBounds {
+        public int left, right, bottom, top;
+        public static FlameBounds Empty => new FlameBounds { left = int.MaxValue, bottom = int.MaxValue, right = int.MinValue, top = int.MinValue };
+        public void Include(int x, int y) {
+            left = Math.Min(left, x); right = Math.Max(right, x);
+            bottom = Math.Min(bottom, y); top = Math.Max(top, y);
+        }
+    }
+
     public sealed class FlameSim {
         private readonly FlameParticle[] particles;
         private readonly int[] free;
@@ -93,6 +103,10 @@ namespace Omnia.Fire {
         private float injectionSpeed, stampDirect, stampMaterial;
         private float thermalVariation, thermalLength, thermalWidth, thermalSpeed;
         private int flowTick;
+        private readonly int[] sourceCells;
+        private readonly float[] stampSamples = new float[17 * 17];
+        private int sourceCount;
+        private FlameBounds sourceBounds;
         public FlameFlow Flow => flow;
         public int Capacity => particles.Length;
         public int ParticleCount { get; private set; }
@@ -116,6 +130,7 @@ namespace Omnia.Fire {
             flow = new FlameFlow(windowSize, seed, flowCellSize);
             sourceVelocity = new FlameVector[heat.Length];
             sourceHeat = new float[heat.Length];
+            sourceCells = new int[heat.Length];
             cohortPositions = new FlameVector[capacity];
             cohortHeat = new float[capacity]; cohortDistance = new float[capacity];
             cohortAges = new int[capacity]; cohortCounts = new int[capacity]; cohortOrder = new int[capacity];
@@ -136,6 +151,7 @@ namespace Omnia.Fire {
             rasterFiring = false; ribbonCount = 0;
             flow.Clear();
             flowTick = 0;
+            ClearSources();
         }
 
         private uint RandomBits() {
@@ -310,8 +326,7 @@ namespace Omnia.Fire {
             }
             OriginX = (int)Math.Floor(centerX - WindowSize * 0.5f);
             OriginY = (int)Math.Floor(centerY - WindowSize * 0.5f);
-            Array.Clear(sourceVelocity, 0, sourceVelocity.Length);
-            Array.Clear(sourceHeat, 0, sourceHeat.Length); stampDirect = 1;
+            ClearSources(); stampDirect = 1;
             stampingCore = true; injectionSpeed = settings.flowSpeed;
             thermalVariation = Clamp01(settings.coreHeatVariation);
             thermalLength = Math.Max(1, settings.coreHeatPatchLength);
@@ -341,10 +356,13 @@ namespace Omnia.Fire {
             stampingCore = false;
             if (settings.cellularFlow) {
                 if (flowTick != StepIndex) {
-                    flow.Step(OriginX, OriginY, sourceHeat, sourceVelocity, settings, rasterFiring, StepIndex, collision);
+                    flow.Step(OriginX, OriginY, sourceHeat, sourceVelocity, settings, rasterFiring, StepIndex, collision, sourceBounds);
                     flowTick = StepIndex;
                 } else flow.Recenter(OriginX, OriginY);
-                for (int i = 0; i < heat.Length; i++) {
+                int flowMinX = Math.Max(0, flow.MinWorldX - OriginX), flowMaxX = Math.Min(WindowSize - 1, flow.MaxWorldX - OriginX);
+                int flowMinY = Math.Max(0, flow.MinWorldY - OriginY), flowMaxY = Math.Min(WindowSize - 1, flow.MaxWorldY - OriginY);
+                if (flow.HasHeat) for (int y = flowMinY; y <= flowMaxY; y++) for (int x = flowMinX; x <= flowMaxX; x++) {
+                    int i = y * WindowSize + x;
                     float value = flow.CellHeat(i);
                     if (value <= heat[i]) continue;
                     if (heat[i] == 0) occupied[OccupiedCount++] = i;
@@ -357,6 +375,13 @@ namespace Omnia.Fire {
                     if (collision.CellSolid(OriginX + cell % WindowSize, OriginY + cell / WindowSize)) heat[cell] = 0;
                 }
             }
+        }
+
+        private void ClearSources() {
+            for (int i = 0; i < sourceCount; i++) {
+                int cell = sourceCells[i]; sourceHeat[cell] = 0; sourceVelocity[cell] = default;
+            }
+            sourceCount = 0; sourceBounds = FlameBounds.Empty;
         }
 
         private void AddRibbonPoint(FlameVector position, float value, float radius, int age, float direct = 1) {
@@ -499,23 +524,7 @@ namespace Omnia.Fire {
             }
         }
 
-        private float ThermalHash(int x, int y) {
-            uint h;
-            unchecked {
-                h = (uint)x * 73856093u ^ (uint)y * 19349663u ^ initialSeed;
-                h ^= h >> 13; h *= 1274126177u; h ^= h >> 16;
-            }
-            return (h & 0xffffff) * (1f / 16777216f);
-        }
-        private float ThermalNoise(float x, float y) {
-            int ix = (int)Math.Floor(x), iy = (int)Math.Floor(y);
-            float fx = Smooth01(x - ix), fy = Smooth01(y - iy);
-            float a = ThermalHash(ix, iy), b = ThermalHash(ix + 1, iy);
-            float c = ThermalHash(ix, iy + 1), d = ThermalHash(ix + 1, iy + 1);
-            return (a + (b - a) * fx) * (1 - fy) + (c + (d - c) * fx) * fy;
-        }
-
-        private void Stamp(FlameVector position, float radius, float value, float falloff, IFlameCollision collision) {
+        private unsafe void Stamp(FlameVector position, float radius, float value, float falloff, IFlameCollision collision) {
             int cx = (int)Math.Floor(position.x) - OriginX, cy = (int)Math.Floor(position.y) - OriginY;
             radius = Math.Max(0, Math.Min(8, radius));
             float squared = radius * radius + 0.25f;
@@ -524,27 +533,29 @@ namespace Omnia.Fire {
             // In particular, subpixel wisps occupy one cell, not a 3x3 search.
             int extent = (int)radius;
             if ((extent + 1) * (extent + 1) <= squared) extent++;
+            var stamp = new FlameKernels.StampInput {
+                centerX = cx, centerY = cy, originX = OriginX, originY = OriginY, size = WindowSize,
+                extent = extent, squared = squared, value = value, falloff = falloff,
+                variation = thermalVariation, material = stampMaterial, speed = thermalSpeed,
+                length = thermalLength, width = thermalWidth, position = position, forward = forward, seed = initialSeed
+            };
+            fixed (float* h = heat, source = sourceHeat, samples = stampSamples)
+                FlameKernels.Stamp(ref stamp, h, source, samples, stampingCore ? 1 : 0);
+            int stride = extent * 2 + 1;
             for (int dy = -extent; dy <= extent; dy++) for (int dx = -extent; dx <= extent; dx++) {
+                float sample = stampSamples[(dy + extent) * stride + dx + extent];
+                if (sample <= 0) continue;
                 int x = cx + dx, y = cy + dy;
-                int distance = dx * dx + dy * dy;
-                if (x < 0 || y < 0 || x >= WindowSize || y >= WindowSize || distance > squared) continue;
-                float sample = value * Math.Max(0, 1 - Math.Max(0, falloff) * distance / squared);
-                if (stampingCore && thermalVariation > 0) {
-                    float ox = OriginX + x + 0.5f - position.x, oy = OriginY + y + 0.5f - position.y;
-                    // Emission time is a material coordinate: hot/cool pockets travel
-                    // with the jet rather than flickering as independent screen noise.
-                    float along = stampMaterial * thermalSpeed - ox * forward.x - oy * forward.y;
-                    float across = -ox * forward.y + oy * forward.x;
-                    float coolPocket = 1 - ThermalNoise(along / thermalLength, across / thermalWidth);
-                    sample *= 1 - thermalVariation * coolPocket * coolPocket;
-                }
                 int index = y * WindowSize + x;
                 if (sample <= heat[index] && (!stampingCore || sample <= sourceHeat[index])) continue;
                 // A thick stamp must not bleed across a one-pixel wall either.
                 if (collision != null && (dx != 0 || dy != 0)
                     && collision.HitsSolid(position, new FlameVector(OriginX + x + 0.5f, OriginY + y + 0.5f))) continue;
                 if (stampingCore) {
-                    if (sample > sourceHeat[index]) { sourceHeat[index] = sample; sourceVelocity[index] = stampVelocity; }
+                    if (sample > sourceHeat[index]) {
+                        if (sourceHeat[index] == 0) { sourceCells[sourceCount++] = index; sourceBounds.Include(x, y); }
+                        sourceHeat[index] = sample; sourceVelocity[index] = stampVelocity;
+                    }
                     sample *= stampDirect;
                 }
                 if (sample <= heat[index]) continue;

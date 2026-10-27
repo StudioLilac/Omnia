@@ -61,7 +61,7 @@ namespace Omnia.Fire {
             return (hash & 0xffffff) * (1f / 16777216f) < (heat - cutoff) / 0.15f;
         }
 
-        public void Draw(FlameSim sim, FlamePalette palette, float cutoff, bool dither) {
+        public void Draw(FlameSim sim, FlamePalette palette, float cutoff, bool dither, bool upload = true) {
             for (int i = 0; i < VisibleCount; i++) {
                 int index = visible[i]; pixels[index] = default; visibleHeat[index] = 0;
             }
@@ -79,9 +79,37 @@ namespace Omnia.Fire {
                 pixels[index] = palette.Evaluate(value);
             }
             display.flipX = display.flipY = false;
+            if (upload) Upload();
+        }
+
+        public void Upload() {
             texture.SetPixels32(pixels);
             texture.Apply(false, false);
         }
+
+        public bool DamageBounds(float threshold, out Bounds worldBounds, out FlameBounds cells) {
+            cells = FlameBounds.Empty;
+            for (int i = 0; i < VisibleCount; i++) {
+                int index = visible[i];
+                if (visibleHeat[index] > threshold) cells.Include(index % side, index / side);
+            }
+            if (cells.right < cells.left) { worldBounds = default; return false; }
+            Vector2 min = lowerLeft + new Vector2(cells.left, cells.bottom) / ppu;
+            Vector2 max = lowerLeft + new Vector2(cells.right + 1, cells.top + 1) / ppu;
+            worldBounds = new Bounds((min + max) * 0.5f, max - min);
+            return true;
+        }
+
+        // Conservative pixel range for the collider AABB. Exact containment is
+        // checked by the caller; the extra boundary cells tolerate float rounding.
+        public FlameBounds IntersectPixels(Bounds bounds, FlameBounds cells) {
+            cells.left = Mathf.Max(cells.left, Mathf.FloorToInt((bounds.min.x - lowerLeft.x) * ppu - 0.5f));
+            cells.right = Mathf.Min(cells.right, Mathf.CeilToInt((bounds.max.x - lowerLeft.x) * ppu - 0.5f));
+            cells.bottom = Mathf.Max(cells.bottom, Mathf.FloorToInt((bounds.min.y - lowerLeft.y) * ppu - 0.5f));
+            cells.top = Mathf.Min(cells.top, Mathf.CeilToInt((bounds.max.y - lowerLeft.y) * ppu - 0.5f));
+            return cells;
+        }
+        public int CellIndex(int x, int y) => y * side + x;
 
         private void OnDestroy() { Release(sprite); Release(texture); Release(material); }
         private static void Release(UnityEngine.Object resource) {

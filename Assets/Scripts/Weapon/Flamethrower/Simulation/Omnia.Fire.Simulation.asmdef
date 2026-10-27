@@ -1,1 +1,9 @@
-{"name":"Omnia.Fire.Simulation","rootNamespace":"Omnia.Fire","noEngineReferences":true}
+{
+  "name": "Omnia.Fire.Simulation",
+  "rootNamespace": "Omnia.Fire",
+  "noEngineReferences": false,
+  "references": [
+    "Unity.Burst"
+  ],
+  "allowUnsafeCode": true
+}

@@ -116,6 +116,11 @@ namespace Omnia.Fire {
         private readonly long[] chunkKeys = new long[2048];
         private readonly int[] chunkTicks = new int[2048];
         private readonly bool[] chunkSolid = new bool[2048];
+        private readonly ulong[] chunkKnownCells = new ulong[2048];
+        private readonly ulong[] chunkSolidCells = new ulong[2048];
+        // At most 100 ms of work at the 40 Hz preset. Excess elapsed time is
+        // discarded after a stall, rather than accumulating an unbounded backlog.
+        private const int MaxCatchUpSteps = 4;
         private int collisionTick;
 
         private void Awake() {
@@ -158,8 +163,9 @@ namespace Omnia.Fire {
 
         private void AdvanceSimulation(float elapsed) {
             if (this == null) return;
-            accumulator += elapsed;
             double step = 1.0 / Mathf.Max(1, simHz);
+            accumulator = Math.Min(accumulator + Math.Max(0, elapsed), step * MaxCatchUpSteps);
+            bool needsUpload = false;
             while (accumulator >= step) {
                 accumulator -= step;
                 // Pose input is captured once at the step boundary; the sim gets values only.
@@ -169,15 +175,27 @@ namespace Omnia.Fire {
                 Direction = direction;
                 var pose = new FlamePose(Origin.x * pixelsPerUnit, Origin.y * pixelsPerUnit, Mathf.Atan2(direction.y, direction.x));
                 if (!poseValid) { previousPose = pose; poseValid = true; }
+                bool firing = IsFiring && isActiveAndEnabled;
+                if (!firing && Sim.ParticleCount == 0 && !Sim.Flow.HasHeat) {
+                    // Keep the nozzle current without moving or simulating extinct fire.
+                    previousPose = pose;
+                    if (Renderer.VisibleCount > 0) {
+                        Renderer.Draw(Sim, palette != null ? palette : fallbackPalette, cutoff, ditherEdges, false);
+                        needsUpload = true;
+                    }
+                    continue;
+                }
                 solidFilter = new ContactFilter2D { useTriggers = false };
                 solidFilter.SetLayerMask(solidLayers);
                 unchecked { collisionTick++; }
                 if (collisionTick == 0) { Array.Clear(chunkTicks, 0, chunkTicks.Length); collisionTick = 1; }
-                Sim.Step(IsFiring && isActiveAndEnabled, previousPose, pose, Settings((float)step), solidLayers.value == 0 ? null : this);
+                Sim.Step(firing, previousPose, pose, Settings((float)step), solidLayers.value == 0 ? null : this);
                 previousPose = pose;
-                Renderer.Draw(Sim, palette != null ? palette : fallbackPalette, cutoff, ditherEdges);
+                Renderer.Draw(Sim, palette != null ? palette : fallbackPalette, cutoff, ditherEdges, false);
+                needsUpload = true;
                 SimulationTick?.Invoke((float)step);
             }
+            if (needsUpload) Renderer.Upload();
         }
 
         public bool HitsSolid(FlameVector from, FlameVector to) {
@@ -202,10 +220,22 @@ namespace Omnia.Fire {
             bool solid = Physics2D.OverlapBox(new Vector2((x + 0.5f) * 8, (y + 0.5f) * 8) / pixelsPerUnit,
                 Vector2.one * (8 / pixelsPerUnit), 0, solidFilter, overlaps) > 0;
             chunkTicks[index] = collisionTick; chunkKeys[index] = key; chunkSolid[index] = solid;
+            chunkKnownCells[index] = chunkSolidCells[index] = 0;
             return solid;
         }
-        public bool CellSolid(int x, int y) => ChunkSolid(Mathf.FloorToInt(x / 8f), Mathf.FloorToInt(y / 8f))
-            && Physics2D.OverlapPoint(new Vector2(x + 0.5f, y + 0.5f) / pixelsPerUnit, solidFilter, overlaps) > 0;
+        public bool CellSolid(int x, int y) {
+            int cx = Mathf.FloorToInt(x / 8f), cy = Mathf.FloorToInt(y / 8f);
+            if (!ChunkSolid(cx, cy)) return false;
+            int index;
+            unchecked { index = (int)((uint)cx * 73856093u ^ (uint)cy * 19349663u) & 2047; }
+            ulong bit = 1UL << ((y - cy * 8) * 8 + x - cx * 8);
+            if ((chunkKnownCells[index] & bit) == 0) {
+                bool blocked = Physics2D.OverlapPoint(new Vector2(x + 0.5f, y + 0.5f) / pixelsPerUnit, solidFilter, overlaps) > 0;
+                chunkKnownCells[index] |= bit;
+                if (blocked) chunkSolidCells[index] |= bit;
+            }
+            return (chunkSolidCells[index] & bit) != 0;
+        }
         public float SampleHeat(Vector2 worldPos) => Renderer != null ? Renderer.SampleHeat(worldPos) : 0;
         public bool IsCoreHeat(float heat) => heat >= coreHeatThreshold;
 
