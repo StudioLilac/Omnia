@@ -53,7 +53,6 @@ namespace Scenes {
                 AudioManager.Instance.SetAmbientVolume(0f);
                 ToggleAudio();
             }
-            PlayerDataManager.Instance.warpedDepthsProgress = 0;
             dustImages = dustParent.GetComponentsInChildren<Image>();
 
             foreach (var img in dustImages) {
@@ -94,7 +93,7 @@ namespace Scenes {
             yield return new WaitForSeconds(3f);
             yield return StartCoroutine(strongFadeHandler.FadeInDarkScreen(2f));
 
-            SceneManager.LoadScene("2_Opening");
+            SceneManager.LoadScene("4_Tutorial");
         }
 
         public void LaunchDinky() {

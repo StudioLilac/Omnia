@@ -164,7 +164,7 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
     public void LevelSelectScene() {
         ResumeScene();
         BuffManager.Instance.ClearAllBuffs();
-        SceneInitializer.LoadScene("LevelSelect");
+        SceneInitializer.LoadScene("1_Title");
     }
 
     public void MainMenuScene() {

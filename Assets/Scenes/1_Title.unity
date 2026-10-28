@@ -2585,13 +2585,10 @@ MonoBehaviour:
   buttons:
   - {fileID: 121086986}
   - {fileID: 785048718}
-  - {fileID: 0}
   launchableDinkyPrefab: {fileID: 1581481017}
   dinkyLaunchPoint: {fileID: 651295878}
   launchVariation: 6
   velocityVariation: 5
-  musicSlider: {fileID: 0}
-  toggle: {fileID: 0}
 --- !u!1 &1687957477
 GameObject:
   m_ObjectHideFlags: 0
