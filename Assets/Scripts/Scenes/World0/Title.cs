@@ -35,13 +35,6 @@ namespace Scenes {
         private string taglineText;
         private string quoteText;
 
-        [SerializeField] private Slider musicSlider;
-        [SerializeField] private Toggle toggle;
-
-
-
-
-
         public void QuitGame() {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
@@ -59,12 +52,7 @@ namespace Scenes {
                 AudioManager.Instance.SetSFXVolume(0f);
                 AudioManager.Instance.SetAmbientVolume(0f);
                 ToggleAudio();
-                toggle.isOn = true;
-                musicSlider.value = PauseMenu.musicVol;
-                MusicVolume();
             }
-            musicSlider.value = PauseMenu.musicVol;
-            MusicVolume();
             PlayerDataManager.Instance.warpedDepthsProgress = 0;
             dustImages = dustParent.GetComponentsInChildren<Image>();
 
@@ -96,13 +84,6 @@ namespace Scenes {
             StartCoroutine(StartGameSequence());
         }
 
-        public void GoToLevelSelect() {
-            SceneManager.LoadScene("LevelSelect");
-        }
-
-        public void GoToWarpedDepths() {
-            SceneManager.LoadScene("WarpedDepths");
-        }
 
         private IEnumerator StartGameSequence() {
             yield return StartCoroutine(fadeScreen.FadeInDarkScreen(2f));
@@ -113,7 +94,6 @@ namespace Scenes {
             yield return new WaitForSeconds(3f);
             yield return StartCoroutine(strongFadeHandler.FadeInDarkScreen(2f));
 
-            // Done to avoid scene transition
             SceneManager.LoadScene("2_Opening");
         }
 
@@ -159,13 +139,6 @@ namespace Scenes {
 
         public void ToggleAudio() {
             AudioManager.Instance.ToggleAudio();
-        }
-
-        public void MusicVolume() {
-            PauseMenu.musicVol = musicSlider.value;
-            AudioManager.Instance.SetBGMVolume(musicSlider.value);
-            AudioManager.Instance.SetSFXVolume(musicSlider.value);
-            AudioManager.Instance.SetAmbientVolume(musicSlider.value);
         }
 
 
