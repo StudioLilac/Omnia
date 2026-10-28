@@ -13,23 +13,12 @@ public static class DualGridTilemapSetup
     {
         try
         {
-            var settings = Selection.activeObject as DualGridSetupSettings;
-            if (settings == null)
-            {
-                var candidates = AssetDatabase.FindAssets($"t:{nameof(DualGridSetupSettings)}");
-                if (candidates.Length != 1)
-                    throw new InvalidOperationException("Create one Tiles > Dual Grid Setup Settings asset, "
-                        + "or select the settings asset to use when several exist.");
-                settings = AssetDatabase.LoadAssetAtPath<DualGridSetupSettings>(
-                    AssetDatabase.GUIDToAssetPath(candidates[0]));
-            }
-
             var selected = Selection.activeGameObject;
             var target = selected == null ? null : selected.GetComponentInParent<DualGridTilemap>(true);
             var scene = target == null ? SceneManager.GetActiveScene() : target.gameObject.scene;
-            var dualGrid = SetupDualGrid(scene, settings.terrain, target);
+            var dualGrid = SetupDualGrid(scene, target);
             EditorSceneManager.SaveScene(scene);
-            Debug.Log($"Dual Grid setup complete. Paint the data tilemap with {settings.terrain.name}.", dualGrid);
+            Debug.Log("Dual Grid setup complete. Paint the Data tilemap with DualGridTerrainTile assets.", dualGrid);
         }
         catch (InvalidOperationException exception)
         {
@@ -38,11 +27,8 @@ public static class DualGridTilemapSetup
     }
 
     // Scene and asset identity come from references; names below are only initial display labels.
-    public static DualGridTilemap SetupDualGrid(Scene scene, DualGridTerrainTile terrain,
-        DualGridTilemap target = null)
+    public static DualGridTilemap SetupDualGrid(Scene scene, DualGridTilemap target = null)
     {
-        if (terrain == null)
-            throw new InvalidOperationException("Assign a terrain asset in Dual Grid Setup Settings before running setup.");
         if (!scene.IsValid() || !scene.isLoaded)
             throw new InvalidOperationException("Open a scene before running Dual Grid setup.");
         if (target != null && target.gameObject.scene != scene)
@@ -81,11 +67,6 @@ public static class DualGridTilemapSetup
 
         target.data = data;
         target.visual = visual;
-        // Upgrade ordinary painted tiles using the explicitly configured terrain.
-        var paintedTiles = new TileBase[data.GetUsedTilesCount()];
-        data.GetUsedTilesNonAlloc(paintedTiles);
-        foreach (var paintedTile in paintedTiles)
-            if (!(paintedTile is DualGridTerrainTile)) data.SwapTile(paintedTile, terrain);
         target.RebuildAll();
 
         EditorUtility.SetDirty(data);

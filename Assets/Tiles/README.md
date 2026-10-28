@@ -43,19 +43,14 @@ values draw above lower ones, relative to Visual's sorting order. Give terrain
 types distinct orders when a particular overlap order is required. Artwork
 transparency still controls which underlying pixels are visible.
 
-**Tools > Setup Dual Grid** uses the terrain reference in the **Dual Grid Setup
-Settings** asset. Edit that asset to choose a different terrain, or create one via
-**Create > Tiles > Dual Grid Setup Settings**. The terrain supplies its authored
-sprite and artwork; setup does not generate or overwrite terrain assets. Unity
-references survive moves and renames of the settings, terrain and artwork.
+**Tools > Setup Dual Grid** creates or wires the Data and Visual tilemaps. Paint
+the Data tilemap with the desired `DualGridTerrainTile` assets after setup; it does
+not generate, convert or overwrite terrain assets or painted tiles.
 
 Setup reuses the scene's `DualGridTilemap` component and its Data/Visual references,
 including inactive or renamed objects. With several grids, select the grid (or a
-child) first. With several settings assets, select the settings to use. A new grid
-is created only when the scene has none. Object names are initial display labels,
-not identifiers. When upgrading an old Data tilemap, setup replaces ordinary
-painted tiles with the configured representative, preserving occupied cells and
-existing terrain representatives.
+child) first. A new grid is created only when the scene has none. Object names are
+initial display labels, not identifiers.
 
 Regression check (requires a connected Unity Editor):
 
@@ -68,5 +63,5 @@ This runs in a temporary preview scene and checks all 81 four-corner arrangement
 of empty/Stone/Dirt, incremental updates versus full rebuilds, replacement,
 erasure, collision, sorting, undo/redo and independent grids, plus sparse
 variation fallback, distribution, seed changes, stable rebuilds and asset migration.
-The setup check also covers renamed and inactive objects, repeat setup, terrain
-conversion, ambiguous grid selection, scene isolation and default asset references.
+The setup check also covers renamed and inactive objects, repeat setup, ambiguous
+grid selection and scene isolation.
