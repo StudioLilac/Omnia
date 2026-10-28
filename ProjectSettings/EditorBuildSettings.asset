@@ -6,16 +6,16 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/World 0/1_Title.unity
+    path: Assets/Scenes/1_Title.unity
     guid: 2bb6708e0e86940d5af9e0075837a950
   - enabled: 1
-    path: Assets/Scenes/World 0/2_Opening.unity
+    path: Assets/Scenes/2_Opening.unity
     guid: d2c46089236844055a03e34d43feb75e
   - enabled: 1
-    path: Assets/Scenes/World 0/3_Birthday.unity
+    path: Assets/Scenes/3_Birthday.unity
     guid: 5fdd7ab07d25f403eb57ca8563a38a84
   - enabled: 1
-    path: Assets/Scenes/World 0/4_Tutorial.unity
+    path: Assets/Scenes/4_Tutorial.unity
     guid: b433c13445543414eafa99007f0649b5
   - enabled: 1
     path: Assets/Scenes/MainScene.unity
@@ -39,7 +39,7 @@ EditorBuildSettings:
     path: Assets/Scenes/World 1/W-1-S old.unity
     guid: d979eb5616623ac428c478eb2b2f808a
   - enabled: 1
-    path: Assets/Scenes/World 0/5_City.unity
+    path: Assets/Scenes/5_City.unity
     guid: a980baa100d824188b4151cb3f8d6d9b
   - enabled: 1
     path: Assets/Scenes/World 0/7_UncleRoom.unity
@@ -108,7 +108,7 @@ EditorBuildSettings:
     path: Assets/Scenes/World 5/W-B-B.unity
     guid: bac3c627ad882460f93f365fe65eee33
   - enabled: 1
-    path: Assets/Scenes/World 0/LevelSelect.unity
+    path: Assets/Scenes/LevelSelect.unity
     guid: 807599f7c48df45478e28264e553d6a4
   - enabled: 1
     path: Assets/Scenes/World 5/W-B-1.unity
@@ -123,7 +123,7 @@ EditorBuildSettings:
     path: Assets/Scenes/World 5/W-B-E.unity
     guid: a1768f6cd5afb40499b21e0a07fc3548
   - enabled: 1
-    path: Assets/Scenes/World 5/Credits.unity
+    path: Assets/Scenes/Credits.unity
     guid: f2c2d1e915c6a4b70a15a528dd7358ab
   - enabled: 1
     path: Assets/Scenes/WarpedDepths/Level 1.unity
