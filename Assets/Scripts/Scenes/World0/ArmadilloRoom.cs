@@ -10,7 +10,6 @@ namespace Scenes {
         public void Start() {
             StartCoroutine(BeginSequence());
             AudioManager.Instance.SwitchBGM(AudioTracks.CaveSpeak);
-            DisablePersistentSingletons.DisableInventory();
         }
 
         private IEnumerator BeginSequence() {

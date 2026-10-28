@@ -69,9 +69,6 @@ namespace Scenes {
             AudioManager.Instance.PlayBGM(AudioTracks.LullabyForAScrapyard);
             fadeScreen.SetLightScreen();
 
-            DisablePersistentSingletons.DisableHUD();
-            DisablePersistentSingletons.DisableInventory();
-            DisablePersistentSingletons.DisablePause();
 
         }
 
@@ -83,7 +80,6 @@ namespace Scenes {
             StartCoroutine(StartGameSequence());
         }
 
-
         private IEnumerator StartGameSequence() {
             yield return StartCoroutine(fadeScreen.FadeInDarkScreen(2f));
             yield return new WaitForSeconds(1f);
@@ -93,7 +89,7 @@ namespace Scenes {
             yield return new WaitForSeconds(3f);
             yield return StartCoroutine(strongFadeHandler.FadeInDarkScreen(2f));
 
-            SceneManager.LoadScene("4_Tutorial");
+            SceneInitializer.LoadScene(LevelData.Get<global::Tutorial>(), shouldFade: false);
         }
 
         public void LaunchDinky() {

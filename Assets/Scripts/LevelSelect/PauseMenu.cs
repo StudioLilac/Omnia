@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Initializers;
 using Players.Buff;
+using Scenes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,7 +10,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Utils;
 
-public class PauseMenu : PersistentSingleton<PauseMenu> {
+public class PauseMenu : MonoBehaviour {
     public static bool IsPaused = false;
     public static bool ScreenShake = true;
     [SerializeField] private GameObject pauseMenuPanel;
@@ -27,6 +28,7 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
 
 
     [SerializeField] private InputActionReference pauseAction;
+    private TimeManager TimeManager => this.Inject<TimeManager>();
 
     // Workaround To Import Mute Icon's Toggle Image from Title since it is not possible to toggle the image without
     // the associated onValueChanged function being called
@@ -81,8 +83,8 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
         }
     }
 
-    protected override void OnAwake() {
-        return;
+    private void Awake() {
+        IsPaused = false;
     }
 
     void ShowHistory() {
@@ -145,14 +147,14 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
     public void ResumeScene()
     {
         pauseMenuPanel.SetActive(false);
-        Time.timeScale = 1f;
+        TimeManager.Unfreeze(this);
         IsPaused = false;
         OnPauseMenuDeactivate?.Invoke();
     }
 
     public void PauseScene() {
         pauseMenuPanel.SetActive(true);
-        Time.timeScale = 0f;
+        TimeManager.Freeze(this);
         IsPaused = true;
 
         if (isDialogueHistoryShowing) {
@@ -164,18 +166,18 @@ public class PauseMenu : PersistentSingleton<PauseMenu> {
     public void LevelSelectScene() {
         ResumeScene();
         BuffManager.Instance.ClearAllBuffs();
-        SceneInitializer.LoadScene("1_Title");
+        SceneInitializer.LoadScene(LevelData.Get<Title>());
     }
 
     public void MainMenuScene() {
         ResumeScene();
         BuffManager.Instance.ClearAllBuffs();
-        SceneInitializer.LoadScene("1_Title");
+        SceneInitializer.LoadScene(LevelData.Get<Title>());
     }
 
     public void ResetScene() {
         ResumeScene();
-        SceneInitializer.LoadScene(SceneManager.GetActiveScene().name);
+        SceneInitializer.Restart();
     }
 
     public void SkipScene() {
