@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e17b34db181f8b499aa5320e85712ac, type: 3}
+  m_Name: Dirt
+  m_EditorClassIdentifier: Assembly-CSharp::DualGridTerrainTile
+  m_Sprite: {fileID: -427872454, guid: 0131a5b9e89289e45b570ea00a8c6b06, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Transform:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  m_InstancedGameObject: {fileID: 0}
+  m_Flags: 1
+  m_ColliderType: 2
+  tileSets:
+  - tiles:
+    - {fileID: 11400000, guid: 32f499e64fa163a4fba6bfc25fd987ce, type: 2}
+    - {fileID: 11400000, guid: 20c19c6225569764386195c483186832, type: 2}
+    - {fileID: 11400000, guid: e5d83b9573fec14429ede975d55c7cd1, type: 2}
+    - {fileID: 11400000, guid: 660c9f9ee4c75db47a497f50dcfeac1c, type: 2}
+    - {fileID: 11400000, guid: 008d6c944a87c5349adc065f678ca647, type: 2}
+    - {fileID: 11400000, guid: f9f6a0f255d735649b0f859858980d77, type: 2}
+    - {fileID: 11400000, guid: e5a131ae99594fe4ea774003f3b11624, type: 2}
+    - {fileID: 11400000, guid: 14668d6e791bef94b9835985bd56c48f, type: 2}
+    - {fileID: 11400000, guid: e6d6006a13c96484aaeb647632499f79, type: 2}
+    - {fileID: 11400000, guid: 4204960b76140434598cd33aa5260b22, type: 2}
+    - {fileID: 11400000, guid: 00aff71bbaaf56f4dbdb288f8fd3b13c, type: 2}
+    - {fileID: 11400000, guid: 1fdf6cd710123fa4c8ba0109613221ba, type: 2}
+    - {fileID: 0}
+    - {fileID: 11400000, guid: 0cb1a52588878134db05b767e367e282, type: 2}
+    - {fileID: 11400000, guid: 1a0ce2f6b6c0bf7438cb28277bd4e6fc, type: 2}
+    - {fileID: 11400000, guid: 4171bee3b28144041b666f44f9e6ae44, type: 2}
+  - tiles:
+    - {fileID: 11400000, guid: 817ef57be4ec575499eb584b69a65265, type: 2}
+    - {fileID: 11400000, guid: f8dde2af27ca48249a19019d4fa743e3, type: 2}
+    - {fileID: 11400000, guid: 924330f46b0fa664ca1985a15cd6da4d, type: 2}
+    - {fileID: 11400000, guid: db83ccbfec7270141865fa04d2fb1de8, type: 2}
+    - {fileID: 11400000, guid: e8b2b850de31eef40b99c17c709c54a2, type: 2}
+    - {fileID: 11400000, guid: 6f5871eb6dcf9d6409c0a45605f33764, type: 2}
+    - {fileID: 11400000, guid: 31269d7ce7debab4fa81743c62eb2bd7, type: 2}
+    - {fileID: 11400000, guid: 0658c731a5dc9b945840bce479e85fc8, type: 2}
+    - {fileID: 11400000, guid: 8177fb805ba938e4b82633e115e90408, type: 2}
+    - {fileID: 11400000, guid: 38ada452ca37af94aabc384175f21391, type: 2}
+    - {fileID: 11400000, guid: fd1cf86d6a140b340a2939a5cd4064e9, type: 2}
+    - {fileID: 11400000, guid: 5e6914f349451964b92ff0759fed82f3, type: 2}
+    - {fileID: 0}
+    - {fileID: 11400000, guid: 99e606fb56dfe4b4b947644685b73ef1, type: 2}
+    - {fileID: 11400000, guid: b4d18aead2c4e384dade35bc36fde1fe, type: 2}
+    - {fileID: 11400000, guid: 986e88622b6b0a54a9beccb69f8dae9d, type: 2}
+  - tiles:
+    - {fileID: 11400000, guid: 38d9c547aedc5d64591913d809cf9dee, type: 2}
+    - {fileID: 11400000, guid: da131209415c03f49b5f3fc36096733f, type: 2}
+    - {fileID: 11400000, guid: 18312a93cc7315744866ddd151115ef2, type: 2}
+    - {fileID: 11400000, guid: 8fef3a6be9bfb75428f70cec6f4d8995, type: 2}
+    - {fileID: 11400000, guid: 9a47e45cd8948e041b85a61a919aa1b1, type: 2}
+    - {fileID: 11400000, guid: 78dfad1345b6dfe4e9e4ed6871875ffc, type: 2}
+    - {fileID: 11400000, guid: 6b9f5803cfd9994488a1415534e28999, type: 2}
+    - {fileID: 11400000, guid: 1085c49854d316e4694df9ae42431b88, type: 2}
+    - {fileID: 11400000, guid: 42d5593933d7f24489246eae5331f193, type: 2}
+    - {fileID: 11400000, guid: 38a85f9464f987c41b29f26e54b8bf3e, type: 2}
+    - {fileID: 11400000, guid: bc07af1a10c41ec4ebdb2fd6573b8c0a, type: 2}
+    - {fileID: 11400000, guid: da94bf09c2fc89f46b264c7e4ac67359, type: 2}
+    - {fileID: 0}
+    - {fileID: 11400000, guid: 9a1338014d742fc41a5a554b0924b6aa, type: 2}
+    - {fileID: 11400000, guid: 1325d5a9724432449b2e87ee7bcc8ca5, type: 2}
+    - {fileID: 11400000, guid: 529fcf82b990d9b4c8787faf473f3f75, type: 2}
+  variationSeed: 67
+  legacyVisualTiles: []
+  sortingOrder: 0
