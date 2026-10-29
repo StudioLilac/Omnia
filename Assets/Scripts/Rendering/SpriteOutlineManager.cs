@@ -37,12 +37,10 @@ namespace Omnia.Rendering {
                 entity.Outliners.RemoveAll(outliner => outliner == null || !outliner.transform.IsChildOf(owner.transform));
                 // rechecks for newly instantiated children
                 AttachOutliners(owner, entity.Outliners);
-                var rootColors = entities[GetRootOwner(owner.transform)].Colors;
-                Color color = rootColors.Count > 0 ? rootColors.Peek() : DefaultColor;
                 entity.Outliners
                     .Where(outliner => outliner != null)
                     .ToList()
-                    .ForEach(outliner => outliner.OutlineColor = color);
+                    .ForEach(outliner => outliner.OutlineColor = ResolveColor(outliner.transform));
             }
         }
 
@@ -72,11 +70,11 @@ namespace Omnia.Rendering {
             }
         }
 
-        // topmost subscribed ancestor (or self); nested subscribers inherit its colour
-        private GameObject GetRootOwner(Transform transform) {
-            return transform.GetComponentsInParent<Transform>(true)
-                .Select(t => t.gameObject)
-                .LastOrDefault(entities.ContainsKey);
+        // nearest subscriber (self or ancestor) with a pushed colour wins
+        private Color ResolveColor(Transform transform) {
+            for (Transform t = transform; t != null; t = t.parent)
+                if (entities.TryGetValue(t.gameObject, out var e) && e.Colors.Count > 0) return e.Colors.Peek();
+            return DefaultColor;
         }
     }
 }
