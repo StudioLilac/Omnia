@@ -24,9 +24,7 @@ public class LevelManager : PersistentSingleton<LevelManager> {
     }
 
     private void HandlePlayerDeath() {
-        if (PlayerDataManager.Instance.warpedDepthsProgress < 1) {
-            Restart();
-        }
+        Restart();
     }
 
     public void Restart() {

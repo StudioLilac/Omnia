@@ -163,12 +163,6 @@ public class PauseMenu : MonoBehaviour {
         OnPauseMenuActivate?.Invoke();
     }
 
-    public void LevelSelectScene() {
-        ResumeScene();
-        BuffManager.Instance.ClearAllBuffs();
-        SceneInitializer.LoadScene(LevelData.Get<Level_Select>());
-    }
-
     public void MainMenuScene() {
         ResumeScene();
         BuffManager.Instance.ClearAllBuffs();

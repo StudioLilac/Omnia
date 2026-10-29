@@ -6,136 +6,19 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/World 0/1_Title.unity
+    path: Assets/Scenes/1_Title.unity
     guid: 2bb6708e0e86940d5af9e0075837a950
   - enabled: 1
-    path: Assets/Scenes/World 0/2_Opening.unity
-    guid: d2c46089236844055a03e34d43feb75e
-  - enabled: 1
-    path: Assets/Scenes/World 0/3_Birthday.unity
-    guid: 5fdd7ab07d25f403eb57ca8563a38a84
-  - enabled: 1
-    path: Assets/Scenes/World 0/4_Tutorial.unity
+    path: Assets/Scenes/4_Tutorial.unity
     guid: b433c13445543414eafa99007f0649b5
+  - enabled: 1
+    path: Assets/Scenes/5_City.unity
+    guid: a980baa100d824188b4151cb3f8d6d9b
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: f2c2d1e915c6a4b70a15a528dd7358ab
   - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
-    path: Assets/Scenes/World 1/W-1-1.unity
-    guid: ccc3de97d0c6a3a41b21fbb31b67dfd1
-  - enabled: 1
-    path: Assets/Scenes/Puzzle1.unity
-    guid: 4e4010e078e1fc54dac6d1bc7cb13f8c
-  - enabled: 1
-    path: Assets/Scenes/World 1/W-1-2.unity
-    guid: eb28b3a55e6971f4890fcf4f4f025e65
-  - enabled: 1
-    path: Assets/Scenes/World 1/W-1-3.unity
-    guid: ac333bd3985f9114f801c5355f61b835
-  - enabled: 1
-    path: Assets/Scenes/World 1/W-1-B.unity
-    guid: b15294b82cc8729498c74e25d5c7786b
-  - enabled: 0
-    path: Assets/Scenes/World 1/W-1-S old.unity
-    guid: d979eb5616623ac428c478eb2b2f808a
-  - enabled: 1
-    path: Assets/Scenes/World 0/5_City.unity
-    guid: a980baa100d824188b4151cb3f8d6d9b
-  - enabled: 1
-    path: Assets/Scenes/World 0/7_UncleRoom.unity
-    guid: 59ac416693805f741a79d095e4ca87e6
-  - enabled: 1
-    path: Assets/Scenes/World 0/6_ArmadilloRoom.unity
-    guid: bddfb2052ac45284c8aaeb7137aefd2e
-  - enabled: 1
-    path: Assets/Scenes/World 0/8_DinkyWasted.unity
-    guid: 9e3c081096d08c444818f70a0d520d9c
-  - enabled: 1
-    path: Assets/Scenes/World 0/9_City2.unity
-    guid: 5a269fffee8367d4dba16857d7383873
-  - enabled: 1
-    path: Assets/Scenes/World 0/10_ArmadilloRoom2.unity
-    guid: d67bd39299dd2de45a60d156cd824f3f
-  - enabled: 1
-    path: Assets/Scenes/World 4/W-4-1.unity
-    guid: ce3df8071c2dc4b43ad0e0dd2cdc772a
-  - enabled: 1
-    path: Assets/Scenes/World 4/W-4-2.unity
-    guid: 893572d0a9191cc44a4695ae05bbe3f0
-  - enabled: 1
-    path: Assets/Scenes/World 4/W-4-3.unity
-    guid: f7eb644b165f6904da93d46cbb7af082
-  - enabled: 1
-    path: Assets/Scenes/World 4/W-4-B.unity
-    guid: 1cbc5cf17fe2df148853f1f5a0837926
-  - enabled: 1
-    path: Assets/Scenes/World 3/W-3-1.unity
-    guid: 4bc72e3d444dae245aa1e53682c85949
-  - enabled: 1
-    path: Assets/Scenes/World 3/W-3-2.unity
-    guid: 3568e3afbec8c78449252c53dad5bd58
-  - enabled: 1
-    path: Assets/Scenes/World 3/W-3-3.unity
-    guid: 00c1f45c7665e6443b32e7fe4725cd17
-  - enabled: 1
-    path: Assets/Scenes/World 3/W-3-B.unity
-    guid: 532f9c1e4c836cb44b2bcd643cd025e9
-  - enabled: 1
-    path: Assets/Scenes/World 3/W-3-S.unity
-    guid: b5b8d2da1847da145b951896abfb530b
-  - enabled: 1
-    path: Assets/Scenes/World 2/W-2-1.unity
-    guid: be3f86c970f17aa4b99acc42836e7f0b
-  - enabled: 1
-    path: Assets/Scenes/World 2/W-2-2.unity
-    guid: 122b11a7b55dddd42ad275c4c5bc5dad
-  - enabled: 1
-    path: Assets/Scenes/World 2/W-2-3.unity
-    guid: fcc6f0bf4ba39414b8165f7018f4dece
-  - enabled: 1
-    path: Assets/Scenes/World 2/W-2-B.unity
-    guid: ec26e50ef277104409dffd5fc0db5887
-  - enabled: 1
-    path: Assets/Scenes/World 2/W-2-S.unity
-    guid: 61f2eaf0a17d5524ba4ee8c7c4eb6917
-  - enabled: 1
-    path: Assets/Scenes/World 1/W-1-S.unity
-    guid: 7e19f253de8fee548955e0d41da8a46f
-  - enabled: 1
-    path: Assets/Scenes/World 4/W-4-S.unity
-    guid: c28bfb855a5b42141878fdc81b44e608
-  - enabled: 1
-    path: Assets/Scenes/World 5/W-B-B.unity
-    guid: bac3c627ad882460f93f365fe65eee33
-  - enabled: 1
-    path: Assets/Scenes/World 0/LevelSelect.unity
-    guid: 807599f7c48df45478e28264e553d6a4
-  - enabled: 1
-    path: Assets/Scenes/World 5/W-B-1.unity
-    guid: e5625d0b9998d6644bb2d5efe9acfdae
-  - enabled: 1
-    path: Assets/Scenes/World 5/W-B-2.unity
-    guid: e9e65bdc19680144dafee4607599e6b3
-  - enabled: 1
-    path: Assets/Scenes/World 5/W-B-3.unity
-    guid: b2ba321e54459be41be3baf1d79bc1ec
-  - enabled: 1
-    path: Assets/Scenes/World 5/W-B-E.unity
-    guid: a1768f6cd5afb40499b21e0a07fc3548
-  - enabled: 1
-    path: Assets/Scenes/World 5/Credits.unity
-    guid: f2c2d1e915c6a4b70a15a528dd7358ab
-  - enabled: 1
-    path: Assets/Scenes/WarpedDepths/Level 1.unity
-    guid: d6153433e5bc94a489637d03cac600e9
-  - enabled: 1
-    path: Assets/Scenes/WarpedDepths/WarpedDepths.unity
-    guid: 9a611dbff27bc4f2d978a2d330f4bf8f
-  - enabled: 1
-    path: Assets/Scenes/WarpedDepths/FragmentSelection.unity
-    guid: f5f85755687b946d09aed38235eef0e7
-  - enabled: 1
-    path: Assets/Scenes/WarpedDepths/Results.unity
-    guid: 5f87d707c17165840b8a5be977229a7a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 89c77ec2c3cf8d440bf87704e072f482, type: 3}

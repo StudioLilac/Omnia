@@ -90,7 +90,7 @@ public class DualGridTerrainTile : Tile, ISerializationCallbackReceiver
     }
 
 #if UNITY_EDITOR
-    private void OnValidate()
+    public override void OnValidate()
     {
         colliderType = ColliderType.Grid;
         UnityEditor.EditorApplication.delayCall -= RefreshGrids;
@@ -100,7 +100,7 @@ public class DualGridTerrainTile : Tile, ISerializationCallbackReceiver
     private void RefreshGrids()
     {
         if (this == null) return;
-        foreach (var grid in UnityEngine.Object.FindObjectsByType<DualGridTilemap>(FindObjectsSortMode.None))
+        foreach (var grid in UnityEngine.Object.FindObjectsByType<DualGridTilemap>())
             grid.RebuildAll();
     }
 #endif
