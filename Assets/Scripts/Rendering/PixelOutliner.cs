@@ -44,6 +44,13 @@ namespace Omnia.Rendering {
             return outliner;
         }
 
+        // Lets the manager skip the renderers this component creates when scanning an entity.
+        internal static bool IsOutlineRenderer(SpriteRenderer renderer) {
+            Transform parent = renderer.transform.parent;
+            return parent != null && parent.TryGetComponent(out PixelOutliner outliner)
+                && outliner.outlines != null && Array.IndexOf(outliner.outlines, renderer) >= 0;
+        }
+
         private void Awake() {
             source = GetComponent<SpriteRenderer>();
             if (outlineMaterial == null)

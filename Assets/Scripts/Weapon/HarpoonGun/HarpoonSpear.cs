@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Enemies;
 using Omnia.Utils;
+using Omnia.Rendering;
 using Players;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ using Random = UnityEngine.Random;
     This class should only be interacted upon by its prefabs and HarpoonGun
 */
 public class HarpoonSpear : MonoBehaviour {
+    private SpriteOutlineManager outlineManager;
+
     public LayerMask hittableLayerMask;
     public LayerMask playerLayer;
     public LayerMask groundLayer;
@@ -50,6 +53,16 @@ public class HarpoonSpear : MonoBehaviour {
         if (player == null) {
             Debug.LogWarning("Player not found or Player script is not attached to the GameObject.");
         }
+    }
+
+    // Runs on first Fire(), since the gun spawns the spear inactive
+    public void Start() {
+        outlineManager = this.Inject<SpriteOutlineManager>();
+        outlineManager.PushColor(this);
+    }
+
+    public void OnDestroy() {
+        if (outlineManager != null) outlineManager.OnEntityDestroyed(this);
     }
 
     public void OnEnable() {

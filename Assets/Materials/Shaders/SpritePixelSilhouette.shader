@@ -60,6 +60,11 @@ Shader "Omnia/Sprite Pixel Silhouette"
                 return SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv).a * inside;
             }
 
+            half IsVisible(float2 uv)
+            {
+                return step(0.1, SampleAlpha(uv));
+            }
+
             float2 PixelStep(float2 offset)
             {
                 return _PixelUV.xy * offset.x + _PixelUV.zw * offset.y;
@@ -82,10 +87,10 @@ Shader "Omnia/Sprite Pixel Silhouette"
             {
                 int index = (int)_Direction;
                 float2 direction = Directions[index];
-                half alpha = SampleAlpha(input.uv) * (1 - SampleAlpha(input.uv + PixelStep(direction)));
+                half alpha = IsVisible(input.uv) * (1 - IsVisible(input.uv + PixelStep(direction)));
                 // A lower-index direction already draws this pixel; skipping it prevents double blending.
                 [unroll] for (int j = 0; j < 3; j++)
-                    if (j < index) alpha *= 1 - SampleAlpha(input.uv + PixelStep(direction - Directions[j]));
+                    if (j < index) alpha *= 1 - IsVisible(input.uv + PixelStep(direction - Directions[j]));
                 return half4(input.color.rgb, input.color.a * alpha);
             }
             ENDHLSL

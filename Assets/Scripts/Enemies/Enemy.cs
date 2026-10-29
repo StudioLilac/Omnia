@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using UnityEngine;
 using Omnia.State;
+using Omnia.Rendering;
+using Utils;
 using Enemies.Common.Behaviour;
 
 namespace Enemies {
@@ -12,6 +14,8 @@ namespace Enemies {
     }
 
     public abstract class Enemy : MonoBehaviour {
+        private SpriteOutlineManager outlineManager;
+
         public static event Action<Enemy> Spawn;
         public static event Action<Enemy> Death;
         public event Action<Enemy> OnDeath;
@@ -36,9 +40,15 @@ namespace Enemies {
         public virtual EnemyWeightType WeightType => EnemyWeightType.Heavy;
 
         public virtual void Start() {
+            outlineManager = this.Inject<SpriteOutlineManager>();
+            outlineManager.PushColor(this);
             currentHealth = maximumHealth;
             UseAnimation(new StateMachine());
             Spawn?.Invoke(this);
+        }
+
+        public virtual void OnDestroy() {
+            if (outlineManager != null) outlineManager.OnEntityDestroyed(this);
         }
 
         /**
