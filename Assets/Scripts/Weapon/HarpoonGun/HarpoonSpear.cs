@@ -169,9 +169,13 @@ public class HarpoonSpear : MonoBehaviour {
 
         TaggedEnemies.Add(enemy);
 
-        if (enemy.WeightType == EnemyWeightType.Light) {
-            SkewerLightEnemy(enemy);
-            return;
+        switch(enemy.WeightType) {
+            case EnemyWeightType.Light:
+                SkewerLightEnemy(enemy);
+                return;
+            case EnemyWeightType.Heavy:
+                StunHeavyEnemy(enemy);
+                break;
         }
 
         DoDamage(enemy);
@@ -205,6 +209,10 @@ public class HarpoonSpear : MonoBehaviour {
         }
         StartCooldown();
         StartHarpoonTimer();
+    }
+
+    private void StunHeavyEnemy(Enemy enemy) {
+        enemy.Stun(gun.stunDuration);
     }
 
     private void SkewerLightEnemy(Enemy enemy) {
