@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Utils;
 
 namespace Omnia.Rendering {
-    public sealed class SpriteOutlineManager : PersistentSingleton<SpriteOutlineManager> {
+    public sealed class SpriteOutlineManager : MonoBehaviour {
         private static readonly Color DefaultColor = Color.black;
 
         private readonly Dictionary<GameObject, (Stack<Color> Colors, List<PixelOutliner> Outliners)> entities = new();
