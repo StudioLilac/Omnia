@@ -30,7 +30,10 @@ namespace Enemies.Bird {
         private ScreenShakeManager ScreenShakeManager => this.Inject<ScreenShakeManager>();
         public Action<Bird> NotifyOnDestroy;
 
-        public void OnDestroy() => NotifyOnDestroy?.Invoke(this);
+        public override void OnDestroy() {
+            NotifyOnDestroy?.Invoke(this);
+            base.OnDestroy();
+        }
 
         public void Awake() {
             targetInstance ??= FindObjectsByType<Player>().FirstOrDefault();

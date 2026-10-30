@@ -1,10 +1,14 @@
 using System;
+using Omnia.Rendering;
 using Omnia.Utils;
 using Players;
 using UnityEngine;
+using Utils;
 
 namespace Enemies.Sundew {
     public class SundewProjectile : MonoBehaviour {
+        private SpriteOutlineManager outlineManager;
+
         [SerializeField] internal SpriteRenderer sprite;
         [SerializeField] internal Rigidbody2D rb;
         [SerializeField] internal LayerMask mask;
@@ -13,7 +17,15 @@ namespace Enemies.Sundew {
 
         public Action<Player, SundewProjectile> NotifyOnHit;
 
-        public void Start() => Destroy(gameObject, time);
+        public void Start() {
+            outlineManager = this.Inject<SpriteOutlineManager>();
+            outlineManager.PushColor(this);
+            Destroy(gameObject, time);
+        }
+
+        public void OnDestroy() {
+            if (outlineManager != null) outlineManager.OnEntityDestroyed(this);
+        }
 
         public void Update() {
             sprite.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(rb.linearVelocity.y, rb.linearVelocity.x) * Mathf.Rad2Deg);

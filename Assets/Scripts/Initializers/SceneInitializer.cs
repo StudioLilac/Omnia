@@ -2,6 +2,7 @@ using Enemies.Common;
 using FX;
 using Players;
 using Players.Buff;
+using Omnia.Rendering;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -106,6 +107,7 @@ namespace Initializers {
         public PlayerDataManager playerDataManager;
         public PlayerHealthVignettePPFX playerHealthFx;
         public TimeManager timeManager;
+        public SpriteOutlineManager spriteOutlineManager;
 
         public List<MonoBehaviour> All => new() {
             dialogueManager,
@@ -121,6 +123,7 @@ namespace Initializers {
             playerDataManager,
             playerHealthFx,
             timeManager,
+            spriteOutlineManager,
         };
 
         public List<MonoBehaviour> AllExcept(params MonoBehaviour[] exclude) {
