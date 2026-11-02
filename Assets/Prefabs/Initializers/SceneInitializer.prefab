@@ -77,3 +77,4 @@ MonoBehaviour:
     playerHealthFx: {fileID: 2043504567393240233, guid: ac259b6f372a8441e81789736434cd2a, type: 3}
     timeManager: {fileID: 5928374610283746152, guid: d737dc1cbbae49f8841cf395d531870d, type: 3}
     spriteOutlineManager: {fileID: 5960877088227004635, guid: d43f88f0aa1847ec8cabde4faed213a8, type: 3}
+    debugConsole: {fileID: 7091429800653844593, guid: 1ef7d1701372349d39f4560ec1bcdad2, type: 3}
