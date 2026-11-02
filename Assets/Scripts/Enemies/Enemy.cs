@@ -27,13 +27,15 @@ namespace Enemies {
         [SerializeField] internal float knockbackForce = 10f;
         [SerializeField] internal float knockbackAngle = 45f;
         [SerializeField] internal float staggerDurationS = 1f;
+        [SerializeField] internal GameObject stunEffect;
 
         protected IBehaviour behaviour;
         public IBehaviour prevBehaviour { get; protected set; }
+        internal virtual IBehaviour PostStunBehaviour => null;
 
         public StateMachine animationStateMachine { get; protected set; }
 
-        public virtual EnemyWeightType WeightType => EnemyWeightType.Heavy;
+        public virtual EnemyWeightType WeightType => EnemyWeightType.None;
 
         public virtual void Start() {
             currentHealth = maximumHealth;
@@ -61,10 +63,22 @@ namespace Enemies {
             if (damage == 0) return;
 
             // Previous behavious should be set here to avoid softlocking the enemy;
-            if (behaviour is Stagger) return;
+            if (behaviour is Stagger or Stunned) return;
             prevBehaviour = behaviour;
             UseBehaviour(new Stagger(this));
         }
+
+        public void Stun(float duration) {
+            if (currentHealth <= 0 || duration <= 0) return;
+            if (behaviour is Stunned stunned) {
+                stunned.Refresh(duration);
+                return;
+            }
+
+            UseBehaviour(new Stunned(this, duration));
+        }
+
+        internal virtual void OnStunned() { }
 
         /**
          * The child inheriting this class must call base.Update()

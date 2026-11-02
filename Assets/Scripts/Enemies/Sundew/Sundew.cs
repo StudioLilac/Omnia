@@ -1,11 +1,15 @@
 using Enemies.Sundew.Behaviour;
 using Enemies.Sundew.Animation;
+using Enemies.Common.Behaviour;
 using Omnia.State;
 using Players;
 using UnityEngine;
 
 namespace Enemies.Sundew {
     public class Sundew : Enemy {
+        public override EnemyWeightType WeightType => EnemyWeightType.Heavy;
+        internal override IBehaviour PostStunBehaviour => new Idle(this);
+
         [SerializeField] internal float windup;
         [SerializeField] internal float reload;
         [SerializeField] internal float spread;
@@ -52,7 +56,7 @@ namespace Enemies.Sundew {
 
         protected override void UseAnimation(StateMachine stateMachine) {
             var idleAnim = new IdleAnimation(animator);
-            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle));
+            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle or Stunned));
             stateMachine.AddAnyTransition(new AttackAnimation(animator), new FuncPredicate(() => behaviour is Attack));
 
             stateMachine.SetState(idleAnim);
