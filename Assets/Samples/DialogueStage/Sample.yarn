@@ -1,0 +1,14 @@
+title: Start
+---
+<<enter Jamie left neutral>>
+Jamie: Hi! I'm Jamie, freshly entered on the left. #expr:grin
+<<enter Dinky right neutral>>
+Dinky: And I'm Dinky. Pleased to meet you. #sfx:scream
+<<move Jamie center>>
+Jamie: The stage moved me to the centre while I talk. #expr:neutral
+Dinky: Watch my expression change. #expr:happy
+Jamie: And now we both exit. #expr:sad
+<<exit Dinky>>
+<<exit Jamie>>
+Jamie: Press R to play it again!
+===
