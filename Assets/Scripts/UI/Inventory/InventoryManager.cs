@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using Utils;
 
 public class InventoryManager : MonoBehaviour {
+    private TimeManager TimeManager => this.Inject<TimeManager>();
     [SerializeField] private GameObject inventoryUI; // Reference to Inventory UI Panel
     [SerializeField] private TrinketSlot[] trinketSlots; // Grid of trinket slots
     [SerializeField] private TrinketSlot equippedTrinket;
@@ -31,7 +32,7 @@ public class InventoryManager : MonoBehaviour {
     }
 
     private void Update() {
-        if (PauseMenu.IsPaused || DialogueManager.Instance.IsInDialogue()) return;
+        if (TimeManager.IsFrozen) return;
 
         if (inventoryAction.action.WasPressedThisFrame()) {
             ToggleInventory();
