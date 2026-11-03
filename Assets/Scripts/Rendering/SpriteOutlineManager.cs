@@ -4,76 +4,109 @@ using System.Linq;
 using UnityEngine;
 
 namespace Omnia.Rendering {
+    // Raise after adding or reparenting a subtree containing sprites at runtime.
+    public readonly struct SpriteOutlineHierarchyChanged : IEvent {
+        public Transform Root { get; }
+
+        public SpriteOutlineHierarchyChanged(Transform root) => Root = root;
+    }
+
     public sealed class SpriteOutlineManager : MonoBehaviour {
         private static readonly Color DefaultColor = Color.black;
 
-        private readonly Dictionary<GameObject, (Stack<Color> Colors, List<PixelOutliner> Outliners)> entities = new();
+        private readonly Dictionary<GameObject, Stack<Color>> entities = new();
         private readonly List<SpriteRenderer> rendererBuffer = new();
+
+        private void OnEnable() {
+            EventBus.Register<SpriteOutlineHierarchyChanged>(OnHierarchyChanged);
+            // Catch up on hierarchy changes made while this manager was disabled.
+            entities.Keys.Where(owner => owner != null).ToList().ForEach(owner => RefreshHierarchy(owner.transform));
+        }
+
+        private void OnDisable() {
+            EventBus.Unregister<SpriteOutlineHierarchyChanged>(OnHierarchyChanged);
+            entities.Keys
+                .Where(owner => owner != null)
+                .SelectMany(owner => owner.GetComponentsInChildren<SpriteRenderer>(true))
+                .Select(renderer => renderer.GetComponent<PixelOutliner>())
+                .Where(outliner => outliner != null && outliner.Manager == this)
+                .ToList()
+                .ForEach(outliner => {
+                    outliner.Manager = null;
+                    outliner.enabled = false;
+                });
+        }
+
+        private void OnDestroy() {
+            OnDisable();
+            entities.Clear();
+        }
 
         public void PushColor(Component target, Color? outlineColor = null) {
             if (target == null) throw new ArgumentNullException(nameof(target));
             GameObject gameObject = target.gameObject;
 
-            if (!entities.TryGetValue(gameObject, out var entity)) {
-                entity = (new Stack<Color>(), new List<PixelOutliner>());
-                entities.Add(gameObject, entity);
+            if (!entities.TryGetValue(gameObject, out var colors)) {
+                colors = new Stack<Color>();
+                entities.Add(gameObject, colors);
             }
 
-            if (outlineColor.HasValue) entity.Colors.Push(outlineColor.Value);
-            AttachOutliners(gameObject, entity.Outliners);
+            if (outlineColor.HasValue) colors.Push(outlineColor.Value);
+            RefreshHierarchy(gameObject.transform);
         }
 
         public void PopColor(Component target) {
-            if (target == null || !entities.TryGetValue(target.gameObject, out var entity)) return;
-            if (entity.Colors.Count > 0) entity.Colors.Pop();
-        }
-
-        public void Update() {
-            foreach (var (owner, entity) in entities) {
-                // This line is kinda goon but basically its for enemies tagged by the harpoon. 
-                // Enemies tagged by the harpoon are "pulled", but I don't think it's needed anymore for now. Imma just leave this line here
-                // but that tagged code should be refactored in another PR.
-                entity.Outliners.RemoveAll(outliner => outliner == null || !outliner.transform.IsChildOf(owner.transform));
-                // rechecks for newly instantiated children
-                AttachOutliners(owner, entity.Outliners);
-                entity.Outliners
-                    .Where(outliner => outliner != null)
-                    .ToList()
-                    .ForEach(outliner => outliner.OutlineColor = ResolveColor(outliner.transform));
-            }
+            if (target == null || !entities.TryGetValue(target.gameObject, out var colors) || colors.Count == 0) return;
+            colors.Pop();
+            RefreshHierarchy(target.transform);
         }
 
         internal void OnEntityDestroyed(Component target) {
             if (ReferenceEquals(target, null)) return;
             GameObject gameObject = target.gameObject;
-            if (!entities.TryGetValue(gameObject, out var entity)) return;
-            entities.Remove(gameObject);
-
-            entity.Outliners
-                .Where(outliner => outliner != null && !entities.Values.Any(other => other.Outliners.Contains(outliner)))
-                .ToList()
-                .ForEach(outliner => outliner.enabled = false);
+            if (entities.Remove(gameObject)) RefreshHierarchy(gameObject.transform);
         }
 
-        // prefabs that have multiple sprites will need multiple outliners
-        private void AttachOutliners(GameObject target, List<PixelOutliner> outliners) {
-            target.GetComponentsInChildren(true, rendererBuffer);
-            foreach (var renderer in rendererBuffer) {
-                if (PixelOutliner.IsOutlineRenderer(renderer)) continue;
+        private void OnHierarchyChanged(SpriteOutlineHierarchyChanged change) {
+            if (change.Root != null) RefreshHierarchy(change.Root);
+        }
 
-                var outliner = renderer.TryGetComponent(out PixelOutliner existing)
-                    ? existing
-                    : PixelOutliner.Attach(renderer);
+        // Scan only the affected subtree, on registration, color changes or hierarchy events.
+        private void RefreshHierarchy(Transform root) {
+            if (!isActiveAndEnabled) return;
+            root.GetComponentsInChildren(true, rendererBuffer);
+            foreach (var renderer in rendererBuffer) {
+                if (renderer == null) continue;
+                renderer.TryGetComponent(out PixelOutliner outliner);
+                if (!ResolveColor(renderer.transform, out Color color)) {
+                    // Preserve independently attached outliners when a subtree leaves an entity.
+                    if (outliner != null && outliner.Manager == this) {
+                        outliner.Manager = null;
+                        outliner.enabled = false;
+                    }
+                    continue;
+                }
+
+                if (outliner == null) outliner = PixelOutliner.Attach(renderer);
+                outliner.Manager = this;
+                outliner.OutlineColor = color;
                 outliner.enabled = true;
-                if (!outliners.Contains(outliner)) outliners.Add(outliner);
             }
+            rendererBuffer.Clear();
         }
 
         // nearest subscriber (self or ancestor) with a pushed colour wins
-        private Color ResolveColor(Transform transform) {
-            for (Transform t = transform; t != null; t = t.parent)
-                if (entities.TryGetValue(t.gameObject, out var e) && e.Colors.Count > 0) return e.Colors.Peek();
-            return DefaultColor;
+        private bool ResolveColor(Transform transform, out Color color) {
+            color = DefaultColor;
+            bool registered = false;
+            for (Transform t = transform; t != null; t = t.parent) {
+                if (!entities.TryGetValue(t.gameObject, out var colors)) continue;
+                registered = true;
+                if (colors.Count == 0) continue;
+                color = colors.Peek();
+                return true;
+            }
+            return registered;
         }
     }
 }

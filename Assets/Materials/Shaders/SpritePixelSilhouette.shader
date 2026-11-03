@@ -5,7 +5,7 @@ Shader "Omnia/Sprite Pixel Silhouette"
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         [HideInInspector] _SpriteUVRect ("Sprite UV Rect", Vector) = (0, 0, 1, 1)
         [HideInInspector] _PixelUV ("UV Per Sprite Pixel (xy: X, zw: Y)", Vector) = (0, 0, 0, 0)
-        [HideInInspector] _Direction ("Direction Index", Float) = 0
+        [HideInInspector] _OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
     }
 
     SubShader
@@ -24,13 +24,12 @@ Shader "Omnia/Sprite Pixel Silhouette"
             #pragma fragment SilhouetteFragment
             #pragma multi_compile_instancing
 
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
             struct Attributes
             {
                 float3 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
-                half4 color : COLOR;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -38,7 +37,6 @@ Shader "Omnia/Sprite Pixel Silhouette"
             {
                 float4 positionCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                half4 color : COLOR;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
@@ -48,11 +46,8 @@ Shader "Omnia/Sprite Pixel Silhouette"
             CBUFFER_START(UnityPerMaterial)
                 float4 _SpriteUVRect;
                 float4 _PixelUV;
-                float _Direction;
+                half4 _OutlineColor;
             CBUFFER_END
-
-            // Order must match PixelOutliner.Directions.
-            static const float2 Directions[4] = { float2(-1, 0), float2(1, 0), float2(0, 1), float2(0, -1) };
 
             half SampleAlpha(float2 uv)
             {
@@ -65,33 +60,23 @@ Shader "Omnia/Sprite Pixel Silhouette"
                 return step(0.1, SampleAlpha(uv));
             }
 
-            float2 PixelStep(float2 offset)
-            {
-                return _PixelUV.xy * offset.x + _PixelUV.zw * offset.y;
-            }
-
             Varyings SilhouetteVertex(Attributes input)
             {
                 UNITY_SETUP_INSTANCE_ID(input);
-                SetUpSpriteInstanceProperties();
 
                 Varyings output;
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
-                output.positionCS = TransformObjectToHClip(UnityFlipSprite(input.positionOS, unity_SpriteProps.xy));
+                output.positionCS = TransformObjectToHClip(input.positionOS);
                 output.uv = input.uv;
-                output.color = input.color * unity_SpriteColor;
                 return output;
             }
 
             half4 SilhouetteFragment(Varyings input) : SV_Target
             {
-                int index = (int)_Direction;
-                float2 direction = Directions[index];
-                half alpha = IsVisible(input.uv) * (1 - IsVisible(input.uv + PixelStep(direction)));
-                // A lower-index direction already draws this pixel; skipping it prevents double blending.
-                [unroll] for (int j = 0; j < 3; j++)
-                    if (j < index) alpha *= 1 - IsVisible(input.uv + PixelStep(direction - Directions[j]));
-                return half4(input.color.rgb, input.color.a * alpha);
+                half neighbors = max(max(IsVisible(input.uv - _PixelUV.xy), IsVisible(input.uv + _PixelUV.xy)),
+                                     max(IsVisible(input.uv - _PixelUV.zw), IsVisible(input.uv + _PixelUV.zw)));
+                half alpha = neighbors * (1 - IsVisible(input.uv));
+                return half4(_OutlineColor.rgb, _OutlineColor.a * alpha);
             }
             ENDHLSL
         }
