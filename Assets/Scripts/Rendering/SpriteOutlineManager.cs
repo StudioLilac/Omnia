@@ -4,11 +4,10 @@ using System.Linq;
 using UnityEngine;
 
 namespace Omnia.Rendering {
-    // Raise after adding or reparenting a subtree containing sprites at runtime.
-    public readonly struct SpriteOutlineHierarchyChanged : IEvent {
+    public readonly struct SpriteOutlineUpdated : IEvent {
         public Transform Root { get; }
 
-        public SpriteOutlineHierarchyChanged(Transform root) => Root = root;
+        public SpriteOutlineUpdated(Transform root) => Root = root;
     }
 
     public sealed class SpriteOutlineManager : MonoBehaviour {
@@ -18,13 +17,12 @@ namespace Omnia.Rendering {
         private readonly List<SpriteRenderer> rendererBuffer = new();
 
         private void OnEnable() {
-            EventBus.Register<SpriteOutlineHierarchyChanged>(OnHierarchyChanged);
-            // Catch up on hierarchy changes made while this manager was disabled.
+            EventBus.Register<SpriteOutlineUpdated>(OnHierarchyChanged);
             entities.Keys.Where(owner => owner != null).ToList().ForEach(owner => RefreshHierarchy(owner.transform));
         }
 
         private void OnDisable() {
-            EventBus.Unregister<SpriteOutlineHierarchyChanged>(OnHierarchyChanged);
+            EventBus.Unregister<SpriteOutlineUpdated>(OnHierarchyChanged);
             entities.Keys
                 .Where(owner => owner != null)
                 .SelectMany(owner => owner.GetComponentsInChildren<SpriteRenderer>(true))
@@ -67,7 +65,7 @@ namespace Omnia.Rendering {
             if (entities.Remove(gameObject)) RefreshHierarchy(gameObject.transform);
         }
 
-        private void OnHierarchyChanged(SpriteOutlineHierarchyChanged change) {
+        private void OnHierarchyChanged(SpriteOutlineUpdated change) {
             if (change.Root != null) RefreshHierarchy(change.Root);
         }
 
@@ -77,10 +75,12 @@ namespace Omnia.Rendering {
             root.GetComponentsInChildren(true, rendererBuffer);
             foreach (var renderer in rendererBuffer) {
                 if (renderer == null) continue;
+                bool registered = false;
+                if (!TryResolveColor(renderer.transform, null, ref registered, out Color color)) color = DefaultColor;
                 renderer.TryGetComponent(out PixelOutliner outliner);
-                if (!ResolveColor(renderer.transform, out Color color)) {
+                if (!registered) {
                     // Preserve independently attached outliners when a subtree leaves an entity.
-                    if (outliner != null && outliner.Manager == this) {
+                    if (outliner != null && ReferenceEquals(outliner.Manager, this)) {
                         outliner.Manager = null;
                         outliner.enabled = false;
                     }
@@ -95,18 +95,17 @@ namespace Omnia.Rendering {
             rendererBuffer.Clear();
         }
 
-        // nearest subscriber (self or ancestor) with a pushed colour wins
-        private bool ResolveColor(Transform transform, out Color color) {
-            color = DefaultColor;
-            bool registered = false;
-            for (Transform t = transform; t != null; t = t.parent) {
+        // Walks ancestors from `from` up to (excluding) `stop`; nearest pushed colour wins.
+        private bool TryResolveColor(Transform from, Transform stop, ref bool registered, out Color color) {
+            for (Transform t = from; !ReferenceEquals(t, stop); t = t.parent) {
                 if (!entities.TryGetValue(t.gameObject, out var colors)) continue;
                 registered = true;
                 if (colors.Count == 0) continue;
                 color = colors.Peek();
                 return true;
             }
-            return registered;
+            color = DefaultColor;
+            return false;
         }
     }
 }
