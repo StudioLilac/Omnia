@@ -4,21 +4,11 @@ using System.Linq;
 using UnityEngine;
 
 namespace Omnia.Rendering {
-    public readonly struct SpriteOutlineUpdated : IEvent {
-        public Transform Root { get; }
-
-        public SpriteOutlineUpdated(Transform root) => Root = root;
-    }
-
     public sealed class SpriteOutlineManager : MonoBehaviour {
         private static readonly Color DefaultColor = Color.black;
 
         private readonly Dictionary<GameObject, Stack<Color>> entities = new();
         private readonly List<SpriteRenderer> rendererBuffer = new();
-
-        private void Awake() {
-            this.Subscribe<SpriteOutlineUpdated>(OnHierarchyChanged);
-        }
 
         private void OnEnable() {
             entities.Keys.Where(owner => owner != null).ToList().ForEach(owner => RefreshHierarchy(owner.transform));
@@ -65,10 +55,6 @@ namespace Omnia.Rendering {
             if (ReferenceEquals(target, null)) return;
             GameObject gameObject = target.gameObject;
             if (entities.Remove(gameObject)) RefreshHierarchy(gameObject.transform);
-        }
-
-        private void OnHierarchyChanged(SpriteOutlineUpdated change) {
-            if (change.Root != null) RefreshHierarchy(change.Root);
         }
 
         private void RefreshHierarchy(Transform root) {
