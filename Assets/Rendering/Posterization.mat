@@ -18,7 +18,99 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap:
-    PosterizationPaletteHexCodes: 1F1211,112224,5C311C,3D3D42
+    PosterizationPaletteHexCodes: '1F1211
+
+      112224
+
+      5C311C
+
+      3D3D42
+
+      466469
+
+      706B26
+
+      EDC146
+
+      B26535
+
+      A33F39
+
+      4A5457
+
+      477149
+
+      7C903C
+
+      FDDB94
+
+      D58D38
+
+      DA4242
+
+      7A8388
+
+      8FAF9F
+
+      D1C687
+
+      EDE7BF
+
+      F6F6F6
+
+      9DC3D1
+
+      F7EBD4
+
+      262E47
+
+      2A4124
+
+      5C311C
+
+      556277
+
+      3D6E70
+
+      5E6D41
+
+      B7591F
+
+      A33F39
+
+      B0305C
+
+      00889B
+
+      08866B
+
+      6ABA37
+
+      81941F
+
+      DA4242
+
+      EE3B63
+
+      11B9CC
+
+      1FC2A4
+
+      48CC7A
+
+      95EF68
+
+      96BC51
+
+      FFA946
+
+      FF8095
+
+      03EDCD
+
+      F3F529
+
+      F5CE56'
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -30,7 +122,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _PaletteCount: 4
+    - _PaletteCount: 47
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
