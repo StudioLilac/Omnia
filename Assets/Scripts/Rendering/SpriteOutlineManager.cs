@@ -16,13 +16,15 @@ namespace Omnia.Rendering {
         private readonly Dictionary<GameObject, Stack<Color>> entities = new();
         private readonly List<SpriteRenderer> rendererBuffer = new();
 
+        private void Awake() {
+            this.Subscribe<SpriteOutlineUpdated>(OnHierarchyChanged);
+        }
+
         private void OnEnable() {
-            EventBus.Register<SpriteOutlineUpdated>(OnHierarchyChanged);
             entities.Keys.Where(owner => owner != null).ToList().ForEach(owner => RefreshHierarchy(owner.transform));
         }
 
         private void OnDisable() {
-            EventBus.Unregister<SpriteOutlineUpdated>(OnHierarchyChanged);
             entities.Keys
                 .Where(owner => owner != null)
                 .SelectMany(owner => owner.GetComponentsInChildren<SpriteRenderer>(true))
@@ -69,7 +71,6 @@ namespace Omnia.Rendering {
             if (change.Root != null) RefreshHierarchy(change.Root);
         }
 
-        // Scan only the affected subtree, on registration, color changes or hierarchy events.
         private void RefreshHierarchy(Transform root) {
             if (!isActiveAndEnabled) return;
             root.GetComponentsInChildren(true, rendererBuffer);
