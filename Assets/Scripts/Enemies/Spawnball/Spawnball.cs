@@ -27,7 +27,10 @@ namespace Enemies.Spawnball {
         public Action<Spawnball> NotifyOnDestroy;
         public Action<Enemy> NotifyOnSpawn;
 
-        public void OnDestroy() => NotifyOnDestroy?.Invoke(this);
+        public override void OnDestroy() {
+            NotifyOnDestroy?.Invoke(this);
+            base.OnDestroy();
+        }
 
         public void Awake() {
             UseBehaviour(new Idle(this));
