@@ -19,6 +19,7 @@ public class YarnInputSystemLineAdvancer : MonoBehaviour, ILineAdvancerInput {
 
     private void Update() {
         if (lineAdvancer == null) return;
+        if (PauseMenu.IsPaused) return;
 
         bool advance = (advanceAction != null && advanceAction.action != null && advanceAction.action.WasPressedThisFrame())
                        || (fastForwardAction != null && fastForwardAction.action != null && fastForwardAction.action.WasPressedThisFrame());

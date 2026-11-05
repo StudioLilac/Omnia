@@ -31,14 +31,10 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
     }
 
     void Start() {
-        PauseMenu.OnPauseMenuActivate += OnPause;
-        PauseMenu.OnPauseMenuDeactivate += OnUnpause;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnDestroy() {
-        PauseMenu.OnPauseMenuActivate -= OnPause;
-        PauseMenu.OnPauseMenuDeactivate -= OnUnpause;
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
@@ -65,16 +61,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         if (!inDialogue) return;
         TimeManager.Unfreeze(this);
         yarnDialogueRunner.Stop();
-    }
-
-    private void OnPause() {
-        if (inDialogue) SetDialogueUiVisible(false);
-    }
-
-    private void OnUnpause() {
-        if (inDialogue) {
-            SetDialogueUiVisible(true);
-        }
+        inDialogue = false;
     }
 
     private void SetDialogueUiVisible(bool isVisible) {
