@@ -1,0 +1,18 @@
+{
+    "name": "StudioLilac.Dialogue",
+    "rootNamespace": "StudioLilac.Dialogue",
+    "references": [
+        "GUID:0c752da273b17c547ae705acf0f2adf2",
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab",
+        "GUID:34aa492b82754644eac2f903cd496268"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
