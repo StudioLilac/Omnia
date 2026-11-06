@@ -629,10 +629,11 @@ MonoBehaviour:
   moveSpeed: 7
   jumpSpeed: 7
   pullSpeed: 12
-  rollSpeed: 8
+  rollSpeed: 10
   rollDuration: 0.4
-  rollCooldown: 1
-  rollThreshold: 1
+  rollCooldown: 0.375
+  maxAirRolls: 3
+  airRollBoost: 3.64
   moveAccel: 8
   fallAccel: 4
   jumpLockoutTime: 0.1

@@ -3,26 +3,27 @@ using UnityEngine;
 namespace Players.Behaviour {
     public class Roll : IBehaviour {
         private readonly Player self;
+        private readonly bool isAirRoll;
+        private readonly bool isDirectionRight;
         private float t;
-        private float direction;
         private Vector2 originalColliderSize;
 
-        public Roll(Player self) {
+        public Roll(Player self, bool isAirRoll, bool isDirectionRight) {
             this.self = self;
+            this.isAirRoll = isAirRoll;
+            this.isDirectionRight = isDirectionRight;
         }
 
         public void OnEnter() {
             t = self.rollDuration;
             self.roll = false;
             self.invulnerable = true;
-
             originalColliderSize = self.hitbox.size;
             ShrinkCollider();
 
-            // If player is moving above threshold, roll in that direction, else roll in facing direction
-            direction = Mathf.Sign(Mathf.Abs(self.rb.linearVelocity.x) > self.rollThreshold ? self.rb.linearVelocity.x : self.moving.x != 0 ? self.moving.x : self.facing.x);
-
-            self.OnRoll();
+            var verticalVelocity = isAirRoll ? self.airRollBoost : self.rb.linearVelocity.y;
+            self.rb.linearVelocity = new Vector2(self.rollSpeed * (isDirectionRight ? 1f : -1f), verticalVelocity);
+            self.OnRoll(isAirRoll);
         }
 
         public void OnExit() {
@@ -31,7 +32,6 @@ namespace Players.Behaviour {
         }
 
         public void OnTick() {
-            self.rb.linearVelocity = new Vector2(self.rollSpeed * direction, self.rb.linearVelocity.y);
         }
 
         public void OnUpdate() {
@@ -48,7 +48,16 @@ namespace Players.Behaviour {
         }
 
         public static IBehaviour If(Player it) {
-            return it.roll && it.canRoll && it.grounded && it.checks[1].IsTouchingLayers(it.GroundedMask) ? new Roll(it) : null;
+            return IfRollingRight(it, it.lastDirectionIsRight);
+        }
+
+        public static IBehaviour If(Player it, bool isOnRightWall) {
+            return IfRollingRight(it, !isOnRightWall);
+        }
+
+        private static IBehaviour IfRollingRight(Player it, bool rollRight) {
+            if (!it.roll || it.AirRollsRemaining <= 0) return null;
+            return new Roll(it, it.grounded == false, rollRight);
         }
 
         // Probably better to have a separate dedicated collider for rolling state

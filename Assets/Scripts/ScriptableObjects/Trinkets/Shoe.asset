@@ -14,9 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: bf31c744fce00d045b45b24b9cda303e, type: 3}
   trinketName: Shoe
-  description: 'Allows you to roll with [Left Shift].
-
-
-    Poor fella who lost this
+  description: 'Poor fella who lost this
     must have had a real sore foot walking through these caves.'
   buffPrefab: {fileID: -8049459756325560125, guid: 77f3501a21550467bb28598797dd1766, type: 3}

@@ -20,7 +20,7 @@ namespace Players.Behaviour {
         }
 
         public void OnUpdate() {
-            self.UseBehaviour(WallJump.If(self) ?? Fall.If(self) ?? Move.If(self) ?? Idle.If(self));
+            self.UseBehaviour(Roll.If(self, self.slide.x > 0f) ?? WallJump.If(self) ?? Fall.If(self) ?? Move.If(self) ?? Idle.If(self));
         }
 
         public static IBehaviour If(Player it) {

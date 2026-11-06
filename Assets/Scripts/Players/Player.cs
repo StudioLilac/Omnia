@@ -65,7 +65,8 @@ namespace Players {
         [SerializeField] internal float rollSpeed;
         [SerializeField] internal float rollDuration;
         [SerializeField] internal float rollCooldown;
-        [SerializeField] internal float rollThreshold;
+        [SerializeField] internal int maxAirRolls;
+        [SerializeField] internal float airRollBoost;
         [SerializeField] internal float moveAccel;
         [SerializeField] internal float fallAccel;
         [SerializeField] internal float jumpLockoutTime;
@@ -102,6 +103,7 @@ namespace Players {
 
         // if this is false, disable swapping.
         [SerializeField] internal bool hasShotgun;
+        internal bool lastDirectionIsRight = true;
 
         [SerializeField] public float critChance;
         [SerializeField] public float critMultiplier;
@@ -110,6 +112,7 @@ namespace Players {
         private List<float> multiplicativeMultipliers = new List<float>();
 
         public float BaseDamageMultiplier => 1f;
+        public int AirRollsRemaining { get; private set; }
 
         public float damageMultiplier {
             get {
@@ -227,6 +230,7 @@ namespace Players {
             introCooldownTimer = new CountdownTimer(introCooldown);
             bearCooldownTimer = new CountdownTimer(TeddyBearBuff.cooldownTime);
 
+            AirRollsRemaining = maxAirRolls;
             canRoll = true;
 
             // use persistence data from data manager
@@ -336,6 +340,7 @@ namespace Players {
 
             behaviour?.OnExit();
             behaviour = it;
+            if (it is not Jump && it is not Fall && it is not Roll) AirRollsRemaining = maxAirRolls;
             behaviour?.OnEnter();
         }
 
@@ -364,7 +369,10 @@ namespace Players {
         }
 
         // Called by Behaviour.Roll to handle the cooldown timer
-        internal void OnRoll() {
+        internal void OnRoll(bool isAirRoll) {
+            if (isAirRoll) {
+                AirRollsRemaining = Mathf.Max(0, AirRollsRemaining - 1);
+            }
             canRoll = false;
             rollCooldownTimer.Start();
         }
@@ -431,10 +439,7 @@ namespace Players {
 
         private void UpdateRollCooldownTimer() {
             rollCooldownTimer.Tick(Time.deltaTime);
-
-            if (!rollCooldownTimer.IsRunning) {
-                canRoll = true;
-            }
+            canRoll = !rollCooldownTimer.IsRunning;
         }
 
         private void UpdateSkillCooldownTimer() {
