@@ -20,7 +20,6 @@ namespace Players.Behaviour {
             self.invulnerable = true;
             originalColliderSize = self.hitbox.size;
             ShrinkCollider();
-
             var verticalVelocity = isAirRoll ? self.airRollBoost : self.rb.linearVelocity.y;
             self.rb.linearVelocity = new Vector2(self.rollSpeed * (isDirectionRight ? 1f : -1f), verticalVelocity);
             self.OnRoll(isAirRoll);
@@ -39,7 +38,7 @@ namespace Players.Behaviour {
             // If needed, flip direction if stuck in tunnel and deadend
 
             // If roll into wall, pass and enter new state
-            if (self.checks[0].IsTouchingLayers(self.ground) || self.checks[2].IsTouchingLayers(self.ground)) {
+            if (self.checks[isDirectionRight ? 0 : 2].IsTouchingLayers(self.ground)) {
             }
             // else check if roll is active or stuck in small space to continue
             else if (t > 0 || self.checks[3].IsTouchingLayers(self.GroundedMask)) return;
