@@ -40,7 +40,7 @@ namespace Players.Mixin {
             var jump = jumpAction.action.WasPressedThisFrame();
             var held = jumpAction.action.IsPressed();
             var skill = skillAction.action.WasPressedThisFrame();
-            var roll = rollAction.action.WasPressedThisFrame() && self.shoeEquipped;
+            var roll = rollAction.action.WasPressedThisFrame();
             var intro = introAction.action.IsPressed();
 
             ft = fire ? delay : Mathf.Max(0, ft - Time.deltaTime);
@@ -56,7 +56,10 @@ namespace Players.Mixin {
             self.intro = self.intro ? ist > 0 : intro;
 
             self.facing = GetFacingInput(self);
-            self.moving = GetMovingInput();
+            var move = GetMovingInput();
+            if (move.x < 0f) self.lastDirectionIsRight = false;
+            else if (move.x > 0f) self.lastDirectionIsRight = true;
+            self.moving = move;
             self.held = self.jump && (self.grounded || self.slide.x != 0) || self.held && held;
         }
 
