@@ -20,6 +20,8 @@ namespace Utils {
         private readonly List<TimeScale> scales = new();
         private readonly HashSet<object> freezeSources = new();
 
+        public bool IsFrozen => freezeSources.Any();
+
         public void Freeze(object source) {
             if (source == null) return;
             freezeSources.Add(source);
