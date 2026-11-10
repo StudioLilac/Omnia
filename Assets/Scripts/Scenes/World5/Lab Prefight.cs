@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Players;
 using Players.Mixin;
 using UnityEngine;
+using Utils;
 
 namespace Scenes.World5 {
     public class Lab_Prefight : MonoBehaviour {
@@ -20,7 +21,7 @@ namespace Scenes.World5 {
         [SerializeField] Yarn.Unity.DialogueReference dinkyThrownDialogue;
         [SerializeField] Yarn.Unity.DialogueReference dinkyHurtDialogue;
         public void Start() {
-            Player.controlsLocked = true;
+            Player.ControlsLocked.Set(this);
             StartCoroutine(BeginSequence());
         }
 
@@ -81,7 +82,7 @@ namespace Scenes.World5 {
 
             yield return StartCoroutine(DialogueManager.Instance.StartDialogue(dinkyHurtDialogue));
 
-            Player.controlsLocked = false;
+            Player.ControlsLocked.Unset(this);
             LevelManager.Instance.NextLevel();
         }
 
