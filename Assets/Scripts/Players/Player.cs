@@ -149,7 +149,7 @@ namespace Players {
 
 
         // disable user input if this is true.
-        public static bool controlsLocked = false;
+        public static readonly RefBool ControlsLocked = new();
 
         public static bool knockbackImmune;
 
