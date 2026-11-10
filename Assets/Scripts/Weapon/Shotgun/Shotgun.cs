@@ -3,7 +3,9 @@ using Enemies;
 using Omnia.Utils;
 using Utils;
 using Players;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Serialization;
 using MathUtils = Utils.MathUtils;
