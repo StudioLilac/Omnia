@@ -3,26 +3,28 @@ using UnityEngine;
 namespace Players.Behaviour {
     public class Roll : IBehaviour {
         private readonly Player self;
+        private readonly bool isAirRoll;
+        private readonly bool isDirectionRight;
         private float t;
-        private float direction;
         private Vector2 originalColliderSize;
+        private Vector2 originalColliderOffset;
 
-        public Roll(Player self) {
+        public Roll(Player self, bool isAirRoll, bool isDirectionRight) {
             this.self = self;
+            this.isAirRoll = isAirRoll;
+            this.isDirectionRight = isDirectionRight;
         }
 
         public void OnEnter() {
             t = self.rollDuration;
             self.roll = false;
             self.invulnerable = true;
-
             originalColliderSize = self.hitbox.size;
+            originalColliderOffset = self.hitbox.offset;
             ShrinkCollider();
-
-            // If player is moving above threshold, roll in that direction, else roll in facing direction
-            direction = Mathf.Sign(Mathf.Abs(self.rb.linearVelocity.x) > self.rollThreshold ? self.rb.linearVelocity.x : self.moving.x != 0 ? self.moving.x : self.facing.x);
-
-            self.OnRoll();
+            var verticalVelocity = isAirRoll ? self.airRollBoost : self.rb.linearVelocity.y;
+            self.rb.linearVelocity = new Vector2(self.rollSpeed * (isDirectionRight ? 1f : -1f), verticalVelocity);
+            self.OnRoll(isAirRoll);
         }
 
         public void OnExit() {
@@ -31,27 +33,47 @@ namespace Players.Behaviour {
         }
 
         public void OnTick() {
-            self.rb.linearVelocity = new Vector2(self.rollSpeed * direction, self.rb.linearVelocity.y);
         }
 
         public void OnUpdate() {
             t -= Time.deltaTime;
-            // If needed, flip direction if stuck in tunnel and deadend
-
-            // If roll into wall, pass and enter new state
-            if (self.checks[0].IsTouchingLayers(self.ground) || self.checks[2].IsTouchingLayers(self.ground)) {
-            }
-            // else check if roll is active or stuck in small space to continue
-            else if (t > 0 || self.checks[3].IsTouchingLayers(self.GroundedMask)) return;
+            if (t > 0 && !IsBlockedAtRollHeight()) return;
+            if (!HasStandingClearance()) return;
 
             self.UseBehaviour(Slide.If(self) ?? Fall.If(self) ?? Jump.If(self) ?? Move.If(self) ?? Idle.If(self));
         }
 
         public static IBehaviour If(Player it) {
-            return it.roll && it.canRoll && it.grounded && it.checks[1].IsTouchingLayers(it.GroundedMask) ? new Roll(it) : null;
+            return IfRollingRight(it, it.lastDirectionIsRight);
         }
 
-        // Probably better to have a separate dedicated collider for rolling state
+        public static IBehaviour If(Player it, bool isOnRightWall) {
+            return IfRollingRight(it, !isOnRightWall);
+        }
+
+        private static IBehaviour IfRollingRight(Player it, bool rollRight) {
+            if (!it.roll || it.AirRollsRemaining <= 0) return null;
+            if (it.grounded && !it.canRoll) return null;
+            return new Roll(it, it.grounded == false, rollRight);
+        }
+
+        private bool IsBlockedAtRollHeight() {
+            var bounds = self.hitbox.bounds;
+            var direction = isDirectionRight ? 1f : -1f;
+            var probeCenter = new Vector2(bounds.center.x + direction * (bounds.extents.x + 0.03125f), bounds.center.y);
+            var probeSize = new Vector2(0.0625f, bounds.size.y * 0.9f);
+            return Physics2D.OverlapBox(probeCenter, probeSize, 0f, self.ground);
+        }
+
+        private bool HasStandingClearance() {
+            var bounds = self.hitbox.bounds;
+            var lower = bounds.max.y + 0.01f;
+            var upper = bounds.min.y + originalColliderSize.y * Mathf.Abs(self.transform.lossyScale.y) - 0.01f;
+            var probeCenter = new Vector2(bounds.center.x, (lower + upper) / 2f);
+            var probeSize = new Vector2(bounds.size.x * 0.95f, upper - lower);
+            return !Physics2D.OverlapBox(probeCenter, probeSize, 0f, self.GroundedMask);
+        }
+
         private void ShrinkCollider() {
             self.hitbox.size = new Vector2(self.hitbox.size.x, self.hitbox.size.y / 2);
             self.hitbox.offset = new Vector2(self.hitbox.offset.x, self.hitbox.offset.y - self.hitbox.size.y / 2);
@@ -59,7 +81,7 @@ namespace Players.Behaviour {
 
         private void ResetCollider() {
             self.hitbox.size = originalColliderSize;
-            self.hitbox.offset = new Vector2(self.hitbox.offset.x, self.hitbox.size.y / 2);
+            self.hitbox.offset = originalColliderOffset;
         }
     }
 }
