@@ -631,7 +631,7 @@ MonoBehaviour:
   pullSpeed: 12
   rollSpeed: 10
   rollDuration: 0.4
-  rollCooldown: 0.375
+  rollCooldown: 0.6
   maxAirRolls: 3
   airRollBoost: 3.64
   moveAccel: 8
