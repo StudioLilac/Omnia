@@ -46,21 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: 1
   persistent: 1
-  managers:
-  - {fileID: 611694203283719876, guid: a6e780c4edc61774091363501d9752ec, type: 3}
-  - {fileID: 4784404927837135503, guid: e1b45acd2dee60749abdd5853e4d1003, type: 3}
-  - {fileID: 6314362272733343423, guid: 3932fe25bb04644b8b0c6b7aeadb4e16, type: 3}
-  - {fileID: 8591503019450182587, guid: 8d25b64c33c41434ca2ffa92437ea568, type: 3}
-  - {fileID: 2616134746012579580, guid: a2acf392192308645bc8b080c0687662, type: 3}
-  - {fileID: 831985412458610923, guid: eb009b6c038cb4eafa846218e8275fd7, type: 3}
-  - {fileID: 4883409523034971244, guid: e73900af4eaf1443989339fff7eb7353, type: 3}
-  - {fileID: 3157765424273095830, guid: 8e34de0f30303481da877a1d76801f5e, type: 3}
-  - {fileID: 3462894613357866754, guid: f37eae00dd81646049c7e1e9d70ed493, type: 3}
-  - {fileID: 3063838850607568246, guid: b0b67e9456896443ca66fbd9f6a47713, type: 3}
-  - {fileID: 1514540741666410862, guid: daab3fc359b970845a39aaeb8b7e7d92, type: 3}
-  - {fileID: 541092851418386870, guid: ac259b6f372a8441e81789736434cd2a, type: 3}
-  - {fileID: 7290418253610374521, guid: d737dc1cbbae49f8841cf395d531870d, type: 3}
-  - {fileID: 4051318396973862250, guid: d43f88f0aa1847ec8cabde4faed213a8, type: 3}
   transition: {fileID: 1475504873076089010, guid: 8c52d1dd2a61c41199622e2e87b270bf, type: 3}
   prefabs:
     dialogueManager: {fileID: 4134169843885709107, guid: a6e780c4edc61774091363501d9752ec, type: 3}
@@ -77,4 +62,5 @@ MonoBehaviour:
     playerHealthFx: {fileID: 2043504567393240233, guid: ac259b6f372a8441e81789736434cd2a, type: 3}
     timeManager: {fileID: 5928374610283746152, guid: d737dc1cbbae49f8841cf395d531870d, type: 3}
     spriteOutlineManager: {fileID: 5960877088227004635, guid: d43f88f0aa1847ec8cabde4faed213a8, type: 3}
+    lightManager: {fileID: 3740603014219904790, guid: 9226cc5d588e82b42a4eabc3ef9cd76d, type: 3}
     debugConsole: {fileID: 7091429800653844593, guid: 1ef7d1701372349d39f4560ec1bcdad2, type: 3}

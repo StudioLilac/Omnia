@@ -108,6 +108,7 @@ namespace Initializers {
         public PlayerHealthVignettePPFX playerHealthFx;
         public TimeManager timeManager;
         public SpriteOutlineManager spriteOutlineManager;
+        public LightManager lightManager;
         public DebugConsole debugConsole;
 
         public List<MonoBehaviour> All => new() {
@@ -125,6 +126,7 @@ namespace Initializers {
             playerHealthFx,
             timeManager,
             spriteOutlineManager,
+            lightManager,
             #if UNITY_EDITOR ||  DEBUG
             debugConsole
             #endif
