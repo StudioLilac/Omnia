@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 768985566500072848}
   - component: {fileID: 1927023390166312432}
   m_Layer: 0
-  m_Name: IMG_1082 Light
+  m_Name: flower2 Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

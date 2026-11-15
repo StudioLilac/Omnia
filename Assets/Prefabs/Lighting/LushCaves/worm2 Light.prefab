@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1019295021958381399}
   - component: {fileID: 6921836097073629287}
   m_Layer: 0
-  m_Name: IMG_1046 Light
+  m_Name: worm2 Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

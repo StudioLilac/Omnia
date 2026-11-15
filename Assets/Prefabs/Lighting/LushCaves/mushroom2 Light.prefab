@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6150631557961312603}
   - component: {fileID: 1743901154401301027}
   m_Layer: 0
-  m_Name: IMG_1080 Light
+  m_Name: mushroom2 Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

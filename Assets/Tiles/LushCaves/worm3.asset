@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: IMG_1053
+  m_Name: worm3
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.Tilemaps.Tile
-  m_Sprite: {fileID: 21300000, guid: d051bd94a559aa341ac34012b6c37a89, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 13081b2d8beb87e48838187a1996cb9e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
@@ -31,6 +31,6 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  m_InstancedGameObject: {fileID: 2776653451665060675, guid: 5146f6b6ab1e14db2b9b3cbea349381f, type: 3}
+  m_InstancedGameObject: {fileID: 3741615976400956841, guid: 7461f06a114124bb1bcf3f134e0e3ace, type: 3}
   m_Flags: 1
   m_ColliderType: 1
