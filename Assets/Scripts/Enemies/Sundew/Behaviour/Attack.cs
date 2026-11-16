@@ -1,12 +1,6 @@
-using UnityEngine;
-
 namespace Enemies.Sundew.Behaviour {
     public class Attack : IBehaviour {
-        private const float PostSpinDelay = 0.5f;
         private readonly Sundew self;
-        private float t;
-        private float fireTime;
-        private bool spinComplete;
 
         internal bool Spinning { get; private set; }
         internal bool Fired { get; private set; }
@@ -16,7 +10,6 @@ namespace Enemies.Sundew.Behaviour {
         }
 
         public void OnEnter() {
-            t = self.windup * self.attackTimingMultiplier;
             self.lag = 0;
         }
 
@@ -30,20 +23,14 @@ namespace Enemies.Sundew.Behaviour {
 
         public void OnUpdate() {
             if (Fired) return;
+            var state = self.animator.GetCurrentAnimatorStateInfo(0);
             if (Spinning) {
-                if (!spinComplete) {
-                    var state = self.animator.GetCurrentAnimatorStateInfo(0);
-                    if (state.normalizedTime < 1f) return;
-                    spinComplete = true;
-                    fireTime = Time.time + PostSpinDelay;
-                }
-                if (Time.time < fireTime) return;
+                if (!state.IsName("Base Layer.SundewAttack") || state.normalizedTime < 1f) return;
                 Fired = true;
                 self.FireProjectiles();
                 return;
             }
-            t -= Time.deltaTime;
-            if (t > 0) return;
+            if (!state.IsName("Base Layer.SundewIdle") || state.normalizedTime < 1f) return;
             Spinning = true;
         }
     }

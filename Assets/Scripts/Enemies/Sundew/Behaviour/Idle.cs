@@ -10,7 +10,9 @@ namespace Enemies.Sundew.Behaviour {
         }
 
         public void OnEnter() {
-            t = (self.reload + self.lag + Random.Range(0f, self.randomAttackDelayOffset)) * self.attackTimingMultiplier / 1.5f;
+            // Spend the old windup delay on the no-glue frame before recharging.
+            t = (self.reload + self.lag + Random.Range(0f, self.randomAttackDelayOffset)) * self.attackTimingMultiplier / 1.5f
+                + self.windup * self.attackTimingMultiplier;
         }
 
         public void OnExit() {
