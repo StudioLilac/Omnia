@@ -17,6 +17,8 @@ namespace Enemies.Sundew {
         [SerializeField] internal float attackTimingMultiplier;
         [SerializeField] internal float lag;
         [SerializeField] internal float projectileSpeed;
+        [SerializeField] private int volleySize;
+        [SerializeField] private float launchSpacing;
         [SerializeField] private float projectileVelocityMultiplier;
         [SerializeField] internal float randomAttackDelayOffset;
         [SerializeField] private float warningDuration;
@@ -30,8 +32,6 @@ namespace Enemies.Sundew {
 
         [SerializeField] internal GameObject deathExplosion;
 
-        private const int VolleySize = 5;
-        private const float LaunchSpacing = 0.25f;
         private readonly List<SundewProjectile> activeProjectiles = new();
         private GameObject activeTelegraph;
         private bool volleyActive;
@@ -69,39 +69,41 @@ namespace Enemies.Sundew {
         private IEnumerator FireVolley() {
             volleyActive = true;
             activeProjectiles.RemoveAll(shot => shot == null);
-            var shots = new (SundewProjectile projectile, float launchOffset)[VolleySize];
+            var shotCount = Mathf.Max(1, volleySize);
+            var shots = new (SundewProjectile projectile, float launchOffset)[shotCount];
             var camera = Camera.main;
             var firstLaunchTime = Time.time;
+            var centerIndex = (shotCount - 1) * 0.5f;
             AudioManager.Instance.PlaySFX(AudioTracks.PlantShoot);
 
-            for (var i = 0; i < VolleySize; i++) {
+            for (var i = 0; i < shotCount; i++) {
                 if (i > 0) yield return new WaitForSeconds(Random.Range(0.04f, 0.12f));
                 var launchOffset = Time.time - firstLaunchTime;
-                var launchPosition = rb.worldCenterOfMass + new Vector2((i - 2) * LaunchSpacing, 0f);
+                var launchPosition = rb.worldCenterOfMass + new Vector2((i - centerIndex) * launchSpacing, 0f);
                 var shot = Instantiate(projectile, launchPosition, Quaternion.identity).GetComponent<SundewProjectile>();
                 shot.NotifyOnHit = Attack;
                 shot.rb.linearVelocity = Vector2.up * projectileSpeed * projectileVelocityMultiplier;
                 shots[i] = (shot, launchOffset);
                 activeProjectiles.Add(shot);
             }
-            while (camera.WorldToViewportPoint(shots[VolleySize - 1].projectile.transform.position).y <= 1.1f) yield return null;
+            while (camera.WorldToViewportPoint(shots[shotCount - 1].projectile.transform.position).y <= 1.1f) yield return null;
             foreach (var (shot, _) in shots) shot.BeginCurve();
 
-            // Aim once all five shots have left the view.
+            // Aim once the whole volley has left the view.
             var target = FindAnyObjectByType<Player>();
             var aimPoint = (Vector2)target.hitbox.bounds.center;
             var aimRadius = target.hitbox.bounds.size.x;
-            var paths = new ShotPath[VolleySize];
-            var lines = new LineRenderer[VolleySize];
+            var paths = new ShotPath[shotCount];
+            var lines = new LineRenderer[shotCount];
             var cameraTop = camera.ViewportToWorldPoint(new Vector3(0.5f, 1f, 1f)).y;
             activeTelegraph = new GameObject("Sundew telegraphs");
-            for (var i = 0; i < VolleySize; i++) {
+            for (var i = 0; i < shotCount; i++) {
                 paths[i] = AimShot(aimPoint, aimRadius, cameraTop);
                 lines[i] = CreateTelegraph(paths[i]);
             }
 
             Coroutine lastCurve = null;
-            for (var i = 0; i < VolleySize; i++)
+            for (var i = 0; i < shotCount; i++)
                 lastCurve = StartCoroutine(CurveAndFall(shots[i].projectile, paths[i], warningDuration + shots[i].launchOffset));
             for (var t = 0f; t < warningDuration; t += Time.deltaTime) {
                 var alpha = 0.8f * Mathf.Clamp01(Mathf.Min(t, warningDuration - t) / Mathf.Min(0.2f, warningDuration * 0.5f));

@@ -488,6 +488,8 @@ MonoBehaviour:
   attackTimingMultiplier: 3
   lag: 0
   projectileSpeed: 7
+  volleySize: 5
+  launchSpacing: 0.25
   projectileVelocityMultiplier: 2.5
   randomAttackDelayOffset: 0.5
   warningDuration: 1
