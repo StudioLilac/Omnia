@@ -497,10 +497,7 @@ MonoBehaviour:
   rb: {fileID: 7893308943432753642}
   ground:
     serializedVersion: 2
-    m_Bits: 8
-  player:
-    serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 520
   projectile: {fileID: 5710193498280292276, guid: 405681e7663724b52868906c5592258e, type: 3}
   deathExplosion: {fileID: 6478827744998899019, guid: 423176f41ed8247ddb0fe10d88e78a3e, type: 3}
 --- !u!50 &7893308943432753642

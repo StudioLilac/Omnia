@@ -121,20 +121,12 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8387723225425041366, guid: 784cabab73d374cf19936fa720cd4d25, type: 3}
-      propertyPath: count
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8387723225425041366, guid: 784cabab73d374cf19936fa720cd4d25, type: 3}
       propertyPath: attack
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8387723225425041366, guid: 784cabab73d374cf19936fa720cd4d25, type: 3}
       propertyPath: reload
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8387723225425041366, guid: 784cabab73d374cf19936fa720cd4d25, type: 3}
-      propertyPath: spread
-      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8387723225425041366, guid: 784cabab73d374cf19936fa720cd4d25, type: 3}
       propertyPath: windup
@@ -151,10 +143,6 @@ PrefabInstance:
     - target: {fileID: 8387723225425041366, guid: 784cabab73d374cf19936fa720cd4d25, type: 3}
       propertyPath: maximumHealth
       value: 400
-      objectReference: {fileID: 0}
-    - target: {fileID: 8387723225425041366, guid: 784cabab73d374cf19936fa720cd4d25, type: 3}
-      propertyPath: projectileAngle
-      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 8387723225425041366, guid: 784cabab73d374cf19936fa720cd4d25, type: 3}
       propertyPath: projectileSpeed

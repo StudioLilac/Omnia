@@ -3,41 +3,31 @@ using Omnia.Rendering;
 using Omnia.Utils;
 using Players;
 using UnityEngine;
-using Utils;
 
 namespace Enemies.Sundew {
     public class SundewProjectile : MonoBehaviour {
         private SpriteOutlineManager outlineManager;
         private Collider2D hitbox;
-        private bool skyShot;
-        private bool falling;
         private Vector2 groundCheckStart;
         private int groundMask;
 
         [SerializeField] internal SpriteRenderer sprite;
         [SerializeField] internal Rigidbody2D rb;
-        [SerializeField] internal LayerMask mask;
         [SerializeField] internal float time;
-        [SerializeField] internal float terminalVelocity = -10f;
 
         public Action<Player, SundewProjectile> NotifyOnHit;
+
+        public void Awake() {
+            hitbox = GetComponent<Collider2D>();
+        }
 
         public void Start() {
             outlineManager = this.Inject<SpriteOutlineManager>();
             outlineManager.PushColor(this);
-            if (!skyShot) Destroy(gameObject, time);
         }
 
         public void OnDestroy() {
             if (outlineManager != null) outlineManager.OnEntityDestroyed(this);
-        }
-
-        public void ConfigureSkyShot() {
-            skyShot = true;
-            hitbox = GetComponent<Collider2D>();
-            hitbox.enabled = false;
-            rb.gravityScale = 0f;
-            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         }
 
         public void BeginCurve() {
@@ -62,7 +52,6 @@ namespace Enemies.Sundew {
             rb.simulated = true;
             rb.linearVelocity = direction * speed;
             hitbox.enabled = true;
-            falling = true;
             Destroy(gameObject, time);
         }
 
@@ -71,21 +60,15 @@ namespace Enemies.Sundew {
         }
 
         public void FixedUpdate() {
-            if (!skyShot) {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Max(terminalVelocity, rb.linearVelocity.y));
-                return;
-            }
-            if (!falling || rb.position.y > groundCheckStart.y) return;
+            if (!hitbox.enabled || rb.position.y > groundCheckStart.y) return;
             if (Physics2D.Raycast(groundCheckStart, rb.linearVelocity.normalized,
                     Vector2.Distance(groundCheckStart, rb.position) + hitbox.bounds.extents.y, groundMask)) Destroy(gameObject);
         }
 
         public void OnTriggerEnter2D(Collider2D other) {
-            if (!CollisionUtils.IsLayerInMask(other.gameObject.layer, mask)) return;
-            if (skyShot && !other.TryGetComponent<Player>(out _)) return;
+            if (!other.TryGetComponent<Player>(out var player)) return;
             Destroy(gameObject);
-
-            if (other.TryGetComponent<Player>(out var player)) NotifyOnHit?.Invoke(player, this);
+            NotifyOnHit(player, this);
         }
     }
 }

@@ -6,12 +6,10 @@ namespace Enemies.Sundew.Behaviour {
         private readonly Sundew self;
         private float t;
         private float fireTime;
-        private bool spinning;
         private bool spinComplete;
-        private bool fired;
 
-        internal bool Spinning => spinning;
-        internal bool Fired => fired;
+        internal bool Spinning { get; private set; }
+        internal bool Fired { get; private set; }
 
         public Attack(Sundew self) {
             this.self = self;
@@ -19,10 +17,6 @@ namespace Enemies.Sundew.Behaviour {
 
         public void OnEnter() {
             t = self.windup * self.attackTimingMultiplier;
-            fireTime = 0f;
-            spinning = false;
-            spinComplete = false;
-            fired = false;
             self.lag = 0;
         }
 
@@ -30,27 +24,27 @@ namespace Enemies.Sundew.Behaviour {
         }
 
         public void OnTick() {
-            if (!fired || self.VolleyActive) return;
+            if (!Fired || self.VolleyActive) return;
             self.UseBehaviour(new Idle(self));
         }
 
         public void OnUpdate() {
-            if (fired) return;
-            if (spinning) {
+            if (Fired) return;
+            if (Spinning) {
                 if (!spinComplete) {
                     var state = self.animator.GetCurrentAnimatorStateInfo(0);
-                    if (!state.IsName("SundewAttack") || state.normalizedTime < 1f) return;
+                    if (state.normalizedTime < 1f) return;
                     spinComplete = true;
                     fireTime = Time.time + PostSpinDelay;
                 }
                 if (Time.time < fireTime) return;
-                fired = true;
+                Fired = true;
                 self.FireProjectiles();
                 return;
             }
-            t = Mathf.Max(0, t - Time.deltaTime);
+            t -= Time.deltaTime;
             if (t > 0) return;
-            spinning = true;
+            Spinning = true;
         }
     }
 }
