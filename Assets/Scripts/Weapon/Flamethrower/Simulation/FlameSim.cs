@@ -35,7 +35,7 @@ namespace Omnia.Fire {
         public float wingForward, wingLift, wingSpread, backDrag, liftAccel, wingHeat;
         public float emberGravity, emberHeat;
         public int maxEmbers, emberLifeMin, emberLifeMax;
-        public float coreRadius, wingRadius, emberRadius, radialFalloff, colorFalloff, releaseCooling, stepSeconds;
+        public float coreRadius, wingRadius, emberRadius, radialFalloff, colorFalloff, releaseCooling, aimAwayCooling, stepSeconds;
         public bool coreRibbon;
         public float ribbonSmoothness, ribbonWidthScale, ribbonTipTaper, wingTrail;
         public float coreNozzleScale, coreBloomPixels, coreFadeStart, coreFadeEnd;
@@ -51,7 +51,7 @@ namespace Omnia.Fire {
             backDrag = 0.35f, liftAccel = 0.03f, wingLifeMin = 4, wingLifeMax = 9, wingHeat = 0.7f,
             emberGravity = 0.06f, emberHeat = 0.75f, maxEmbers = 64, emberLifeMin = 3, emberLifeMax = 6,
             coreRadius = 1, wingRadius = 1, emberRadius = 0.75f, radialFalloff = 0.3f,
-            colorFalloff = 0.55f, releaseCooling = 1.5f, stepSeconds = 0.05f,
+            colorFalloff = 0.55f, releaseCooling = 1.5f, aimAwayCooling = 0, stepSeconds = 0.05f,
             coreRibbon = true, ribbonSmoothness = 0.85f, ribbonWidthScale = 1.75f, ribbonTipTaper = 0.2f, wingTrail = 1,
             coreNozzleScale = 1, coreFadeStart = 1, coreFadeEnd = 1,
             coreHeatPatchLength = 10, coreHeatPatchWidth = 3,
@@ -215,6 +215,17 @@ namespace Omnia.Fire {
             return Clamp01(particle.heat0 * remaining - particle.cooling);
         }
 
+        private static float AimCooling(FlameParticle particle, FlamePose pose, FlameSimSettings settings) {
+            if (settings.aimAwayCooling <= 0) return 0;
+            FlameVector offset = particle.pos - pose.position;
+            float distance = offset.Length;
+            if (distance <= 0.0001f) return 0;
+            var aim = new FlameVector((float)Math.Cos(pose.angle), (float)Math.Sin(pose.angle));
+            float alignment = (offset.x * aim.x + offset.y * aim.y) / distance;
+            float away = Math.Max(0, 1 - alignment);
+            return settings.aimAwayCooling * away * away * Math.Max(0, settings.stepSeconds);
+        }
+
         private void Embers(FlameParticle parent, FlameSimSettings settings) {
             int count = RandomInt(1, 3);
             for (int i = 0; i < count && EmberCount < Math.Max(0, settings.maxEmbers) && freeCount > 0; i++) {
@@ -272,6 +283,7 @@ namespace Omnia.Fire {
                 particle.vel.y -= settings.coreDroop;
                 particle.age++;
                 if (!firing) particle.cooling += Math.Max(0, settings.releaseCooling * settings.stepSeconds);
+                particle.cooling += AimCooling(particle, currentPose, settings);
                 if (particle.age >= particle.life || particle.dist >= particle.maxDistance) { Kill(i); Embers(particle, settings); continue; }
                 if (Heat(particle, settings) <= 0) { Kill(i); continue; }
                 particles[i] = particle;
@@ -292,9 +304,12 @@ namespace Omnia.Fire {
                 particle.pos = destination;
                 particle.age++;
                 if (!firing) particle.cooling += Math.Max(0, settings.releaseCooling * settings.stepSeconds);
+                particle.cooling += AimCooling(particle, currentPose, settings);
                 if (particle.age >= particle.life || Heat(particle, settings) <= 0) { Kill(i); continue; }
                 particles[i] = particle;
             }
+            var currentAim = new FlameVector((float)Math.Cos(currentPose.angle), (float)Math.Sin(currentPose.angle));
+            flow.CoolOutsideAim(currentPose.position, currentAim, settings.aimAwayCooling * Math.Max(0, settings.stepSeconds));
             Rasterize(currentPose.position, settings, collision);
         }
 

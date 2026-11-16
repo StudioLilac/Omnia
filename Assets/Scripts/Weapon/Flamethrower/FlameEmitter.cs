@@ -89,6 +89,9 @@ namespace Omnia.Fire {
         [Min(0)] public float coreDamageMultiplier = 1;
         [Min(0)] public float wingDamageMultiplier = 0.6f;
         [Min(0)] public float releaseCooling = 1.5f;
+        [Header("Aim Culling")]
+        [Tooltip("Extra heat loss per second for fire outside the gun's current aim. Higher values quickly remove trails made by abrupt aim changes.")]
+        [Min(0)] public float aimAwayCooling = 16f;
         public FlamePalette palette;
         public Material flameMaterial;
         public bool ditherEdges = true;
@@ -149,7 +152,7 @@ namespace Omnia.Fire {
             emberHeat = emberHeat, emberLifeMin = emberLifeMin, emberLifeMax = emberLifeMax,
             coreRadius = coreRadius, wingRadius = wingRadius, emberRadius = emberRadius,
             radialFalloff = radialFalloff, colorFalloff = colorFalloff,
-            releaseCooling = releaseCooling, stepSeconds = seconds,
+            releaseCooling = releaseCooling, aimAwayCooling = aimAwayCooling, stepSeconds = seconds,
             coreRibbon = coreRibbon, ribbonSmoothness = ribbonSmoothness, ribbonWidthScale = ribbonWidthScale,
             ribbonTipTaper = ribbonTipTaper, wingTrail = wingTrail,
             coreNozzleScale = coreNozzleScale, coreBloomPixels = coreBloomPixels,

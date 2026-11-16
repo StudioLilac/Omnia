@@ -45,6 +45,38 @@ namespace Omnia.Fire {
         public float CellHeat(int cell) => heat[cell];
         public FlameVector CellVelocity(int cell) => new FlameVector(u[cell], v[cell]);
 
+        // Heat is world-space, so it must not survive a sharp turn as a bright trail
+        // behind the muzzle. Keep the forward cone intact and cool off-axis cells
+        // quadratically, making large aim shakes disappear in only a few ticks.
+        public void CoolOutsideAim(FlameVector aimOrigin, FlameVector aimDirection, float cooling) {
+            if (!HasHeat || cooling <= 0) return;
+            var bounds = written[heat];
+            if (bounds.right < bounds.left || bounds.top < bounds.bottom) return;
+            bool hasHeat = false;
+            var remaining = FlameBounds.Empty;
+            for (int y = bounds.bottom; y <= bounds.top; y++) for (int x = bounds.left; x <= bounds.right; x++) {
+                int index = y * size + x;
+                float value = heat[index];
+                if (value <= 0) continue;
+                float dx = originX + x + 0.5f - aimOrigin.x, dy = originY + y + 0.5f - aimOrigin.y;
+                float distance = (float)Math.Sqrt(dx * dx + dy * dy);
+                if (distance > 0.0001f) {
+                    float alignment = (dx * aimDirection.x + dy * aimDirection.y) / distance;
+                    float away = Math.Max(0, 1 - alignment);
+                    value = Math.Max(0, value - cooling * away * away);
+                    heat[index] = value;
+                }
+                if (value <= 0) continue;
+                hasHeat = true;
+                remaining.Include(x, y);
+            }
+            HasHeat = hasHeat;
+            MinWorldX = hasHeat ? originX + remaining.left : int.MaxValue;
+            MaxWorldX = hasHeat ? originX + remaining.right : int.MinValue;
+            MinWorldY = hasHeat ? originY + remaining.bottom : int.MaxValue;
+            MaxWorldY = hasHeat ? originY + remaining.top : int.MinValue;
+        }
+
         public FlameFlow(int windowSize, uint randomSeed, int velocityResolution = 2) {
             FlameKernels.WarmUp();
             size = windowSize; seed = randomSeed;

@@ -68,6 +68,17 @@ public class FlameSimTests {
         Assert.Less(sim.ParticleAt(3).vel.x, 0);
     }
 
+    [Test] public void FireOutsideCurrentAimIsCooledAwayQuickly() {
+        var sim = new FlameSim(); var settings = Quiet();
+        settings.pulsePeriod = 1; settings.coreDroop = 0; settings.aimAwayCooling = 16;
+        sim.Step(true, Pose(), Pose(), settings);
+        sim.Step(true, Pose(0, 0, (float)Math.PI), Pose(0, 0, (float)Math.PI), settings);
+        for (int i = 0; i < sim.Capacity; i++) {
+            var particle = sim.ParticleAt(i);
+            if (particle.kind == FlameParticleKind.Core) Assert.Less(particle.vel.x, 0);
+        }
+    }
+
     [Test] public void ContinuedEmissionCannotChangeAnOldParticlesJitterStream() {
         var a = new FlameSim(); var b = new FlameSim(); var settings = Quiet();
         settings.maxRange = 200; settings.coreJitterChance = 1; settings.inheritVelocity = 1;
