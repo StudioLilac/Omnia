@@ -166,14 +166,10 @@ public class Flamethrower : WeaponClass {
         }
         return true;
     }
-    public override void IntroSkill() { StartCoroutine(IntroBurst()); }
-    private IEnumerator IntroBurst() {
-        CurrentAmmo = maxAmmoCount;
-        yield return new WaitForSeconds(introDelayTime);
-        burstTimer = 1;
-        player.GetComponent<Player>().UseRecoil(10);
-        if (ScreenShakeManager.Instance != null) ScreenShakeManager.Instance.Shake(3);
+
+    public override void IntroSkill() {
     }
+
     protected virtual void OnDisable() {
         triggerHeld = false;
         burstTimer = 0;
