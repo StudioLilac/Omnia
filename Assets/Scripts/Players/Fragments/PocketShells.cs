@@ -7,18 +7,18 @@ namespace Players.Fragments {
         [SerializeField] private int extraAmmo;
         public override void ApplyBuff() {
             base.ApplyBuff();
-            Shotgun shotgun = player.weapons.OfType<Shotgun>().FirstOrDefault();
+            Flamethrower flamethrower = player.weapons.OfType<Flamethrower>().FirstOrDefault();
 
-            if (shotgun != null) {
-                shotgun.maxAmmoCount += extraAmmo;
+            if (flamethrower != null) {
+                flamethrower.maxAmmoCount += extraAmmo;
             }
         }
 
         public override void RevokeBuff() {
-            Shotgun shotgun = player.weapons.OfType<Shotgun>().FirstOrDefault();
+            Flamethrower flamethrower = player.weapons.OfType<Flamethrower>().FirstOrDefault();
 
-            if (shotgun != null) {
-                shotgun.maxAmmoCount -= extraAmmo;
+            if (flamethrower != null) {
+                flamethrower.maxAmmoCount -= extraAmmo;
             }
         }
     }

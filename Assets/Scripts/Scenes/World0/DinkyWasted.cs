@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using NPC.Dinky;
 using Players;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
 
 namespace Scenes {
     public class DinkyWasted : MonoBehaviour {
         [SerializeField] private Yarn.Unity.DialogueReference beginDialogue;
-        [SerializeField] private Yarn.Unity.DialogueReference shotgunDialogue;
+        [SerializeField] private Yarn.Unity.DialogueReference flamethrowerDialogue;
         [SerializeField] private Player player;
 
         private bool changedWeapon = false;
@@ -26,7 +25,7 @@ namespace Scenes {
         public void Update() {
             if (player.selectedWeapon == 1 && !changedWeapon && beginDialoguePlayed) {
                 changedWeapon = true;
-                StartCoroutine(ShotgunTutorialSequence());
+                StartCoroutine(FlamethrowerTutorialSequence());
             }
         }
 
@@ -36,8 +35,8 @@ namespace Scenes {
             beginDialoguePlayed = true;
         }
 
-        private IEnumerator ShotgunTutorialSequence() {
-            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(shotgunDialogue));
+        private IEnumerator FlamethrowerTutorialSequence() {
+            yield return StartCoroutine(DialogueManager.Instance.StartDialogue(flamethrowerDialogue));
         }
 
         private void EndScene() {

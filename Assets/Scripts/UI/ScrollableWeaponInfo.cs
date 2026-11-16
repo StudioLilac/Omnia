@@ -8,9 +8,9 @@ namespace UI {
         [SerializeField, TextArea] private string harpoonSkill;
         [SerializeField, TextArea] private string harpoonIntro;
 
-        [SerializeField, TextArea] private string shotgunDescription;
-        [SerializeField, TextArea] private string shotgunSkill;
-        [SerializeField, TextArea] private string shotgunIntro;
+        [SerializeField, TextArea] private string flamethrowerDescription;
+        [SerializeField, TextArea] private string flamethrowerSkill;
+        [SerializeField, TextArea] private string flamethrowerIntro;
 
         [SerializeField] private TextMeshProUGUI description;
         [SerializeField] private TextMeshProUGUI skill;
@@ -19,7 +19,7 @@ namespace UI {
         [SerializeField] private Image weaponImage;
 
         [SerializeField] private Sprite harpoonGun;
-        [SerializeField] private Sprite shotgun;
+        [SerializeField] private Sprite flamethrower;
 
         private bool viewingHarpoon = true;
 
@@ -39,10 +39,10 @@ namespace UI {
                 intro.text = harpoonIntro;
                 weaponImage.sprite = harpoonGun;
             } else {
-                description.text = shotgunDescription;
-                skill.text = shotgunSkill;
-                intro.text = shotgunIntro;
-                weaponImage.sprite = shotgun;
+                description.text = flamethrowerDescription;
+                skill.text = flamethrowerSkill;
+                intro.text = flamethrowerIntro;
+                weaponImage.sprite = flamethrower;
             }
         }
     }

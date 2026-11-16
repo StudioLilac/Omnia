@@ -8,18 +8,18 @@ namespace Players.Buff {
         [SerializeField] private float angleReduction;
 
         public override void ApplyBuff() {
-            Shotgun shotgun = player.weapons.OfType<Shotgun>().FirstOrDefault();
+            Flamethrower flamethrower = player.weapons.OfType<Flamethrower>().FirstOrDefault();
 
-            if (shotgun) {
-                shotgun.blastAngle -= angleReduction;
+            if (flamethrower) {
+                flamethrower.blastAngle -= angleReduction;
             }
         }
 
         public override void RevokeBuff() {
-            Shotgun shotgun = player.weapons.OfType<Shotgun>().FirstOrDefault();
+            Flamethrower flamethrower = player.weapons.OfType<Flamethrower>().FirstOrDefault();
 
-            if (shotgun) {
-                shotgun.blastAngle += angleReduction;
+            if (flamethrower) {
+                flamethrower.blastAngle += angleReduction;
             }
         }
     }

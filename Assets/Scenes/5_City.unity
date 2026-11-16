@@ -6317,7 +6317,7 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6725967550211918722, guid: a0a8f7069068e40faa87eaf58c7b7cda, type: 3}
-      propertyPath: hasShotgun
+      propertyPath: hasFlamethrower
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

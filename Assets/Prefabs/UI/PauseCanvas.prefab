@@ -3792,15 +3792,15 @@ MonoBehaviour:
   harpoonDescription: The Harpoon Gun fires up to three harpoons at a time. Harpoons may impale enemies, semisolid platforms, or the ground. Harpoons can be picked up to restore ammo, but stay lodged in enemies.
   harpoonSkill: 'Skill: Quickly pulls Jamie to the most recently impaled enemy or semisolid platform. Does not work on ground.'
   harpoonIntro: 'Intro Skill: Instantly retrieves all harpoons and staggers enemies that were impaled.'
-  shotgunDescription: The Flamethrower projects a continuous stream of pixel fire. Hold fire to consume fuel. Targets touching hot flame take damage, and walls block the stream. Fuel regenerates after a short pause.
-  shotgunSkill: 'Skill: Vent a burst of flame downwards and boost Jamie upwards.'
-  shotgunIntro: 'Intro Skill: Refill fuel and release a sustained flame burst, recoiling Jamie backwards.'
+  flamethrowerDescription: The Flamethrower projects a continuous stream of pixel fire. Hold fire to consume fuel. Targets touching hot flame take damage, and walls block the stream. Fuel regenerates after a short pause.
+  flamethrowerSkill: 'Skill: Vent a burst of flame downwards and boost Jamie upwards.'
+  flamethrowerIntro: 'Intro Skill: Refill fuel and release a sustained flame burst, recoiling Jamie backwards.'
   description: {fileID: 467942398185157651}
   skill: {fileID: 639122358439454786}
   intro: {fileID: 1462331216434662797}
   weaponImage: {fileID: 5288333175215766542}
   harpoonGun: {fileID: 21300000, guid: 89542a89156ed48ffb22dd213c0434fd, type: 3}
-  shotgun: {fileID: 21300000, guid: c3e355a25431b4c79baa502196087ca2, type: 3}
+  flamethrower: {fileID: 21300000, guid: c3e355a25431b4c79baa502196087ca2, type: 3}
 --- !u!1 &7292110490065377139
 GameObject:
   m_ObjectHideFlags: 0

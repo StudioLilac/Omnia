@@ -11,7 +11,6 @@ using Players.Buff;
 using Puzzle;
 using UI;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
 using If = Omnia.State.FuncPredicate;
 
@@ -102,7 +101,7 @@ namespace Players {
         [SerializeField] internal Transform buffsParent;
 
         // if this is false, disable swapping.
-        [SerializeField] internal bool hasShotgun;
+        [SerializeField] internal bool hasFlamethrower;
 
         [SerializeField] public float critChance;
         [SerializeField] public float critMultiplier;
@@ -313,7 +312,7 @@ namespace Players {
 
         public void OnHit(float damage, Enemy enemy) {
             combatTimer.Start();
-            if (!hasShotgun) return;
+            if (!hasFlamethrower) return;
             CurrentFlow = Mathf.Min(CurrentFlow + (damage / damageMultiplier) * WeaponClass.damageToFlowRatio, maximumFlow);
             OnEnemyHit?.Invoke(damage, enemy);
         }
@@ -404,7 +403,7 @@ namespace Players {
 
 
         public void DoSwap(int targetWeapon) {
-            if (!hasShotgun) return;
+            if (!hasFlamethrower) return;
             if (selectedWeapon != targetWeapon) {
                 weapons[selectedWeapon].SetSpriteActive(false);
 

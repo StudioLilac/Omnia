@@ -646,7 +646,7 @@ MonoBehaviour:
   hurtInvulnerabilityTime: 1
   weapons:
   - {fileID: 8474927021672394680}
-  - {fileID: 1016169061012764450}
+  - {fileID: 1659092831378219537}
   selectedWeapon: 0
   facing: {x: 0, y: 0}
   moving: {x: 0, y: 0}
@@ -664,7 +664,7 @@ MonoBehaviour:
   debugBehaviour: 
   debugPullToTargetTransform: {fileID: 0}
   buffsParent: {fileID: 9209025776175109295}
-  hasShotgun: 1
+  hasFlamethrower: 1
   critChance: 0
   critMultiplier: 2
   musicBoxEquipped: 0
@@ -1059,15 +1059,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3989308426405327203, guid: efa9c0dcd785c994e9b60cd2c68cbec9, type: 3}
       propertyPath: m_Name
-      value: Shotgun
-      objectReference: {fileID: 0}
-    - target: {fileID: 3989308426405327203, guid: efa9c0dcd785c994e9b60cd2c68cbec9, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3989308426405327203, guid: efa9c0dcd785c994e9b60cd2c68cbec9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      value: Flamethrower
       objectReference: {fileID: 0}
     - target: {fileID: 5713062283198653993, guid: efa9c0dcd785c994e9b60cd2c68cbec9, type: 3}
       propertyPath: m_Enabled
@@ -1081,27 +1073,64 @@ PrefabInstance:
       propertyPath: enemyLayer.m_Bits
       value: 64
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6090924249510559695, guid: efa9c0dcd785c994e9b60cd2c68cbec9, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3989308426405327203, guid: efa9c0dcd785c994e9b60cd2c68cbec9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1659092831378219537}
   m_SourcePrefab: {fileID: 100100000, guid: efa9c0dcd785c994e9b60cd2c68cbec9, type: 3}
---- !u!114 &1016169061012764450 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6090924249510559695, guid: efa9c0dcd785c994e9b60cd2c68cbec9, type: 3}
+--- !u!1 &2993365851769401669 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8293366980119116200, guid: efa9c0dcd785c994e9b60cd2c68cbec9, type: 3}
   m_PrefabInstance: {fileID: 6529488516325034221}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00c1b0db80d363246b293fe7f28eac76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &7795098894954148840 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3940832265663412997, guid: efa9c0dcd785c994e9b60cd2c68cbec9, type: 3}
   m_PrefabInstance: {fileID: 6529488516325034221}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7908806746659322254 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3989308426405327203, guid: efa9c0dcd785c994e9b60cd2c68cbec9, type: 3}
+  m_PrefabInstance: {fileID: 6529488516325034221}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1659092831378219537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7908806746659322254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95318ceb4e9934cd8bd628830c74ca13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 5710193498280292276}
+  hittableLayerMask:
+    serializedVersion: 2
+    m_Bits: 2112
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  damage: 70
+  attackCooldown: 0
+  maxAmmoCount: 100
+  useFuel: 0
+  reloadTime: 1.2
+  fuelPerSecond: 12
+  refillInterval: 0.08
+  barrelPosition: {fileID: 2993365851769401669}
+  skillForce: 10
+  skillLockDuration: 0.25
+  introDelayTime: 0.25
+  blastAngle: 35
 --- !u!1001 &6623724537174562648
 PrefabInstance:
   m_ObjectHideFlags: 0

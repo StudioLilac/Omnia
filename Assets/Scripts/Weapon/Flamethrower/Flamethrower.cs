@@ -16,7 +16,7 @@ public class Flamethrower : WeaponClass {
     [SerializeField] internal float skillForce = 10;
     [SerializeField] private float skillLockDuration = 0.25f;
     [SerializeField] private float introDelayTime = 0.25f;
-    // Preserve serialized spread upgrades on existing shotgun prefabs and save content.
+    // Spread upgrades tune the width of the flame stream.
     [HideInInspector] public float blastAngle = 35;
     public FlameEmitter Emitter { get; private set; }
     private SpriteRenderer weaponSprite;

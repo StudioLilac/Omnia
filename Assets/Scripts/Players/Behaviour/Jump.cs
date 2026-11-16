@@ -34,7 +34,7 @@ namespace Players.Behaviour {
         }
 
         public static IBehaviour If(Player it) {
-            //Bugfix: When player stands still and uses shotgun skill, they should enter this state via the lockGravity flag instead of being stuck in Idle and not allowed to move.
+            // Bugfix: When the player uses the flamethrower skill while still, lockGravity moves them into this state instead of leaving them stuck in Idle.
             return it.lockGravity || it.grounded && it.jump ? new Jump(it) : null;
         }
     }

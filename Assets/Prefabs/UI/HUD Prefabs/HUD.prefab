@@ -429,8 +429,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e1243e7dc61450c8dc812960e79af15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  root: 1
-  persistent: 1
   healthContainer: {fileID: 1259367060579067387}
   heartPrefab: {fileID: 4885711954112943314, guid: 1bec0dc3f73da4568aaa134f68d5accd, type: 3}
   halfHeartPrefab: {fileID: 4885711954112943314, guid: 07635045b8ba34884b0017bc560fa637, type: 3}
@@ -440,7 +438,7 @@ MonoBehaviour:
   ammoPrefab: {fileID: 6597586213829669474, guid: 55623c03deb55428d92b3944c5b30e96, type: 3}
   emptyAmmoPrefab: {fileID: 6597586213829669474, guid: c65d13bc762ab4ca8a53e16c97cb307e, type: 3}
   harpoonGunSprite: {fileID: 21300000, guid: 89542a89156ed48ffb22dd213c0434fd, type: 3}
-  shotgunSprite: {fileID: 21300000, guid: c3e355a25431b4c79baa502196087ca2, type: 3}
+  flamethrowerSprite: {fileID: 21300000, guid: c3e355a25431b4c79baa502196087ca2, type: 3}
   weaponRenderer: {fileID: 8840202269791732719}
   flowSlider: {fileID: 6749028236361330706}
   lowHealthEffect: {fileID: 1639958623085454677}

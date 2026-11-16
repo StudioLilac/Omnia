@@ -6375,6 +6375,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 970156644}
     m_Modifications:
+    - target: {fileID: 232222883543526544, guid: a0a8f7069068e40faa87eaf58c7b7cda, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1624237461}
     - target: {fileID: 1129889265447086856, guid: a0a8f7069068e40faa87eaf58c7b7cda, type: 3}
       propertyPath: semisolidCollider
       value: 
@@ -6426,10 +6430,6 @@ PrefabInstance:
     - target: {fileID: 6725967550211918722, guid: a0a8f7069068e40faa87eaf58c7b7cda, type: 3}
       propertyPath: cam
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7908806746659322254, guid: a0a8f7069068e40faa87eaf58c7b7cda, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6672,7 +6672,7 @@ TilemapRenderer:
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0.03333336, y: 1, z: 0}
+  m_ChunkCullingBounds: {x: 0, y: 1, z: 0}
   m_MaxChunkCount: 32
   m_MaxFrameAge: 64
   m_SortOrder: 0
@@ -25919,6 +25919,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1636166958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1624237461 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5710193498280292276, guid: a0a8f7069068e40faa87eaf58c7b7cda, type: 3}
+  m_PrefabInstance: {fileID: 706077474}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1636166955
 GameObject:
   m_ObjectHideFlags: 0
@@ -26125,11 +26130,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4774809283147415622, guid: 60c329ee0656c824e8e9c92cb57b8930, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.0088596
+      value: 6.0088644
       objectReference: {fileID: 0}
     - target: {fileID: 4774809283147415622, guid: 60c329ee0656c824e8e9c92cb57b8930, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.395587
+      value: 4.3982086
       objectReference: {fileID: 0}
     - target: {fileID: 4774809283147415622, guid: 60c329ee0656c824e8e9c92cb57b8930, type: 3}
       propertyPath: m_LocalPosition.z
