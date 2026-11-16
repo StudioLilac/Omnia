@@ -758,6 +758,17 @@
                 },
                 {
                     "name": "",
+                    "id": "6774f370-d02f-4995-8593-b70baadd57c2",
+                    "path": "<Mouse>/forwardButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "5cd28354-8b7d-4052-9e09-ddd5760b6a6a",
                     "path": "<Keyboard>/r",
                     "interactions": "",

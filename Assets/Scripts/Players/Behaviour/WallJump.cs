@@ -28,7 +28,7 @@ namespace Players.Behaviour {
             t = Mathf.Max(0, t - Time.deltaTime);
             if (t != 0) return;
 
-            self.UseBehaviour(Slide.If(self) ?? Fall.If(self) ?? Move.If(self) ?? Idle.If(self));
+            self.UseBehaviour(Roll.If(self) ?? Slide.If(self) ?? Fall.If(self) ?? Move.If(self) ?? Idle.If(self));
         }
 
         public static IBehaviour If(Player it) {
