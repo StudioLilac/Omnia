@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Omnia.slnx"
+    "dotnet.defaultSolution": "Omnia.sln"
 }
