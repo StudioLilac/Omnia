@@ -11,7 +11,7 @@ namespace Enemies.Sundew.Behaviour {
 
         public void OnEnter() {
             float randomVariance = Random.Range(0f, self.randomAttackDelayOffset);
-            t = self.reload + self.lag + randomVariance;
+            t = (self.reload + self.lag + randomVariance) * self.attackTimingMultiplier / 1.5f;
         }
 
         public void OnExit() {
