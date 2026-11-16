@@ -7,7 +7,8 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using Utils;
 
-public class InventoryManager : PersistentSingleton<InventoryManager> {
+public class InventoryManager : MonoBehaviour {
+    private TimeManager TimeManager => this.Inject<TimeManager>();
     [SerializeField] private GameObject inventoryUI; // Reference to Inventory UI Panel
     [SerializeField] private TrinketSlot[] trinketSlots; // Grid of trinket slots
     [SerializeField] private TrinketSlot equippedTrinket;
@@ -22,19 +23,6 @@ public class InventoryManager : PersistentSingleton<InventoryManager> {
 
     public bool IsInventoryOpen { get; private set; }
 
-    protected override void OnAwake() {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDestroy() {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        CloseInventory();
-        InitializeTrinketSlots();
-        EquipDisplay.color = new Color(1, 1, 1, 1);
-    }
 
     private void Start() {
         InitializeTrinketSlots();
@@ -44,7 +32,7 @@ public class InventoryManager : PersistentSingleton<InventoryManager> {
     }
 
     private void Update() {
-        if (PauseMenu.IsPaused || DialogueManager.Instance.IsInDialogue()) return;
+        if (TimeManager.IsFrozen) return;
 
         if (inventoryAction.action.WasPressedThisFrame()) {
             ToggleInventory();

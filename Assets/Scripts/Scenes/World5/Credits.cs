@@ -18,10 +18,6 @@ public class Credits : MonoBehaviour
         fadeScreen.SetDarkScreen();
         StartCoroutine(fadeScreen.FadeInLightScreen(2f));
 
-        DisablePersistentSingletons.DisableHUD();
-        DisablePersistentSingletons.DisableInventory();
-        DisablePersistentSingletons.DisablePause();
-        DisablePersistentSingletons.DisableScreenShakeManager();
         StartCoroutine(EndSequence());
     }
 

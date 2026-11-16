@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 namespace Utils {
-    public sealed class TimeManager : PersistentSingleton<TimeManager> {
+    public sealed class TimeManager : MonoBehaviour {
         private const float DefaultTimeScale = 1f;
 
         private sealed class TimeScale {
@@ -19,6 +19,8 @@ namespace Utils {
 
         private readonly List<TimeScale> scales = new();
         private readonly HashSet<object> freezeSources = new();
+
+        public bool IsFrozen => freezeSources.Any();
 
         public void Freeze(object source) {
             if (source == null) return;

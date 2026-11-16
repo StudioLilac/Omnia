@@ -13,7 +13,6 @@ namespace Scenes.World5 {
         [SerializeField] private DialogueReference dialogue;
 
         public void Start() {
-            HUDManager.Instance.gameObject.SetActive(false);
             StartCoroutine(StartSequence());
         }
 
@@ -31,7 +30,6 @@ namespace Scenes.World5 {
             yield return DialogueManager.Instance.StartDialogue(dialogue);
 
             yield return new WaitForSeconds(3f);
-            HUDManager.Instance.gameObject.SetActive(true);
             LevelManager.Instance.NextLevel();
 
         }

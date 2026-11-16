@@ -12,6 +12,7 @@ public class TrinketSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public bool IsEquipped => isEquipped;
     public Image IconImage => iconImage;
+    private InventoryManager InventoryManager => this.Inject<InventoryManager>();
 
     public void Initialize() {
         iconImage = GetComponent<Image>();
@@ -56,18 +57,17 @@ public class TrinketSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData) {
         if (!trinket.IsLocked) {
-            InventoryManager.Instance.UpdateDescription(trinket.trinketName, trinket.description);
+            InventoryManager.UpdateDescription(trinket.trinketName, trinket.description);
         }
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-        InventoryManager.Instance.ClearDescription();
+        InventoryManager.ClearDescription();
     }
 
     public void OnPointerClick(PointerEventData eventData) {
         if (trinket.IsLocked) return; // Prevent interaction if locked
-
-        InventoryManager.Instance.EquipTrinket(this);
+        InventoryManager.EquipTrinket(this);
     }
 
     public void SetEquipped(bool equipped) {

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Enemies.Bird.Animation;
 using Enemies.Bird.Behaviour;
+using Enemies.Common.Behaviour;
 using Omnia.State;
 using Players;
 using UnityEngine;
@@ -10,6 +11,7 @@ using StateMachine = Omnia.State.StateMachine;
 namespace Enemies.Bird {
     public class Bird : Enemy {
         public override EnemyWeightType WeightType => EnemyWeightType.Light;
+        internal override IBehaviour PostStunBehaviour => new Idle(this);
 
         [SerializeField] internal float detectionRadius;
         [SerializeField] internal float fuse;
@@ -28,10 +30,13 @@ namespace Enemies.Bird {
         [SerializeField] internal LayerMask ground;
         [SerializeField] internal LayerMask player;
         [SerializeField] internal Player targetInstance;
-
+        private ScreenShakeManager ScreenShakeManager => this.Inject<ScreenShakeManager>();
         public Action<Bird> NotifyOnDestroy;
 
-        public void OnDestroy() => NotifyOnDestroy?.Invoke(this);
+        public override void OnDestroy() {
+            NotifyOnDestroy?.Invoke(this);
+            base.OnDestroy();
+        }
 
         public void Awake() {
             targetInstance ??= FindObjectsByType<Player>().FirstOrDefault();
@@ -49,7 +54,7 @@ namespace Enemies.Bird {
 
         public override void Die() {
             Attack();
-            ScreenShakeManager.Instance.Shake(screenShakeIntensity, screenShakeDuration);
+            ScreenShakeManager.Shake(screenShakeIntensity, screenShakeDuration);
 
             base.Die();
             Instantiate(explosion, rb.worldCenterOfMass, Quaternion.identity);
@@ -70,7 +75,7 @@ namespace Enemies.Bird {
 
         protected override void UseAnimation(StateMachine stateMachine) {
             var idleAnim = new IdleAnimation(animator);
-            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle));
+            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle or Stunned));
             stateMachine.AddAnyTransition(new AlertAnimation(animator), new FuncPredicate(() => behaviour is Alert));
             stateMachine.AddAnyTransition(new AttackAnimation(animator), new FuncPredicate(() => behaviour is Attack));
 

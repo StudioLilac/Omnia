@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace Enemies.Armadillo {
     public class Armadillo : ShieldedEnemy {
+        public override EnemyWeightType WeightType => EnemyWeightType.Heavy;
+        internal override IBehaviour PostStunBehaviour => new Idle(this);
+
         [SerializeField] internal SpriteRenderer sprite;
         [SerializeField] internal Animator animator;
         [SerializeField] internal Rigidbody2D rb;
@@ -41,6 +44,19 @@ namespace Enemies.Armadillo {
         public override void Update() {
             base.Update();
             sprite.flipX = facing.x == 0 ? sprite.flipX : facing.x > 0;
+            if (stunEffect) {
+                drawStunEffect();
+            }
+        }
+
+        private void drawStunEffect() {
+            var position = stunEffect.transform.localPosition;
+            position.x = Mathf.Abs(position.x) * (sprite.flipX ? 1 : -1);
+            stunEffect.transform.localPosition = position;
+        }
+
+        internal override void OnStunned() {
+            dirtParticles.Stop();
         }
 
         public override void Die() {
@@ -85,7 +101,7 @@ namespace Enemies.Armadillo {
 
         protected override void UseAnimation(StateMachine stateMachine) {
             var idleAnim = new IdleAnimation(animator);
-            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle));
+            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle or Stunned));
             stateMachine.AddAnyTransition(new MoveAnimation(animator), new FuncPredicate(() => behaviour is Move));
             stateMachine.AddAnyTransition(new AlertAnimation(animator), new FuncPredicate(() => behaviour is Alert));
             stateMachine.AddAnyTransition(new RollAnimation(animator), new FuncPredicate(() => behaviour is Charge or Roll));

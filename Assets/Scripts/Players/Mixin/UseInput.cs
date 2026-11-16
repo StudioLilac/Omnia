@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utils;
 
 namespace Players.Mixin {
     public class UseInput : MonoBehaviour {
@@ -14,6 +15,9 @@ namespace Players.Mixin {
         [SerializeField] private InputActionReference jumpAction;   // Button
         [SerializeField] private InputActionReference rollAction;   // Button
         [SerializeField] private InputActionReference introAction;  // Button (held)
+#nullable enable
+        private TimeManager TimeManager => this.Inject<TimeManager>();
+        private InventoryManager? InventoryManager => this.InjectOptional<InventoryManager>();
 
         private float jt;
         private float ft;
@@ -32,8 +36,9 @@ namespace Players.Mixin {
                 self.moving = Vector2.zero;
                 return;
             }
-            if (DialogueManager.Instance?.IsInDialogue() == true || InventoryManager.Instance?.IsInventoryOpen == true) return;
-            if (PauseMenu.IsPaused) return;
+
+            // Game is paused, or inventory is open (inventory open does not freeze the game)
+            if (TimeManager.IsFrozen || InventoryManager?.IsInventoryOpen == true) return;
 
             var fire = fireAction.action.WasPressedThisFrame();
             self.fireHeld = fireAction.action.IsPressed();

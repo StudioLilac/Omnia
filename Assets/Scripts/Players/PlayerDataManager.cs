@@ -10,13 +10,10 @@ namespace Players {
 
         [SerializeField] private Trinket[] trinkets;
 
-        public int warpedDepthsProgress;
-
         public void Start() {
             foreach (Trinket trinket in trinkets) {
                 trinket.IsLocked = !devMode;
             }
-            warpedDepthsProgress = 0;
         }
 
         public int playerSelectedWeapon = 0;

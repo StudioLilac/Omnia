@@ -74,6 +74,12 @@ public class UnscaledLinePresenter : DialoguePresenterBase {
         if (duration <= 0) { group.alpha = to; return; }
         var elapsed = 0f;
         while (!token.IsCancellationRequested && elapsed < duration) {
+            if (PauseMenu.IsPaused) {
+                await YarnTask.WaitUntil(() => !PauseMenu.IsPaused, token)
+                    .SuppressCancellationThrow();
+                continue;
+            }
+
             elapsed += Time.unscaledDeltaTime;
             group.alpha = Mathf.Lerp(from, to, elapsed / duration);
             await YarnTask.Yield();

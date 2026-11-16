@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da2e407dfe1fa4b10b6b0ba1d0fbeba8, type: 3}
+  m_Name: DialogueSampleAudioConfig
+  m_EditorClassIdentifier: Dialogue::Dialogue.ScriptableObjects.AudioConfig
+  effects:
+  - key: slide
+    value:
+      Guid:
+        Data1: -896930289
+        Data2: 1323032279
+        Data3: 1508778673
+        Data4: -1945919267
+      Path: event:/SFX/JamieSlide
+  - key: scream
+    value:
+      Guid:
+        Data1: -1139824060
+        Data2: 1217607957
+        Data3: -944821073
+        Data4: 1425334194
+      Path: event:/SFX/Dinky_Scream

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Enemies;
 using Omnia.State;
+using Omnia.Rendering;
 using Omnia.Utils;
 using Players.Animation;
 using Players.Behaviour;
@@ -16,6 +17,8 @@ using If = Omnia.State.FuncPredicate;
 
 namespace Players {
     public class Player : MonoBehaviour {
+        private SpriteOutlineManager outlineManager;
+
         [SerializeField] internal SpriteRenderer sprite;
         [SerializeField] internal Animator animator;
         [SerializeField] internal Rigidbody2D rb;
@@ -213,6 +216,8 @@ namespace Players {
         }
 
         public void Start() {
+            outlineManager = this.Inject<SpriteOutlineManager>();
+            outlineManager.PushColor(this);
             CurrentHealth = maximumHealth;
 
             CurrentFlow = 0;
@@ -239,6 +244,10 @@ namespace Players {
             OnHealthChanged?.Invoke(CurrentHealth);
             OnSkillCooldownUpdated?.Invoke(1);
             Spawn?.Invoke();
+        }
+
+        private void OnDestroy() {
+            if (outlineManager != null) outlineManager.OnEntityDestroyed(this);
         }
 
         public void Update() {

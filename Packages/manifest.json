@@ -14,6 +14,7 @@
     "com.unity.ugui": "2.6.0",
     "com.unity.visualscripting": "1.9.12",
     "dev.yarnspinner.unity": "https://github.com/YarnSpinnerTool/YarnSpinner-Unity.git#current",
+    "com.yasirkula.ingamedebugconsole": "https://github.com/yasirkula/UnityIngameDebugConsole.git#73c1d9c582e0b49d63ddcd6efb48b0059f33d43c",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
