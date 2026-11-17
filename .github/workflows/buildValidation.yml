@@ -43,6 +43,10 @@ jobs:
                   githubToken: ''
                   customParameters: -job-worker-count 1 -desiredWorkerCount 1
 
+            - name: Free disk space after tests
+              run: |
+                  sudo rm -rf test-results
+
             - name: Build project
               uses: game-ci/unity-builder@v4
               env:
