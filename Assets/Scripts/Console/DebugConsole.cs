@@ -1,6 +1,6 @@
-using System;
 using IngameDebugConsole;
 using Initializers;
+using Players;
 using UnityEngine;
 using Utils;
 
@@ -8,15 +8,12 @@ using Utils;
 public class DebugConsole : MonoBehaviour, IPersistentSingleton {
     private DebugLogManager debugLogManager;
 
-    public static event Action OnConsoleOpened;
-    public static event Action OnConsoleClosed;
-
     private void Awake() {
         debugLogManager = GetComponent<DebugLogManager>();
         transform.SetParent(null); // Equivalent to PersistentSingleton L30
 
-        debugLogManager.OnLogWindowShown += () => OnConsoleOpened?.Invoke();
-        debugLogManager.OnLogWindowHidden += () => OnConsoleClosed?.Invoke();
+        debugLogManager.OnLogWindowShown += () => Player.ControlsLocked.Set(this);
+        debugLogManager.OnLogWindowHidden += () => Player.ControlsLocked.Unset(this);
     }
 
     private void Start() {

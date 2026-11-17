@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Players;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using Utils;
@@ -13,7 +14,6 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
 #nullable enable
     public static event Action? LegacyDialogueEvent;
     public bool inDialogue;
-    private TimeManager TimeManager => this.Inject<TimeManager>();
     private InventoryManager? InventoryManager => this.InjectOptional<InventoryManager>();
 
     protected override void OnAwake() {
@@ -45,7 +45,7 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         if (InventoryManager?.IsInventoryOpen ?? false) InventoryManager.CloseInventory();
 
         inDialogue = true;
-        TimeManager.Freeze(this);
+        Player.ControlsLocked.Set(this);
         yarnDialogueRunner.SetProject(dialogueReference.project);
         SetDialogueUiVisible(true);
         yield return YarnTask.ToCoroutine(async () => {
@@ -54,12 +54,12 @@ public class DialogueManager : PersistentSingleton<DialogueManager> {
         });
         SetDialogueUiVisible(false);
         inDialogue = false;
-        TimeManager.Unfreeze(this);
+        Player.ControlsLocked.Unset(this);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         if (!inDialogue) return;
-        TimeManager.Unfreeze(this);
+        Player.ControlsLocked.Unset(this);
         yarnDialogueRunner.Stop();
         inDialogue = false;
     }
