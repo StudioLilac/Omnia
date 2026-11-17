@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e17b34db181f8b499aa5320e85712ac, type: 3}
+  m_Name: stone_grass_rock
+  m_EditorClassIdentifier: Assembly-CSharp::DualGridTerrainTile
+  m_Sprite: {fileID: 482014274, guid: f6308078768105c4db420eb91c1f8d64, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Transform:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  m_InstancedGameObject: {fileID: 0}
+  m_Flags: 1
+  m_ColliderType: 2
+  tileSets:
+  - tiles:
+    - {fileID: 11400000, guid: 59b2b2c24dee6cb438b1707bf6e55677, type: 2}
+    - {fileID: 11400000, guid: c87f92f1626384a41888ae753d8ec5db, type: 2}
+    - {fileID: 11400000, guid: 10286f25d0c26bc47bdf605d55e744c0, type: 2}
+    - {fileID: 11400000, guid: 8143f7576d68fc94eb1be0ff04c4fa18, type: 2}
+    - {fileID: 11400000, guid: a69df837b77bb4e47a45eb98b00335c2, type: 2}
+    - {fileID: 11400000, guid: 08f527caf68764949bac25831f5cd4f9, type: 2}
+    - {fileID: 11400000, guid: 4a1ba6bf05755c44a9a760955458de8b, type: 2}
+    - {fileID: 11400000, guid: 3773176e5578dcd499b28297fbe3ace2, type: 2}
+    - {fileID: 11400000, guid: 37d73802e8c99234b8bcbddba66a930e, type: 2}
+    - {fileID: 11400000, guid: e2f22b78a2c5096458f82d52f3d869ec, type: 2}
+    - {fileID: 11400000, guid: 320129ad933265a49a10aea280f9cc99, type: 2}
+    - {fileID: 11400000, guid: 5daf14f9f1b38bb4a93a9c35b40f093b, type: 2}
+    - {fileID: 0}
+    - {fileID: 11400000, guid: 2d50ee0ae00771e4584785010f29b910, type: 2}
+    - {fileID: 11400000, guid: 830ba1baf2768b64c92d358085da1320, type: 2}
+    - {fileID: 11400000, guid: a39ab3edf8a12374ba7ec51534b76823, type: 2}
+  variationSeed: 0
+  legacyVisualTiles: []
+  sortingOrder: 0

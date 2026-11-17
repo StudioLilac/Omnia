@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e17b34db181f8b499aa5320e85712ac, type: 3}
+  m_Name: stone_mushroom
+  m_EditorClassIdentifier: Assembly-CSharp::DualGridTerrainTile
+  m_Sprite: {fileID: 482014274, guid: 3a34d902a301a0a418dedc5818f419dd, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Transform:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  m_InstancedGameObject: {fileID: 0}
+  m_Flags: 1
+  m_ColliderType: 2
+  tileSets:
+  - tiles:
+    - {fileID: 11400000, guid: f14ffcc0d43a2ea4f9e922041ff2d127, type: 2}
+    - {fileID: 11400000, guid: fd41f4401644e5b4cb55326ca1322607, type: 2}
+    - {fileID: 11400000, guid: ed5cd86f8071c08488b65985098f1e0c, type: 2}
+    - {fileID: 11400000, guid: 74ef667eb506cdd4f8908205ec7565a2, type: 2}
+    - {fileID: 11400000, guid: df1b7f216cc24d54b975e384cc3f1769, type: 2}
+    - {fileID: 11400000, guid: b77f3e3cfec65894ca167ddd14dd3d66, type: 2}
+    - {fileID: 11400000, guid: f37c27cc240811049a97b43647ec67e2, type: 2}
+    - {fileID: 11400000, guid: 56df489a00dd7e843a07bd7b410cade9, type: 2}
+    - {fileID: 11400000, guid: 4b92b33d594656a4c96fcfe06a827ff7, type: 2}
+    - {fileID: 11400000, guid: 2dcfeaba4b7b0604f8b528be1b93b747, type: 2}
+    - {fileID: 11400000, guid: e3acd98da4e32ec448410525fbeb7792, type: 2}
+    - {fileID: 11400000, guid: b3f7eb521ad3bcb4babf3efbbc12c878, type: 2}
+    - {fileID: 0}
+    - {fileID: 11400000, guid: 6c4c1da088e85ed4b9d92b7cb96a437b, type: 2}
+    - {fileID: 11400000, guid: 27ac722ac90a7944d9a22b96ce88013a, type: 2}
+    - {fileID: 11400000, guid: 8400cb443d145e840bb19c2971f488e1, type: 2}
+  variationSeed: 0
+  legacyVisualTiles: []
+  sortingOrder: 0

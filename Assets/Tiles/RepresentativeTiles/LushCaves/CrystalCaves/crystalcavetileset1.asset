@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e17b34db181f8b499aa5320e85712ac, type: 3}
+  m_Name: crystalcavetileset1
+  m_EditorClassIdentifier: Assembly-CSharp::DualGridTerrainTile
+  m_Sprite: {fileID: 482014274, guid: 0583e3f256a49a04bafc2404e7076ab8, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Transform:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  m_InstancedGameObject: {fileID: 0}
+  m_Flags: 1
+  m_ColliderType: 2
+  tileSets:
+  - tiles:
+    - {fileID: 11400000, guid: 3d218f1099667864dacd3ea5287e71d5, type: 2}
+    - {fileID: 11400000, guid: 1635e571e6ff9e947b64eead1a99eb78, type: 2}
+    - {fileID: 11400000, guid: 755af9602530a0840a1604591b4d4101, type: 2}
+    - {fileID: 11400000, guid: 70e687ab9f66843468b9bffb649b90a2, type: 2}
+    - {fileID: 11400000, guid: 6f1ccce7868302d46a76ecacb29a0dde, type: 2}
+    - {fileID: 11400000, guid: 986028b0e6c06bb4994d9f4fbfca1556, type: 2}
+    - {fileID: 11400000, guid: 20adab38b78825841ba7b75b32f0fe26, type: 2}
+    - {fileID: 11400000, guid: 87117a3733b6374449e142b87b0350e1, type: 2}
+    - {fileID: 11400000, guid: 3cf94785cbaa64347b9fea7b4bad5cb9, type: 2}
+    - {fileID: 11400000, guid: c83d46fb0f0852f4fbed4beac3778c27, type: 2}
+    - {fileID: 11400000, guid: ee499be624f5fd641b4506a2229d412e, type: 2}
+    - {fileID: 11400000, guid: fb58c40e7f948654ca9cfba17605373e, type: 2}
+    - {fileID: 0}
+    - {fileID: 11400000, guid: f89fc4a073ecc4246b67048903c95378, type: 2}
+    - {fileID: 11400000, guid: 745056f657b2ef942a51542fc2a1d649, type: 2}
+    - {fileID: 11400000, guid: 412f0fe648d17164e83b513a360066e3, type: 2}
+  variationSeed: 0
+  legacyVisualTiles: []
+  sortingOrder: 0
