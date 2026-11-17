@@ -1,3 +1,4 @@
+using System;
 using IngameDebugConsole;
 using Initializers;
 using UnityEngine;
@@ -5,20 +6,17 @@ using Utils;
 
 // Adapts the IngameDebugConsole prefab with our SceneInitializer + PersistentSingleton logic
 public class DebugConsole : MonoBehaviour, IPersistentSingleton {
-    private TimeManager TimeManager => this.Inject<TimeManager>();
     private DebugLogManager debugLogManager;
+
+    public static event Action OnConsoleOpened;
+    public static event Action OnConsoleClosed;
 
     private void Awake() {
         debugLogManager = GetComponent<DebugLogManager>();
         transform.SetParent(null); // Equivalent to PersistentSingleton L30
 
-        debugLogManager.OnLogWindowShown += () => {
-            TimeManager.Freeze(this);
-        };
-
-        debugLogManager.OnLogWindowHidden += () => {
-            TimeManager.Unfreeze(this);
-        };
+        debugLogManager.OnLogWindowShown += () => OnConsoleOpened?.Invoke();
+        debugLogManager.OnLogWindowHidden += () => OnConsoleClosed?.Invoke();
     }
 
     private void Start() {

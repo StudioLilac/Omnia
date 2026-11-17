@@ -24,20 +24,27 @@ namespace Players.Mixin {
         private float ist;
 
         private TimeManager timeManager;
+        private static readonly object inventoryLock = new();
+        private static readonly object consoleLock = new();
 
         public void Start() {
             timeManager = this.Inject<TimeManager>();
             timeManager.OnFreezeChanged += OnFreezeChanged;
             InventoryManager.OnInventoryOpened += OnInventoryOpened;
             InventoryManager.OnInventoryClosed += OnInventoryClosed;
+            DebugConsole.OnConsoleOpened += OnConsoleOpened;
+            DebugConsole.OnConsoleClosed += OnConsoleClosed;
         }
 
         public void OnDestroy() {
             if (timeManager != null) timeManager.OnFreezeChanged -= OnFreezeChanged;
             Player.ControlsLocked.Unset(timeManager);
-            Player.ControlsLocked.Unset(this);
+            Player.ControlsLocked.Unset(inventoryLock);
+            Player.ControlsLocked.Unset(consoleLock);
             InventoryManager.OnInventoryOpened -= OnInventoryOpened;
             InventoryManager.OnInventoryClosed -= OnInventoryClosed;
+            DebugConsole.OnConsoleOpened -= OnConsoleOpened;
+            DebugConsole.OnConsoleClosed -= OnConsoleClosed;
         }
 
         public void Update() {
@@ -89,7 +96,11 @@ namespace Players.Mixin {
 
         // Putting this here since it feels better coupled, ie so that InventoryManager doesn't
         // know about Player.ControlsLocked
-        private void OnInventoryOpened() => Player.ControlsLocked.Set(this);
-        private void OnInventoryClosed() => Player.ControlsLocked.Unset(this);
+        private void OnInventoryOpened() => Player.ControlsLocked.Set(inventoryLock);
+        private void OnInventoryClosed() => Player.ControlsLocked.Unset(inventoryLock);
+
+        // Same here, DebugConsole probably shouldn't know about Player.ControlsLocked
+        private void OnConsoleOpened() => Player.ControlsLocked.Set(consoleLock);
+        private void OnConsoleClosed() => Player.ControlsLocked.Unset(consoleLock);
     }
 }
