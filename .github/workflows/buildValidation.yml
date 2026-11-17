@@ -29,6 +29,19 @@ jobs:
                   key: Library-${{ runner.os }}-${{ hashFiles('ProjectSettings/ProjectVersion.txt', 'Packages/manifest.json', 'Packages/packages-lock.json') }}
                   restore-keys: |
                       Library-${{ runner.os }}-
+            - name: Run tests
+              id: tests
+              uses: game-ci/unity-test-runner@v4
+              env:
+                  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+                  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+                  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+              with:
+                  unityVersion: 6000.6.3f1
+                  testMode: all
+                  artifactsPath: test-results
+                  githubToken: ''
+                  customParameters: -job-worker-count 1 -desiredWorkerCount 1
 
             - name: Build project
               uses: game-ci/unity-builder@v4
