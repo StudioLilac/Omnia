@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Players;
 using UnityEngine;
 
 namespace Utils {
@@ -23,20 +23,16 @@ namespace Utils {
 
         public bool IsFrozen => frozen;
 
-        public event Action<bool> OnFreezeChanged;
-
         public void Freeze(object source) {
             if (source == null) return;
-            bool wasFrozen = frozen;
             frozen.Set(source);
-            if (!wasFrozen) OnFreezeChanged?.Invoke(true);
+            Player.ControlsLocked.Set(source);
         }
 
         public void Unfreeze(object source) {
             if (source == null) return;
-            bool wasFrozen = frozen;
             frozen.Unset(source);
-            if (wasFrozen && !frozen) OnFreezeChanged?.Invoke(false);
+            Player.ControlsLocked.Unset(source);
         }
 
         public void Push(float scale, float duration, AnimationCurve ease) {

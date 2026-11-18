@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Utils;
 
 namespace Players.Mixin {
     public class UseInput : MonoBehaviour {
@@ -23,18 +22,12 @@ namespace Players.Mixin {
         private float rlt;
         private float ist;
 
-        private TimeManager timeManager;
-
         public void Start() {
-            timeManager = this.Inject<TimeManager>();
-            timeManager.OnFreezeChanged += OnFreezeChanged;
             InventoryManager.OnInventoryOpened += OnInventoryOpened;
             InventoryManager.OnInventoryClosed += OnInventoryClosed;
         }
 
         public void OnDestroy() {
-            if (timeManager != null) timeManager.OnFreezeChanged -= OnFreezeChanged;
-            Player.ControlsLocked.Unset(timeManager);
             Player.ControlsLocked.Unset(this);
             InventoryManager.OnInventoryOpened -= OnInventoryOpened;
             InventoryManager.OnInventoryClosed -= OnInventoryClosed;
@@ -80,11 +73,6 @@ namespace Players.Mixin {
         private Vector2 GetFacingInput(Player it) {
             Vector2 pointer = lookAction.action.ReadValue<Vector2>();
             return it.cam.ScreenToWorldPoint(pointer) - it.sprite.transform.position;
-        }
-
-        private void OnFreezeChanged(bool frozen) {
-            if (frozen) Player.ControlsLocked.Set(timeManager);
-            else Player.ControlsLocked.Unset(timeManager);
         }
 
         // InventoryManager already has these events, so we subscribe here rather than
