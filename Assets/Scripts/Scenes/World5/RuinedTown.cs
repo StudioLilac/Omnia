@@ -40,13 +40,13 @@ namespace Scenes.World5 {
         }
 
         private IEnumerator OnPlayerEnter() {
-            Player.controlsLocked = true;
+            Player.ControlsLocked.Set(this);
             uncleTriggered = true;
             uncle.Walk(-5f, 3f);
             yield return new WaitForSeconds(2f);
             yield return StartCoroutine(DialogueManager.Instance.StartDialogue(uncleDialogue));
 
-            Player.controlsLocked = false;
+            Player.ControlsLocked.Unset(this);
             player.GetComponent<UseInput>().enabled = false;
 
             while (player.transform.position.x <= uncle.transform.position.x) {

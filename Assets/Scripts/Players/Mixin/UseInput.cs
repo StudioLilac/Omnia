@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Utils;
 
 namespace Players.Mixin {
     public class UseInput : MonoBehaviour {
@@ -15,9 +14,6 @@ namespace Players.Mixin {
         [SerializeField] private InputActionReference jumpAction;   // Button
         [SerializeField] private InputActionReference rollAction;   // Button
         [SerializeField] private InputActionReference introAction;  // Button (held)
-#nullable enable
-        private TimeManager TimeManager => this.Inject<TimeManager>();
-        private InventoryManager? InventoryManager => this.InjectOptional<InventoryManager>();
 
         private float jt;
         private float ft;
@@ -27,17 +23,21 @@ namespace Players.Mixin {
         private float ist;
 
         public void Start() {
-            InventoryManager.OnInventoryOpened += StopMoving;
+            InventoryManager.OnInventoryOpened += OnInventoryOpened;
+            InventoryManager.OnInventoryClosed += OnInventoryClosed;
+        }
+
+        public void OnDestroy() {
+            Player.ControlsLocked.Unset(this);
+            InventoryManager.OnInventoryOpened -= OnInventoryOpened;
+            InventoryManager.OnInventoryClosed -= OnInventoryClosed;
         }
 
         public void Update() {
-            if (Player.controlsLocked) {
+            if (Player.ControlsLocked) {
                 self.moving = Vector2.zero;
                 return;
             }
-
-            // Game is paused, or inventory is open (inventory open does not freeze the game)
-            if (TimeManager.IsFrozen || InventoryManager?.IsInventoryOpen == true) return;
 
             var fire = fireAction.action.WasPressedThisFrame();
             var jump = jumpAction.action.WasPressedThisFrame();
@@ -66,10 +66,6 @@ namespace Players.Mixin {
             self.held = self.jump && (self.grounded || self.slide.x != 0) || self.held && held;
         }
 
-        public void OnDestroy() {
-            InventoryManager.OnInventoryOpened -= StopMoving;
-        }
-
         private Vector2 GetMovingInput() {
             return moveAction.action.ReadValue<Vector2>();
         }
@@ -79,8 +75,9 @@ namespace Players.Mixin {
             return it.cam.ScreenToWorldPoint(pointer) - it.sprite.transform.position;
         }
 
-        private void StopMoving() {
-            self.moving = Vector2.zero;
-        }
+        // InventoryManager already has these events, so we subscribe here rather than
+        // having InventoryManager call Player.ControlsLocked directly
+        private void OnInventoryOpened() => Player.ControlsLocked.Set(this);
+        private void OnInventoryClosed() => Player.ControlsLocked.Unset(this);
     }
 }
