@@ -494,7 +494,7 @@ MonoBehaviour:
   maxLaunchAngle: 10
   projectileVelocityMultiplier: 2.5
   randomAttackDelayOffset: 0.5
-  upwardFlightDuration: 2
+  upwardFlightDuration: 1
   warningDuration: 1
   fallSpeed: 12
   sprite: {fileID: 1495548087428681450}
