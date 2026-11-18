@@ -30,10 +30,6 @@ namespace Enemies.Sundew {
             if (outlineManager != null) outlineManager.OnEntityDestroyed(this);
         }
 
-        public void BeginCurve() {
-            rb.simulated = false;
-        }
-
         public void FollowCurve(Vector2 origin, Vector2 control1, Vector2 control2, Vector2 end, float t, float duration) {
             var a = Vector2.Lerp(origin, control1, t);
             var b = Vector2.Lerp(control1, control2, t);

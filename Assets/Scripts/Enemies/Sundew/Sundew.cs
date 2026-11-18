@@ -19,8 +19,11 @@ namespace Enemies.Sundew {
         [SerializeField] internal float projectileSpeed;
         [SerializeField] private int volleySize;
         [SerializeField] private float launchSpacing;
+        [SerializeField] private float minLaunchAngle;
+        [SerializeField] private float maxLaunchAngle;
         [SerializeField] private float projectileVelocityMultiplier;
         [SerializeField] internal float randomAttackDelayOffset;
+        [SerializeField] private float upwardFlightDuration;
         [SerializeField] private float warningDuration;
         [SerializeField] private float fallSpeed;
 
@@ -71,49 +74,65 @@ namespace Enemies.Sundew {
             activeProjectiles.RemoveAll(shot => shot == null);
             var shotCount = Mathf.Max(1, volleySize);
             var shots = new (SundewProjectile projectile, float launchOffset)[shotCount];
-            var camera = Camera.main;
-            var firstLaunchTime = Time.time;
-            var centerIndex = (shotCount - 1) * 0.5f;
             AudioManager.Instance.PlaySFX(AudioTracks.PlantShoot);
 
-            for (var i = 0; i < shotCount; i++) {
+            yield return LaunchShots(shots);
+            yield return new WaitForSeconds(upwardFlightDuration);
+            foreach (var (shot, _) in shots) shot.rb.simulated = false;
+
+            var paths = new ShotPath[shotCount];
+            var lines = new LineRenderer[shotCount];
+            AimShots(paths, lines);
+
+            var lastCurve = StartCurves(shots, paths);
+            yield return ShowWarning(lines);
+            yield return lastCurve;
+            volleyActive = false;
+            Destroy(activeTelegraph);
+        }
+
+        private IEnumerator LaunchShots((SundewProjectile projectile, float launchOffset)[] shots) {
+            var firstLaunchTime = Time.time;
+            var centerIndex = (shots.Length - 1) * 0.5f;
+            for (var i = 0; i < shots.Length; i++) {
                 if (i > 0) yield return new WaitForSeconds(Random.Range(0.04f, 0.12f));
                 var launchOffset = Time.time - firstLaunchTime;
                 var launchPosition = rb.worldCenterOfMass + new Vector2((i - centerIndex) * launchSpacing, 0f);
                 var shot = Instantiate(projectile, launchPosition, Quaternion.identity).GetComponent<SundewProjectile>();
                 shot.NotifyOnHit = Attack;
-                shot.rb.linearVelocity = Vector2.up * projectileSpeed * projectileVelocityMultiplier;
+                var angle = Random.Range(minLaunchAngle, maxLaunchAngle) * (Random.value < 0.5f ? -1f : 1f);
+                shot.rb.linearVelocity = (Vector2)(Quaternion.Euler(0f, 0f, angle) * Vector3.up) * projectileSpeed * projectileVelocityMultiplier;
                 shots[i] = (shot, launchOffset);
                 activeProjectiles.Add(shot);
             }
-            while (camera.WorldToViewportPoint(shots[shotCount - 1].projectile.transform.position).y <= 1.1f) yield return null;
-            foreach (var (shot, _) in shots) shot.BeginCurve();
+        }
 
-            // Aim once the whole volley has left the view.
+        private void AimShots(ShotPath[] paths, LineRenderer[] lines) {
             var target = FindAnyObjectByType<Player>();
             var aimPoint = (Vector2)target.hitbox.bounds.center;
             var aimRadius = target.hitbox.bounds.size.x;
-            var paths = new ShotPath[shotCount];
-            var lines = new LineRenderer[shotCount];
-            var cameraTop = camera.ViewportToWorldPoint(new Vector3(0.5f, 1f, 1f)).y;
+            var cameraTop = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 1f, 1f)).y;
             activeTelegraph = new GameObject("Sundew telegraphs");
-            for (var i = 0; i < shotCount; i++) {
+            for (var i = 0; i < paths.Length; i++) {
                 paths[i] = AimShot(aimPoint, aimRadius, cameraTop);
                 lines[i] = CreateTelegraph(paths[i]);
             }
+        }
 
-            Coroutine lastCurve = null;
-            for (var i = 0; i < shotCount; i++)
-                lastCurve = StartCoroutine(CurveAndFall(shots[i].projectile, paths[i], warningDuration + shots[i].launchOffset));
+        private Coroutine StartCurves((SundewProjectile projectile, float launchOffset)[] shots, ShotPath[] paths) {
+            Coroutine last = null;
+            for (var i = 0; i < shots.Length; i++)
+                last = StartCoroutine(CurveAndFall(shots[i].projectile, paths[i], warningDuration + shots[i].launchOffset));
+            return last;
+        }
+
+        private IEnumerator ShowWarning(LineRenderer[] lines) {
             for (var t = 0f; t < warningDuration; t += Time.deltaTime) {
                 var alpha = 0.8f * Mathf.Clamp01(Mathf.Min(t, warningDuration - t) / Mathf.Min(0.2f, warningDuration * 0.5f));
                 foreach (var line in lines) line.startColor = line.endColor = new Color(1f, 0.1f, 0.1f, alpha);
                 yield return null;
             }
             foreach (var line in lines) line.startColor = line.endColor = Color.clear;
-            yield return lastCurve;
-            volleyActive = false;
-            Destroy(activeTelegraph);
         }
 
         private static ShotPath AimShot(Vector2 aimPoint, float radius, float cameraTop) {
