@@ -28,6 +28,12 @@ namespace Players.Behaviour {
         }
 
         public void OnUpdate() {
+            var roll = Roll.If(self);
+            if (roll != null) {
+                self.UseBehaviour(roll);
+                return;
+            }
+
             t = Mathf.Max(0, t - Time.deltaTime);
             if (t != 0) return;
 

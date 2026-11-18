@@ -14,6 +14,7 @@ namespace Players.Mixin {
 
         // Called once when another collider enters the trigger zone
         void OnTriggerEnter2D(Collider2D other) {
+            if (player.hitbox.bounds.max.y < check.bounds.min.y) return;
             if (IsGroundLayer(other.gameObject.layer)) {
                 Debug.Log("Player entered encased state.");
                 player.Die();

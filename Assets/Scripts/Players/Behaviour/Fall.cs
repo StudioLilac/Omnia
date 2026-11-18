@@ -22,7 +22,7 @@ namespace Players.Behaviour {
         }
 
         public void OnUpdate() {
-            self.UseBehaviour(Slide.If(self) ?? Move.If(self) ?? Idle.If(self));
+            self.UseBehaviour(Roll.If(self) ?? Slide.If(self) ?? Move.If(self) ?? Idle.If(self));
         }
 
         public static IBehaviour If(Player it) {
