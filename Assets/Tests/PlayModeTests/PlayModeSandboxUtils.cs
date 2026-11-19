@@ -14,6 +14,7 @@ using UnityEditor;
 public class PlayModeSandboxUtils {
     public const string PlayerPrefabPath = "Assets/Prefabs/Players/Player.prefab";
     public const string PlayerDataManagerPrefabPath = "Assets/Prefabs/UI/Inventory/PlayerDataManager.prefab";
+    public const string SceneInitializerPrefabPath = "Assets/Prefabs/Initializers/SceneInitializer.prefab";
 
     private readonly List<Object> spawned = new();
     private bool createdSceneInitializer;
@@ -25,8 +26,9 @@ public class PlayModeSandboxUtils {
         if (SceneInitializer.Instance) {
             initializer = SceneInitializer.Instance;
         } else {
-            initializer = new GameObject("SceneInitializer").AddComponent<SceneInitializer>();
-            Track(initializer.gameObject);
+            var sceneInitializer = Object.Instantiate(LoadPrefab(SceneInitializerPrefabPath));
+            initializer = sceneInitializer.GetComponent<SceneInitializer>();
+            Track(sceneInitializer);
             createdSceneInitializer = true;
         }
 
