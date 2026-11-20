@@ -64,7 +64,7 @@ namespace Enemies.Sundew {
         public void OnTriggerEnter2D(Collider2D other) {
             if (!other.TryGetComponent<Player>(out var player)) return;
             Destroy(gameObject);
-            NotifyOnHit(player, this);
+            NotifyOnHit?.Invoke(player, this);
         }
     }
 }

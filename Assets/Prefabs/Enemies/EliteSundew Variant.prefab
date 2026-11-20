@@ -125,14 +125,6 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8387723225425041366, guid: 784cabab73d374cf19936fa720cd4d25, type: 3}
-      propertyPath: reload
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8387723225425041366, guid: 784cabab73d374cf19936fa720cd4d25, type: 3}
-      propertyPath: windup
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8387723225425041366, guid: 784cabab73d374cf19936fa720cd4d25, type: 3}
       propertyPath: projectile
       value: 
       objectReference: {fileID: 188269605483765372, guid: e55c9cb78566c4f8db3e6357db45fc46, type: 3}

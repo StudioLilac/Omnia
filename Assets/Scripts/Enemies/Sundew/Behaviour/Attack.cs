@@ -21,7 +21,7 @@ namespace Enemies.Sundew.Behaviour {
         }
 
         public void OnUpdate() {
-            if (Fired) return;
+            if (Fired || self.VolleyActive) return;
             var state = self.animator.GetCurrentAnimatorStateInfo(0);
             if (Firing) {
                 if (!state.IsName("Base Layer.SundewAttack") || state.normalizedTime < 1f) return;
