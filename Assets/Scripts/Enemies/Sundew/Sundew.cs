@@ -152,8 +152,9 @@ namespace Enemies.Sundew {
 
         protected override void UseAnimation(StateMachine stateMachine) {
             var idleAnim = new IdleAnimation(animator);
-            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle or Stunned));
+            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle));
             stateMachine.AddAnyTransition(new AttackAnimation(animator), new FuncPredicate(() => behaviour is Attack));
+            stateMachine.AddAnyTransition(new StunnedAnimation(animator), new FuncPredicate(() => behaviour is Stunned));
 
             stateMachine.SetState(idleAnim);
             animationStateMachine = stateMachine;
