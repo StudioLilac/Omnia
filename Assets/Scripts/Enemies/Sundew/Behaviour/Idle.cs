@@ -1,9 +1,13 @@
+using UnityEngine;
+
 namespace Enemies.Sundew.Behaviour {
     public class Idle : IBehaviour {
         private readonly Sundew self;
+        private float t;
 
         public Idle(Sundew self) {
             this.self = self;
+            t = self.reload;
         }
 
         public void OnEnter() {
@@ -13,13 +17,12 @@ namespace Enemies.Sundew.Behaviour {
         }
 
         public void OnTick() {
+            if (t != 0 || self.VolleyActive) return;
+            self.UseBehaviour(new Attack(self));
         }
 
         public void OnUpdate() {
-            if (self.VolleyActive) return;
-            var state = self.animator.GetCurrentAnimatorStateInfo(0);
-            if (!state.IsName("Base Layer.SundewIdle") || state.normalizedTime < 1f) return;
-            self.UseBehaviour(new Attack(self));
+            t = Mathf.Max(0, t - Time.deltaTime);
         }
     }
 }

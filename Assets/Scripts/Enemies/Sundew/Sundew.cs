@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Enemies.Sundew.Behaviour;
 using Enemies.Sundew.Animation;
+using Enemies.Common.Behaviour;
 using Omnia.State;
 using Players;
 using UnityEngine;
@@ -11,10 +12,11 @@ namespace Enemies.Sundew {
         public override EnemyWeightType WeightType => EnemyWeightType.Heavy;
         internal override IBehaviour PostStunBehaviour => new Idle(this);
 
+        [SerializeField] internal float windup;
+        [SerializeField] internal float reload;
         [SerializeField] internal float projectileSpeed;
         [SerializeField] private int volleySize;
         [SerializeField] private float launchSpacing;
-        [SerializeField] private float minLaunchAngle;
         [SerializeField] private float maxLaunchAngle;
         [SerializeField] private float projectileVelocityMultiplier;
         [SerializeField] private float upwardFlightDuration;
@@ -73,7 +75,7 @@ namespace Enemies.Sundew {
                 var launchPosition = rb.worldCenterOfMass + new Vector2((i - centerIndex) * launchSpacing, 0f);
                 var shot = Instantiate(projectile, launchPosition, Quaternion.identity).GetComponent<SundewProjectile>();
                 shot.NotifyOnHit = Attack;
-                var angle = Random.Range(minLaunchAngle, maxLaunchAngle) * (Random.value < 0.5f ? -1f : 1f);
+                var angle = Random.Range(maxLaunchAngle * 0.5f, maxLaunchAngle) * (Random.value < 0.5f ? -1f : 1f);
                 shot.rb.linearVelocity = (Vector2)(Quaternion.Euler(0f, 0f, angle) * Vector3.up) * projectileSpeed * projectileVelocityMultiplier;
                 shots[i] = (shot, Time.time - firstLaunchTime);
                 activeProjectiles.Add(shot);
@@ -150,7 +152,7 @@ namespace Enemies.Sundew {
 
         protected override void UseAnimation(StateMachine stateMachine) {
             var idleAnim = new IdleAnimation(animator);
-            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle));
+            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle or Stunned));
             stateMachine.AddAnyTransition(new AttackAnimation(animator), new FuncPredicate(() => behaviour is Attack));
 
             stateMachine.SetState(idleAnim);
