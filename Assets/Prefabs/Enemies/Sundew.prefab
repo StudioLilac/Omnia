@@ -483,17 +483,12 @@ MonoBehaviour:
   knockbackAngle: 45
   staggerDurationS: 1
   stunEffect: {fileID: 9184371171822434598}
-  windup: 1
-  reload: 1
-  attackTimingMultiplier: 3
-  lag: 0
   projectileSpeed: 7
   volleySize: 5
   launchSpacing: 0.25
   minLaunchAngle: 5
   maxLaunchAngle: 10
   projectileVelocityMultiplier: 2.5
-  randomAttackDelayOffset: 0.5
   upwardFlightDuration: 1
   warningDuration: 1
   fallSpeed: 12

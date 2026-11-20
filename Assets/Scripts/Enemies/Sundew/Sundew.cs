@@ -10,19 +10,14 @@ using UnityEngine;
 namespace Enemies.Sundew {
     public class Sundew : Enemy {
         public override EnemyWeightType WeightType => EnemyWeightType.Heavy;
-        internal override IBehaviour PostStunBehaviour => new Idle(this);
+        internal override IBehaviour PostStunBehaviour => new Attack(this);
 
-        [SerializeField] internal float windup;
-        [SerializeField] internal float reload;
-        [SerializeField] internal float attackTimingMultiplier;
-        [SerializeField] internal float lag;
         [SerializeField] internal float projectileSpeed;
         [SerializeField] private int volleySize;
         [SerializeField] private float launchSpacing;
         [SerializeField] private float minLaunchAngle;
         [SerializeField] private float maxLaunchAngle;
         [SerializeField] private float projectileVelocityMultiplier;
-        [SerializeField] internal float randomAttackDelayOffset;
         [SerializeField] private float upwardFlightDuration;
         [SerializeField] private float warningDuration;
         [SerializeField] private float fallSpeed;
@@ -49,7 +44,7 @@ namespace Enemies.Sundew {
         internal bool VolleyActive => volleyActive;
 
         public void Awake() {
-            UseBehaviour(new Idle(this));
+            UseBehaviour(new Attack(this));
         }
 
         public override void Die() {
@@ -181,13 +176,11 @@ namespace Enemies.Sundew {
         }
 
         protected override void UseAnimation(StateMachine stateMachine) {
-            var noGlueAnim = new NoGlueAnimation(animator);
             var idleAnim = new IdleAnimation(animator);
-            stateMachine.AddAnyTransition(noGlueAnim, new FuncPredicate(() => behaviour is not Attack { Fired: false }));
-            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Attack { Spinning: false, Fired: false }));
-            stateMachine.AddAnyTransition(new AttackAnimation(animator), new FuncPredicate(() => behaviour is Attack { Spinning: true, Fired: false }));
+            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Attack { Firing: false, Fired: false }));
+            stateMachine.AddAnyTransition(new AttackAnimation(animator), new FuncPredicate(() => behaviour is Attack { Firing: true, Fired: false }));
 
-            stateMachine.SetState(noGlueAnim);
+            stateMachine.SetState(idleAnim);
             animationStateMachine = stateMachine;
         }
     }
