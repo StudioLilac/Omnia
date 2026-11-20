@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Enemies.Sundew {
     public class Sundew : Enemy {
         public override EnemyWeightType WeightType => EnemyWeightType.Heavy;
-        internal override IBehaviour PostStunBehaviour => new Attack(this);
+        internal override IBehaviour PostStunBehaviour => new Idle(this);
 
         [SerializeField] internal float projectileSpeed;
         [SerializeField] private int volleySize;
@@ -42,7 +42,7 @@ namespace Enemies.Sundew {
         internal bool VolleyActive => volleyActive;
 
         public void Awake() {
-            UseBehaviour(new Attack(this));
+            UseBehaviour(new Idle(this));
         }
 
         public override void Die() {
@@ -135,7 +135,7 @@ namespace Enemies.Sundew {
             line.transform.SetParent(parent, false);
             line.sharedMaterial = telegraphMaterial;
             line.startColor = line.endColor = Color.clear;
-            line.startWidth = line.endWidth = 0.06f;
+            line.startWidth = line.endWidth = 0.04f;
             line.positionCount = 2;
             line.SetPosition(0, start);
             line.SetPosition(1, end);
@@ -150,8 +150,8 @@ namespace Enemies.Sundew {
 
         protected override void UseAnimation(StateMachine stateMachine) {
             var idleAnim = new IdleAnimation(animator);
-            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Attack { Firing: false }));
-            stateMachine.AddAnyTransition(new AttackAnimation(animator), new FuncPredicate(() => behaviour is Attack { Firing: true, Fired: false }));
+            stateMachine.AddAnyTransition(idleAnim, new FuncPredicate(() => behaviour is Idle));
+            stateMachine.AddAnyTransition(new AttackAnimation(animator), new FuncPredicate(() => behaviour is Attack));
 
             stateMachine.SetState(idleAnim);
             animationStateMachine = stateMachine;
