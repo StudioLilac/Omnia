@@ -7,18 +7,17 @@ namespace Enemies.Sundew.Behaviour {
 
         public Idle(Sundew self) {
             this.self = self;
+            t = self.reload;
         }
 
         public void OnEnter() {
-            float randomVariance = Random.Range(0f, self.randomAttackDelayOffset);
-            t = self.reload + self.lag + randomVariance;
         }
 
         public void OnExit() {
         }
 
         public void OnTick() {
-            if (t != 0) return;
+            if (t != 0 || self.VolleyActive) return;
             self.UseBehaviour(new Attack(self));
         }
 
