@@ -5,6 +5,7 @@ using Enemies.Armadillo.Behaviour;
 using Enemies.Common.Behaviour;
 using Omnia.State;
 using Players;
+using StudioLilac.StatusEffects;
 using UnityEngine;
 
 namespace Enemies.Armadillo {
@@ -65,7 +66,15 @@ namespace Enemies.Armadillo {
         }
 
         public void Attack(Player it) {
-            it.Hurt(attack, knockbackForce * new Vector2(facing.x * Mathf.Cos(knockbackAngle * Mathf.Deg2Rad), Mathf.Sin(knockbackAngle * Mathf.Deg2Rad)), 1);
+            StatusEffects.ChainAction(
+                d => it.Hurt(d.Amount, d.Velocity, d.Lockout),
+                e => e.OnAttack,
+                new Damage {
+                    Amount = attack,
+                    Lockout = 1,
+                    Velocity = knockbackForce * new Vector2(facing.x * Mathf.Cos(knockbackAngle * Mathf.Deg2Rad), Mathf.Sin(knockbackAngle * Mathf.Deg2Rad))
+                }
+            );
             AudioManager.Instance.PlaySFX(AudioTracks.ArmadilloAttack);
         }
 

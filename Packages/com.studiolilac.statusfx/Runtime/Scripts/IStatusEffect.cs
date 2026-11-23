@@ -1,5 +1,6 @@
 #nullable enable
 
+using System;
 using UnityEngine;
 
 namespace StudioLilac.StatusEffects {
@@ -15,6 +16,6 @@ namespace StudioLilac.StatusEffects {
         string Name { get; }
         Sprite Icon { get; }
 
-        void OnAttack(Damage damage, DamageNext next);
+        void OnAttack(Damage damage, Action<Damage> next);
     }
 }

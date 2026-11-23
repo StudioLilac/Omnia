@@ -3,8 +3,6 @@
 using UnityEngine;
 
 namespace StudioLilac.StatusEffects {
-    public delegate void DamageNext(Damage damage);
-
     public class Damage {
         public float Amount;
         public bool IsCrit;
