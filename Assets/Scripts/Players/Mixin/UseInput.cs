@@ -22,15 +22,8 @@ namespace Players.Mixin {
         private float rlt;
         private float ist;
 
-        public void Start() {
-            InventoryManager.OnInventoryOpened += OnInventoryOpened;
-            InventoryManager.OnInventoryClosed += OnInventoryClosed;
-        }
-
         public void OnDestroy() {
             Player.ControlsLocked.Unset(this);
-            InventoryManager.OnInventoryOpened -= OnInventoryOpened;
-            InventoryManager.OnInventoryClosed -= OnInventoryClosed;
         }
 
         public void Update() {
@@ -75,9 +68,5 @@ namespace Players.Mixin {
             return it.cam.ScreenToWorldPoint(pointer) - it.sprite.transform.position;
         }
 
-        // InventoryManager already has these events, so we subscribe here rather than
-        // having InventoryManager call Player.ControlsLocked directly
-        private void OnInventoryOpened() => Player.ControlsLocked.Set(this);
-        private void OnInventoryClosed() => Player.ControlsLocked.Unset(this);
     }
 }

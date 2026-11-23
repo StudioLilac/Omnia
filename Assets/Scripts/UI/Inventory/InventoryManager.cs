@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
+using Players;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Utils;
@@ -17,12 +18,7 @@ public class InventoryManager : MonoBehaviour {
     [SerializeField] private InputActionReference inventoryAction;
     [SerializeField] private InputActionReference pauseAction;
 
-    public delegate void InventoryEventHandler();
-    public static event InventoryEventHandler OnInventoryOpened;   // for more complex functions that cannot use isPaused
-    public static event InventoryEventHandler OnInventoryClosed;
-
     public bool IsInventoryOpen { get; private set; }
-
 
     private void Start() {
         InitializeTrinketSlots();
@@ -50,14 +46,14 @@ public class InventoryManager : MonoBehaviour {
     public void ToggleInventory() {
         IsInventoryOpen = !inventoryUI.activeSelf;
         inventoryUI.SetActive(IsInventoryOpen);
-        if (IsInventoryOpen) OnInventoryOpened?.Invoke();
-        else OnInventoryClosed?.Invoke();
+        if (IsInventoryOpen) Player.ControlsLocked.Set(this);
+        else Player.ControlsLocked.Unset(this);
     }
 
     public void CloseInventory() {
         IsInventoryOpen = false;
         inventoryUI.SetActive(false);
-        OnInventoryClosed?.Invoke();
+        Player.ControlsLocked.Unset(this);
     }
 
     public void EquipTrinket(TrinketSlot selectedTrinket) {
