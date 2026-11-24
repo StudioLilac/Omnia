@@ -29,7 +29,7 @@ namespace Omnia.Editor
 
             EditorGUILayout.LabelField("Palette", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox(
-                "Paste one RGB hex code per line (with or without #). Colors are replaced with the closest palette color. Up to 64 colors.",
+                "Paste one RGB hex code per line (with or without #). Strength guides colors toward the closest palette color; 1 fully replaces them. Up to 64 colors.",
                 MessageType.Info);
             paletteText = EditorGUILayout.TextArea(paletteText ?? string.Empty, GUILayout.MinHeight(110));
 
@@ -39,6 +39,15 @@ namespace Omnia.Editor
                     ApplyPalette(material, paletteText);
 
                 EditorGUILayout.LabelField($"{Mathf.RoundToInt(material.GetFloat("_PaletteCount"))} active color(s)", GUILayout.Width(130));
+            }
+
+            EditorGUI.BeginChangeCheck();
+            var strength = EditorGUILayout.Slider("Strength", material.GetFloat("_Strength"), 0f, 1f);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(material, "Change posterization strength");
+                material.SetFloat("_Strength", strength);
+                EditorUtility.SetDirty(material);
             }
         }
 

@@ -4,6 +4,7 @@ Shader "Omnia/Post Processing/Posterization"
     {
         [HideInInspector] _PaletteCount ("Palette Count", Float) = 1
         [NoScaleOffset] _PaletteTexture ("Palette Texture", 2D) = "black" {}
+        _Strength ("Posterization Strength", Range(0, 1)) = 1
     }
 
     SubShader
@@ -28,6 +29,7 @@ Shader "Omnia/Post Processing/Posterization"
 
             CBUFFER_START(UnityPerMaterial)
                 float _PaletteCount;
+                float _Strength;
             CBUFFER_END
 
             TEXTURE2D(_PaletteTexture);
@@ -53,7 +55,8 @@ Shader "Omnia/Post Processing/Posterization"
                     }
                 }
 
-                return half4(closest, source.a);
+                float3 posterized = lerp(source.rgb, closest, saturate(_Strength));
+                return half4(posterized, source.a);
             }
             ENDHLSL
         }

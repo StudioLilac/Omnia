@@ -123,6 +123,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _PaletteCount: 47
+    - _Strength: 0.491
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
