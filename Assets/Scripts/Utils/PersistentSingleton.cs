@@ -40,5 +40,8 @@ namespace Utils {
         }
 
         private static T GetOrCreateSelf() => FindAnyObjectByType<T>() ?? new GameObject(typeof(T).Name).AddComponent<T>();
+
+        // For testing only. Game code must not call this.
+        internal static void ResetForTesting() => _singleton = null;
     }
 }

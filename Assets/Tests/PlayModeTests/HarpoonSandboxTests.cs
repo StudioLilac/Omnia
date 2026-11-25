@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Reflection;
 using Enemies.Dummy;
 using NUnit.Framework;
 using Players;
@@ -7,7 +6,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 
 public class HarpoonSandboxTests {
-    private const string DummyPrefabPath = "Assets/Prefabs/Enemies/Dummy.prefab";
+    private const string DummyPrefabPath = PlayModeAssetPaths.DummyPrefab;
 
     private PlayModeSandboxUtils utils;
     private Player player;
@@ -139,10 +138,7 @@ public class HarpoonSandboxTests {
         HarpoonSpear.CanPullToGround = false;
     }
 
-    private HarpoonSpear GetSpear() {
-        var field = typeof(HarpoonGun).GetField("harpoonSpear", BindingFlags.Instance | BindingFlags.NonPublic);
-        return field?.GetValue(harpoon) as HarpoonSpear;
-    }
+    private HarpoonSpear GetSpear() => harpoon.GetHarpoonSpearForTesting();
 
     private Dummy SpawnDummy(Vector3 position) {
         var prefab = PlayModeSandboxUtils.LoadPrefab(DummyPrefabPath);

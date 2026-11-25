@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Reflection;
 using Enemies.Dummy;
 using NPC.Dinky;
 using NUnit.Framework;
@@ -14,7 +13,7 @@ using UnityEditor.SceneManagement;
 #endif
 
 public class TutorialFlowTests {
-    private const string ScenePath = "Assets/Scenes/4_Tutorial.unity";
+    private const string ScenePath = PlayModeAssetPaths.TutorialScene;
     private const string SceneName = "4_Tutorial";
 
     [UnitySetUp]
@@ -54,12 +53,12 @@ public class TutorialFlowTests {
             input.enabled = false;
         }
 
-        var dummy1 = GetPrivate<Dummy>(tutorial, "dummy1");
-        var dummy2 = GetPrivate<Dummy>(tutorial, "dummy2");
-        var dummy3 = GetPrivate<Dummy>(tutorial, "dummy3");
-        var dummy4 = GetPrivate<Dummy>(tutorial, "dummy4");
-        var dummy5 = GetPrivate<Dummy>(tutorial, "dummy5");
-        var airCheck = GetPrivate<ColliderEventBroadcaster>(tutorial, "dummyAirCheck");
+        var dummy1 = tutorial.Dummy1ForTesting;
+        var dummy2 = tutorial.Dummy2ForTesting;
+        var dummy3 = tutorial.Dummy3ForTesting;
+        var dummy4 = tutorial.Dummy4ForTesting;
+        var dummy5 = tutorial.Dummy5ForTesting;
+        var airCheck = tutorial.DummyAirCheckForTesting;
 
         Assert.IsNotNull(dummy1);
         Assert.IsNotNull(dummy2);
@@ -119,11 +118,5 @@ public class TutorialFlowTests {
             timeoutMessage: "Tutorial never advanced to the next level");
 
         Assert.AreEqual("5_City", SceneManager.GetActiveScene().name);
-    }
-
-    private static T GetPrivate<T>(object target, string fieldName) {
-        var field = target.GetType().GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic);
-        Assert.IsNotNull(field, $"Missing private field '{fieldName}' on {target.GetType().Name}");
-        return (T)field.GetValue(target);
     }
 }

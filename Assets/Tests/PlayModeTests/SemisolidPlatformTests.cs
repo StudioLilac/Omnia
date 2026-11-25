@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Reflection;
 using NUnit.Framework;
 using Players;
 using Players.Mixin;
@@ -114,11 +113,6 @@ public class SemisolidPlatformTests {
     private static void AssignSemisolidCollider(Player target, Collider2D platform) {
         var layerCollision = target.GetComponentInChildren<HandleLayerCollision>(true);
         Assert.IsNotNull(layerCollision, "HandleLayerCollision missing on Player");
-
-        var field = typeof(HandleLayerCollision).GetField(
-            "semisolidCollider",
-            BindingFlags.Instance | BindingFlags.NonPublic);
-        Assert.IsNotNull(field, "HandleLayerCollision.semisolidCollider field not found");
-        field.SetValue(layerCollision, platform);
+        layerCollision.SetSemisolidColliderForTesting(platform);
     }
 }

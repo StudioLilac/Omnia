@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Reflection;
 using Initializers;
 using Omnia.Rendering;
 using Players;
@@ -12,9 +11,9 @@ using UnityEditor;
 
 // Shared scene-less sandbox helpers for play mode tests.
 public class PlayModeSandboxUtils {
-    public const string PlayerPrefabPath = "Assets/Prefabs/Players/Player.prefab";
-    public const string PlayerDataManagerPrefabPath = "Assets/Prefabs/UI/Inventory/PlayerDataManager.prefab";
-    public const string SceneInitializerPrefabPath = "Assets/Prefabs/Initializers/SceneInitializer.prefab";
+    public const string PlayerPrefabPath = PlayModeAssetPaths.PlayerPrefab;
+    public const string PlayerDataManagerPrefabPath = PlayModeAssetPaths.PlayerDataManagerPrefab;
+    public const string SceneInitializerPrefabPath = PlayModeAssetPaths.SceneInitializerPrefab;
 
     private readonly List<Object> spawned = new();
     private bool createdSceneInitializer;
@@ -123,9 +122,6 @@ public class PlayModeSandboxUtils {
     }
 
     private static void ClearSingleton<T>() where T : Component {
-        var field = typeof(PersistentSingleton<T>).GetField(
-            "_singleton",
-            BindingFlags.Static | BindingFlags.NonPublic);
-        field?.SetValue(null, null);
+        PersistentSingleton<T>.ResetForTesting();
     }
 }
