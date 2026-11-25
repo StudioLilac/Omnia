@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Players;
 using UnityEngine;
 
 namespace Utils {
@@ -18,18 +19,20 @@ namespace Utils {
         }
 
         private readonly List<TimeScale> scales = new();
-        private readonly HashSet<object> freezeSources = new();
+        private readonly RefBool frozen = new();
 
-        public bool IsFrozen => freezeSources.Any();
+        public bool IsFrozen => frozen;
 
         public void Freeze(object source) {
             if (source == null) return;
-            freezeSources.Add(source);
+            frozen.Set(source);
+            Player.ControlsLocked.Set(source);
         }
 
         public void Unfreeze(object source) {
             if (source == null) return;
-            freezeSources.Remove(source);
+            frozen.Unset(source);
+            Player.ControlsLocked.Unset(source);
         }
 
         public void Push(float scale, float duration, AnimationCurve ease) {
@@ -41,7 +44,7 @@ namespace Utils {
         }
 
         private void Update() {
-            if (freezeSources.Any()) {
+            if (frozen) {
                 Time.timeScale = 0f;
                 return;
             }
