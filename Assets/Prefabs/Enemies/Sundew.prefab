@@ -485,21 +485,20 @@ MonoBehaviour:
   stunEffect: {fileID: 9184371171822434598}
   windup: 1
   reload: 1
-  spread: 0.05
-  lag: 0
-  count: 6
-  projectileAngle: 90
   projectileSpeed: 7
-  randomAttackDelayOffset: 0.5
+  volleySize: 5
+  launchSpacing: 0.25
+  maxLaunchAngle: 10
+  projectileVelocityMultiplier: 2.5
+  upwardFlightDuration: 1
+  warningDuration: 0.5
+  fallSpeed: 12
   sprite: {fileID: 1495548087428681450}
   animator: {fileID: 6149703548532306918}
   rb: {fileID: 7893308943432753642}
   ground:
     serializedVersion: 2
-    m_Bits: 8
-  player:
-    serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 520
   projectile: {fileID: 5710193498280292276, guid: 405681e7663724b52868906c5592258e, type: 3}
   deathExplosion: {fileID: 6478827744998899019, guid: 423176f41ed8247ddb0fe10d88e78a3e, type: 3}
 --- !u!50 &7893308943432753642

@@ -10,4 +10,9 @@ namespace Enemies.Sundew.Animation {
         public AttackAnimation(Animator animator) : base("SundewAttack", animator) {
         }
     }
+
+    public class StunnedAnimation : AnimationState {
+        public StunnedAnimation(Animator animator) : base("SundewStunned", animator) {
+        }
+    }
 }
