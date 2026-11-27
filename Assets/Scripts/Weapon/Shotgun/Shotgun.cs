@@ -1,13 +1,11 @@
 using System.Collections;
 using Enemies;
 using Omnia.Utils;
-using Utils;
 using Players;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using MathUtils = Utils.MathUtils;
 using System.Collections.Generic;
+using StudioLilac.StatusEffects;
 
 public class Shotgun : WeaponClass {
 
@@ -171,8 +169,17 @@ public class Shotgun : WeaponClass {
                         damageAmount *= player.GetComponent<Player>().critMultiplier;
                     }
 
-                    enemy.Hurt(damageAmount, crit: isCrit);
-                    playerScript.OnHit(damageAmount, enemy);
+                    playerScript.StatusEffects.ChainAction(
+                        d => {
+                            enemy.Hurt(d.Amount, d.IsStagger, d.IsCrit);
+                            playerScript.OnHit(d.Amount, enemy);
+                        },
+                        e => e.OnAttack,
+                        new Damage {
+                            Amount = damageAmount,
+                            IsCrit = isCrit
+                        }
+                    );
                 }
             }
         }

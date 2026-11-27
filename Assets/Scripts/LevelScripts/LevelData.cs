@@ -75,6 +75,14 @@ public class CopyableScene : LevelData {
     public override LevelData PrevLevel => Get<Title>();
 }
 
+public class StatusEffectSample : LevelData {
+    public override string PlainName => "Status Effect Sample";
+    public override string SceneName => "StatusEffectSample";
+    public override LevelType Type => LevelType.Other;
+    public override LevelData NextLevel => Get<Title>();
+    public override LevelData PrevLevel => Get<Title>();
+}
+
 public class MainScene : LevelData {
     public override string PlainName => "Main Scene";
     public override string SceneName => "MainScene";

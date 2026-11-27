@@ -5,6 +5,7 @@ using Enemies.Bird.Behaviour;
 using Enemies.Common.Behaviour;
 using Omnia.State;
 using Players;
+using StudioLilac.StatusEffects;
 using UnityEngine;
 using StateMachine = Omnia.State.StateMachine;
 
@@ -70,7 +71,15 @@ namespace Enemies.Bird {
             if (!hit || !hit.TryGetComponent<Player>(out var it)) return;
             var direction = it.rb.worldCenterOfMass - rb.worldCenterOfMass;
 
-            it.Hurt(attack, direction.normalized * knockbackForce, 5);
+            StatusEffects.ChainAction(
+                d => it.Hurt(d.Amount, d.Velocity, d.Lockout),
+                e => e.OnAttack,
+                new Damage {
+                    Amount = attack,
+                    Lockout = 5,
+                    Velocity = direction.normalized * knockbackForce
+                }
+            );
         }
 
         protected override void UseAnimation(StateMachine stateMachine) {

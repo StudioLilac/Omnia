@@ -3,6 +3,7 @@ using Enemies.Sundew.Animation;
 using Enemies.Common.Behaviour;
 using Omnia.State;
 using Players;
+using StudioLilac.StatusEffects;
 using UnityEngine;
 
 namespace Enemies.Sundew {
@@ -51,7 +52,15 @@ namespace Enemies.Sundew {
         }
 
         private void Attack(Player it, SundewProjectile by) {
-            it.Hurt(attack, knockbackForce * new Vector2(Mathf.Sign(by.rb.linearVelocity.x) * Mathf.Cos(knockbackAngle * Mathf.Deg2Rad), Mathf.Sin(knockbackAngle * Mathf.Deg2Rad)), 1);
+            StatusEffects.ChainAction(
+                d => it.Hurt(d.Amount, d.Velocity, d.Lockout),
+                e => e.OnAttack,
+                new Damage {
+                    Amount = attack,
+                    Lockout = 1,
+                    Velocity = knockbackForce * new Vector2(Mathf.Sign(by.rb.linearVelocity.x) * Mathf.Cos(knockbackAngle * Mathf.Deg2Rad), Mathf.Sin(knockbackAngle * Mathf.Deg2Rad))
+                }
+            );
         }
 
         protected override void UseAnimation(StateMachine stateMachine) {

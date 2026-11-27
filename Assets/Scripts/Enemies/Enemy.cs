@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Omnia.State;
 using Omnia.Rendering;
-using Utils;
 using Enemies.Common.Behaviour;
+using StudioLilac.StatusEffects;
 
 namespace Enemies {
     public enum EnemyWeightType {
@@ -40,6 +41,10 @@ namespace Enemies {
         public StateMachine animationStateMachine { get; protected set; }
 
         public virtual EnemyWeightType WeightType => EnemyWeightType.None;
+
+        public List<IStatusEffect> StatusEffects = new();
+
+        public event Action StatusEffectsChanged;
 
         public virtual void Start() {
             outlineManager = this.Inject<SpriteOutlineManager>();
@@ -94,6 +99,10 @@ namespace Enemies {
          * The child inheriting this class must call base.Update()
          */
         public virtual void Update() {
+            if (StatusEffects.RemoveAll(e => e.IsExpired) > 0) {
+                StatusEffectsChanged?.Invoke();
+            }
+
             behaviour?.OnUpdate();
             animationStateMachine?.Update();
         }
@@ -123,6 +132,11 @@ namespace Enemies {
             Death?.Invoke(this);
             OnDeath?.Invoke(this);
             Destroy(gameObject);
+        }
+
+        public void ApplyStatusEffect(IStatusEffect effect) {
+            StatusEffects.Add(effect);
+            StatusEffectsChanged?.Invoke();
         }
 
         /* TODO: These methods can be moved to Utils if needed. */

@@ -8,10 +8,8 @@ using Omnia.Utils;
 using Players.Animation;
 using Players.Behaviour;
 using Players.Buff;
-using Puzzle;
-using UI;
+using StudioLilac.StatusEffects;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
 using If = Omnia.State.FuncPredicate;
 
@@ -210,6 +208,9 @@ namespace Players {
         internal bool lockGravity = false;
         public Vector3 Center => this ? transform.position + new Vector3(0, 1, 0) : Vector3.zero;
 
+        public List<IStatusEffect> StatusEffects = new();
+
+        public event Action StatusEffectsChanged;
 
         public void Awake() {
             cam = Camera.main;
@@ -254,6 +255,10 @@ namespace Players {
         }
 
         public void Update() {
+            if (StatusEffects.RemoveAll(e => e.IsExpired) > 0) {
+                StatusEffectsChanged?.Invoke();
+            }
+
             currentLockout = Mathf.Clamp(currentLockout - Time.deltaTime, 0, maximumLockout);
             behaviour?.OnUpdate();
             animationStateMachine.Update();
@@ -430,6 +435,10 @@ namespace Players {
             }
         }
 
+        public void ApplyStatusEffect(IStatusEffect effect) {
+            StatusEffects.Add(effect);
+            StatusEffectsChanged?.Invoke();
+        }
 
         // ***** Helpers ***** //
 

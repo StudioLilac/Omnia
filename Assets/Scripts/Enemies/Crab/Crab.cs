@@ -3,8 +3,8 @@ using Enemies.Crab.Animation;
 using Enemies.Crab.Behaviour;
 using Omnia.State;
 using Players;
+using StudioLilac.StatusEffects;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
 
 namespace Enemies.Crab {
@@ -50,7 +50,15 @@ namespace Enemies.Crab {
 
         public void Attack(Player it) {
             var side = sprite.flipX ? -1 : 1;
-            it.Hurt(attack, knockbackForce * new Vector2(side * Mathf.Cos(knockbackAngle * Mathf.Deg2Rad), Mathf.Sin(knockbackAngle * Mathf.Deg2Rad)), 1);
+            StatusEffects.ChainAction(
+                d => it.Hurt(d.Amount, d.Velocity, d.Lockout),
+                e => e.OnAttack,
+                new Damage {
+                    Amount = attack,
+                    Lockout = 1,
+                    Velocity = knockbackForce * new Vector2(side * Mathf.Cos(knockbackAngle * Mathf.Deg2Rad), Mathf.Sin(knockbackAngle * Mathf.Deg2Rad))
+                }
+            );
             AudioManager.Instance.PlaySFX(AudioTracks.CrabHurt);
         }
 

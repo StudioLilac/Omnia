@@ -1,8 +1,6 @@
 using Enemies;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using UnityEngine.Serialization;
 
 namespace UI {
     public class EnemyUI : MonoBehaviour {
@@ -13,6 +11,7 @@ namespace UI {
         [SerializeField] internal Slider shield;  // Shield bar
         [SerializeField] internal Enemy subject;
         [SerializeField] internal Canvas parentCanvas;
+        [SerializeField] private StatusEffectIcons statusEffectIcons;
 
         private float trailTimer;
         private const float trailDelay = 0.3f;
@@ -30,8 +29,20 @@ namespace UI {
             UpdateShieldBar();
         }
 
+        public void OnDisable() {
+            if (subject) {
+                subject.StatusEffectsChanged -= OnStatusEffectsChanged;
+            }
+        }
+
         public EnemyUI Of(Enemy e) {
+            if (subject) {
+                subject.StatusEffectsChanged -= OnStatusEffectsChanged;
+            }
+
             subject = e;
+            subject.StatusEffectsChanged += OnStatusEffectsChanged;
+            OnStatusEffectsChanged();
             return this;
         }
 
@@ -82,6 +93,12 @@ namespace UI {
 
         public void ShowParent(bool show) {
             parentCanvas.enabled = show;
+        }
+
+        private void OnStatusEffectsChanged() {
+            if (subject) {
+                statusEffectIcons.Render(subject.StatusEffects);
+            }
         }
     }
 }

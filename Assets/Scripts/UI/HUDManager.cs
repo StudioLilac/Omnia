@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Players;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
 
 namespace UI {
     public class HUDManager: MonoBehaviour {
@@ -34,6 +33,8 @@ namespace UI {
 
         [SerializeField] private Slider flowSlider;
         [SerializeField] private Image lowHealthEffect;
+        [SerializeField] private StatusEffectIcons statusEffectIcons;
+
         private Coroutine lowHealthCoroutine;
         private Coroutine flowAnimationCoroutine;
         private Coroutine bearEffectCoroutine;
@@ -49,6 +50,8 @@ namespace UI {
             WeaponClass.OnAmmoChanged += UpdateAmmo;
             Player.OnSkillCooldownUpdated += UpdateSkillCooldown;
             Player.OnBearEffectReady += UpdateBearEffect;
+            _p.StatusEffectsChanged += OnStatusEffectsChanged;
+            OnStatusEffectsChanged();
         }
 
         private void OnDisable() {
@@ -58,6 +61,9 @@ namespace UI {
             WeaponClass.OnAmmoChanged -= UpdateAmmo;
             Player.OnSkillCooldownUpdated -= UpdateSkillCooldown;
             Player.OnBearEffectReady -= UpdateBearEffect;
+            if (_p) {
+                _p.StatusEffectsChanged -= OnStatusEffectsChanged;
+            }
         }
 
         private void UpdateHealth(int currentHealth) {
@@ -253,6 +259,12 @@ namespace UI {
                     color.a = alpha;
                     heartImage.color = color;
                 }
+            }
+        }
+
+        private void OnStatusEffectsChanged() {
+            if (_p) {
+                statusEffectIcons.Render(_p.StatusEffects);
             }
         }
     }

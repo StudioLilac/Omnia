@@ -2,11 +2,11 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using Enemies;
-using Omnia.Utils;
 using Omnia.Rendering;
 using Players;
 using System.Collections;
 using System.Collections.Generic;
+using StudioLilac.StatusEffects;
 using Random = UnityEngine.Random;
 
 /*
@@ -199,9 +199,17 @@ public class HarpoonSpear : MonoBehaviour {
         bool isCrit = Random.Range(0f, 1f) < player.critChance;
 
         float damageAmount = gun.damage * player.damageMultiplier * (isCrit ? player.critMultiplier : 1);
-        enemy.Hurt(damageAmount, crit: isCrit);
-
-        player?.OnHit(damageAmount, enemy);
+        player.StatusEffects.ChainAction(
+            d => {
+                enemy.Hurt(d.Amount, d.IsStagger, d.IsCrit);
+                player?.OnHit(d.Amount, enemy);
+            },
+            e => e.OnAttack,
+            new Damage {
+                Amount = damageAmount,
+                IsCrit = isCrit
+            }
+        );
     }
 
     private void HandleSemisolidCollision(GameObject semi) {

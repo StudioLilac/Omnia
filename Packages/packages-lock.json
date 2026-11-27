@@ -6,6 +6,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.studiolilac.statusfx": {
+      "version": "file:com.studiolilac.statusfx",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.2d.animation": {
       "version": "16.0.1",
       "depth": 1,
