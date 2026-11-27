@@ -128,6 +128,12 @@ namespace Scenes {
             LevelManager.Instance.NextLevel();
         }
 
-
+        // For testing only. Game code must not call these.
+        internal Dummy Dummy1ForTesting => dummy1;
+        internal Dummy Dummy2ForTesting => dummy2;
+        internal Dummy Dummy3ForTesting => dummy3;
+        internal Dummy Dummy4ForTesting => dummy4;
+        internal Dummy Dummy5ForTesting => dummy5;
+        internal ColliderEventBroadcaster DummyAirCheckForTesting => dummyAirCheck;
     }
 }

@@ -102,4 +102,7 @@ public class HarpoonGun : WeaponClass
             sr.flipY = shouldFlip;
         }
     }
+
+    // For testing only. Game code must not call this.
+    internal HarpoonSpear GetHarpoonSpearForTesting() => harpoonSpear;
 }

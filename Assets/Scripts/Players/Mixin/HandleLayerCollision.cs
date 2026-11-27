@@ -26,5 +26,8 @@ namespace Players.Mixin {
             Physics2D.IgnoreCollision(self.hitbox, semisolidCollider, false);
             fell = true;
         }
+
+        // For testing only. Game code must not call this.
+        internal void SetSemisolidColliderForTesting(Collider2D collider) => semisolidCollider = collider;
     }
 }
